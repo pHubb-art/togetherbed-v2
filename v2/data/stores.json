@@ -1,0 +1,11 @@
+{
+  "_cms": "Wix collection: Stores. SAMPLE stores and fictional 555 numbers. Real retailer list to come.",
+  "stores": [
+    { "id": "s1", "name": "Sample Sleep Gallery", "city": "Austin", "region": "TX", "zip": "78701", "address": "100 Congress Ave", "phone": "(512) 555-0142", "email": "fit@sample-store.test", "lines": [2, 3], "hasSamples": true },
+    { "id": "s2", "name": "Sample Mattress House", "city": "Denver", "region": "CO", "zip": "80202", "address": "1600 Market St", "phone": "(303) 555-0187", "email": "fit@sample-store.test", "lines": [2], "hasSamples": true },
+    { "id": "s3", "name": "Sample Rest & Co.", "city": "Chicago", "region": "IL", "zip": "60607", "address": "900 W Randolph St", "phone": "(312) 555-0110", "email": "fit@sample-store.test", "lines": [2, 3], "hasSamples": true },
+    { "id": "s4", "name": "Sample Bedroom Outfitters", "city": "Atlanta", "region": "GA", "zip": "30309", "address": "1200 Peachtree St NE", "phone": "(404) 555-0163", "email": "fit@sample-store.test", "lines": [2, 3], "hasSamples": false },
+    { "id": "s5", "name": "Sample Coast Sleep", "city": "San Diego", "region": "CA", "zip": "92101", "address": "500 W Broadway", "phone": "(619) 555-0129", "email": "fit@sample-store.test", "lines": [2], "hasSamples": true },
+    { "id": "s6", "name": "Sample Northern Beds", "city": "Minneapolis", "region": "MN", "zip": "55401", "address": "250 Marquette Ave", "phone": "(612) 555-0175", "email": "fit@sample-store.test", "lines": [2, 3], "hasSamples": true }
+  ]
+}

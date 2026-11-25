@@ -1,0 +1,99 @@
+/* =========================================================
+   TogetherBed design tokens
+   Palette: "Warm Layers" (locked by Patrick, 2026-11-25), black ink.
+   Every color on the site comes from this file. Swap here, nowhere else.
+   ========================================================= */
+
+:root {
+  /* Brand colors */
+  --color-ink: #231f20;            /* black ink (locked): text, logo */
+  --color-pillow: #fff7f1;         /* page ground */
+  --color-apricot: #f6a47a;        /* sleeper one */
+  --color-rose: #eb86a6;           /* sleeper two */
+  --color-mulberry: #8e2f5e;       /* where the two layers overlap */
+  --color-honey: #f4c866;          /* highlight, badges */
+  --color-lilac: #b7a3d9;          /* quiet accent, night */
+
+  /* Roles (components use these, never the raw brand colors) */
+  --bg: var(--color-pillow);
+  --surface: #fffcf9;
+  --surface-sunk: #f8ece3;
+  --text: var(--color-ink);
+  --text-muted: #6b5c57;
+  --line: #ecdcd2;
+  --sleeper-a: var(--color-apricot);
+  --sleeper-b: var(--color-rose);
+  --overlap: var(--color-mulberry);
+  --accent: var(--color-mulberry);
+  --on-accent: #fff7f1;
+  --focus: var(--color-mulberry);
+  --layer-blend: multiply;        /* layers deepen where they overlap */
+  --glass-tint: rgb(255 247 241 / 0.55);
+  --glass-edge: rgb(255 255 255 / 0.7);
+  --shadow: 0 1px 2px rgb(22 17 15 / 0.06), 0 12px 32px -12px rgb(22 17 15 / 0.18);
+
+  /* Type: Poppins light + bold mirrors the logo's light "together" / bold "bed" */
+  --font-sans: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-bold: 700;
+  --step--1: clamp(0.8rem, 0.78rem + 0.1vw, 0.86rem);
+  --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
+  --step-1: clamp(1.2rem, 1.12rem + 0.4vw, 1.45rem);
+  --step-2: clamp(1.5rem, 1.32rem + 0.9vw, 2.1rem);
+  --step-3: clamp(2rem, 1.6rem + 2vw, 3.3rem);
+  --step-4: clamp(2.6rem, 1.9rem + 3.6vw, 5rem);
+
+  /* Space and shape. Shapes are squircles: see .sq in base.css */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 5rem;
+  --radius-s: 14px;
+  --radius-m: 24px;
+  --radius-l: 40px;
+  --page-max: 72rem;
+  --text-max: 34rem;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #120e0d;
+    --surface: #1c1716;
+    --surface-sunk: #241d1b;
+    --text: #fff7f1;
+    --text-muted: #c2b0a8;
+    --line: #3a2f2b;
+    --accent: #e07aa6;
+    --on-accent: #16110f;
+    --focus: #f4c866;
+    --layer-blend: screen;
+    --glass-tint: rgb(28 23 22 / 0.5);
+    --glass-edge: rgb(255 255 255 / 0.14);
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.6);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #120e0d;
+  --surface: #1c1716;
+  --surface-sunk: #241d1b;
+  --text: #fff7f1;
+  --text-muted: #c2b0a8;
+  --line: #3a2f2b;
+  --accent: #e07aa6;
+  --on-accent: #16110f;
+  --focus: #f4c866;
+  --layer-blend: screen;
+  --glass-tint: rgb(28 23 22 / 0.5);
+  --glass-edge: rgb(255 255 255 / 0.14);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}

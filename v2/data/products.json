@@ -1,0 +1,9 @@
+{
+  "_cms": "Wix Stores products (PureCare). SAMPLE names and prices for the concept.",
+  "products": [
+    { "id": "fit-pillow", "name": "PureCare Fit Pillow", "price": 129, "tag": "Sized from your Sleep Fit", "body": "Loft matched to your shoulder width and sleep position. One for each side.", "options": ["Low loft", "Mid loft", "High loft"], "swatch": "apricot" },
+    { "id": "cool-sheets", "name": "PureCare Cooling Sheet Set", "price": 189, "tag": "Made for split tops", "body": "Deep pockets cut for the TogetherBed zip-on top. Cool to the touch.", "options": ["Queen", "King", "Twin XL"], "swatch": "rose" },
+    { "id": "protector", "name": "PureCare Mattress Protector", "price": 109, "tag": "Waterproof, quiet", "body": "Keeps the top layer fresh so your blocks last longer.", "options": ["Queen", "King", "Twin XL"], "swatch": "lilac" },
+    { "id": "pillow-pair", "name": "PureCare Pillow Pair, one each", "price": 239, "tag": "For two sleepers", "body": "Two pillows, each sized to its sleeper. The easy gift for the other side of the bed.", "options": ["Matched from Sleep Fit"], "swatch": "honey" }
+  ]
+}

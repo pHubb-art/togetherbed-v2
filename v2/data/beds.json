@@ -1,0 +1,47 @@
+{
+  "_cms": "Wix collection: Beds. Editors can rename pre-builds, change copy and prices without code. Prices and zone layouts are SAMPLES until the product team confirms them.",
+  "feels": [
+    { "id": "plush",  "label": "Plush",  "shape": "plush",  "digit": 3, "note": "Sink in" },
+    { "id": "medium", "label": "Medium", "shape": "medium", "digit": 2, "note": "Balanced" },
+    { "id": "firm",   "label": "Firm",   "shape": "firm",   "digit": 1, "note": "On top" }
+  ],
+  "supports": [
+    { "id": "M",  "label": "Medium support",      "digit": 3 },
+    { "id": "F",  "label": "Firm support",        "digit": 2 },
+    { "id": "XF", "label": "Extra-firm support",  "digit": 1 }
+  ],
+  "materials": [
+    { "id": "latex",  "label": "Hemp latex",          "digit": 3, "edition": "naturals" },
+    { "id": "memory", "label": "Hemp memory foam",    "digit": 4, "edition": "performance" },
+    { "id": "hybrid", "label": "Hemp hybrid foam",    "digit": 5, "edition": "performance" }
+  ],
+  "zones": [
+    { "id": "head", "label": "Head & shoulders" },
+    { "id": "hips", "label": "Lumbar & hips" },
+    { "id": "legs", "label": "Legs & feet" }
+  ],
+  "tops": [
+    { "id": "P1", "label": "Performance, smooth",       "edition": "performance" },
+    { "id": "P2", "label": "Performance, quilted",      "edition": "performance" },
+    { "id": "N1", "label": "Naturals, medium-firm quilt", "edition": "naturals" },
+    { "id": "N2", "label": "Naturals, plush quilt",     "edition": "naturals" }
+  ],
+  "prebuilds": [
+    { "id": "ex-plush", "name": "Together Ex-Plush", "score": 1, "contour": "plush",  "support": "M",  "blurb": "Deep, cradling sink for lighter side sleepers." },
+    { "id": "plush",    "name": "Together Plush",    "score": 2, "contour": "plush",  "support": "F",  "blurb": "Soft on top, steadier underneath." },
+    { "id": "medium-1", "name": "Together Medium 1", "score": 3, "contour": "medium", "support": "M",  "blurb": "Balanced, with a gentle give." },
+    { "id": "medium-2", "name": "Together Medium 2", "score": 4, "contour": "medium", "support": "F",  "blurb": "Balanced, with more lift at the hips." },
+    { "id": "firm",     "name": "Together Firm",     "score": 5, "contour": "firm",   "support": "F",  "blurb": "Sleep on top of the bed, not in it." },
+    { "id": "ex-firm",  "name": "Together Ex-Firm",  "score": 6, "contour": "firm",   "support": "XF", "blurb": "Flat, solid and quiet for back and stomach sleepers." }
+  ],
+  "lines": [
+    { "id": 1, "name": "Fit",      "where": "online",   "rule": "One feel per side. Pick a pre-build for each sleeper.", "fromPrice": 3999 },
+    { "id": 2, "name": "Tailored", "where": "in store", "rule": "Each zone's comfort feel tuned to your body.",         "fromPrice": 4599 },
+    { "id": 3, "name": "Bespoke",  "where": "in store", "rule": "Every comfort and support block chosen.",             "fromPrice": 5299 }
+  ],
+  "sizes": [
+    { "id": "Q", "label": "Queen",    "sides": 2, "priceAdd": 0 },
+    { "id": "K", "label": "King",     "sides": 2, "priceAdd": 600 },
+    { "id": "X", "label": "Twin XL",  "sides": 1, "priceAdd": -1400 }
+  ]
+}

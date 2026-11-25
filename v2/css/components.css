@@ -1,0 +1,279 @@
+/* =========================================================
+   Components shared by every page
+   ========================================================= */
+
+/* ---------- Concept banner (remove at launch) ---------- */
+.concept-banner {
+  background: var(--color-honey);
+  color: var(--color-ink);
+  font-size: var(--step--1);
+  text-align: center;
+  padding-block: 0.4rem;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 40;
+  border-bottom: 1px solid var(--line);
+}
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 64px;
+}
+.logo { display: inline-flex; color: var(--text); }
+.logo svg { width: 132px; height: auto; aspect-ratio: 256 / 66; }
+.site-nav ul {
+  display: flex;
+  gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.site-nav a {
+  text-decoration: none;
+  font-size: var(--step--1);
+  font-weight: var(--weight-bold);
+  padding-block: 0.5rem;
+}
+.site-nav a[aria-current="page"] { box-shadow: inset 0 -2px 0 var(--accent); }
+.nav-toggle {
+  --sq-r: 14px;
+  display: none;
+  width: 44px; height: 44px;
+  border: 0;
+  background: var(--surface-sunk);
+  cursor: pointer;
+}
+.nav-toggle span, .nav-toggle span::before, .nav-toggle span::after {
+  display: block; width: 18px; height: 2px; margin: auto;
+  background: var(--text); position: relative; content: "";
+}
+.nav-toggle span::before { position: absolute; top: -6px; }
+.nav-toggle span::after { position: absolute; top: 6px; }
+.header-cta { display: none; }
+
+@media (max-width: 47.99rem) {
+  .nav-toggle { display: block; }
+  .site-nav {
+    position: absolute;
+    inset: 100% 0 auto;
+    padding: var(--space-4) max(16px, env(safe-area-inset-right, 0px)) var(--space-5) max(16px, env(safe-area-inset-left, 0px));
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-nav[data-open="false"] { display: none; }
+  .site-nav ul { flex-direction: column; gap: 0; }
+  .site-nav a { display: block; padding-block: 0.8rem; font-size: var(--step-0); }
+}
+@media (min-width: 48rem) {
+  .header-cta { display: inline-flex; }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding-block: var(--space-7);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+.site-footer .wrap { display: grid; gap: var(--space-5); }
+.footer-links { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-5); list-style: none; margin: 0; padding: 0; }
+.footer-partner { color: var(--text); }
+
+/* ---------- Layer sheets: the brand motif ----------
+   Two translucent squircles, one per sleeper. Where they overlap
+   the color deepens, like layers in the bed. */
+.layers { position: relative; isolation: isolate; }
+.layer {
+  position: absolute;
+  --sq-r: 34%;
+  mix-blend-mode: var(--layer-blend);
+}
+.layer-a { background: var(--sleeper-a); }
+.layer-b { background: var(--sleeper-b); }
+.layer-c { background: var(--color-honey); }
+.layer-d { background: var(--color-lilac); }
+
+/* ---------- Placeholder art (character + bed renders arrive later) ---------- */
+.placeholder {
+  position: relative;
+  display: grid;
+  place-items: end center;
+  overflow: hidden;
+  background: var(--surface-sunk);
+  color: var(--text-muted);
+}
+.placeholder svg { width: 62%; height: auto; color: var(--text); opacity: 0.85; }
+.placeholder-tag {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: 0.72rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------- Choice tiles (Sleep Fit answers, shop options) ---------- */
+.choices { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); }
+.choice {
+  --sq-r: 20px;
+  position: relative;
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+  cursor: pointer;
+  text-align: left;
+}
+.choice input { position: absolute; opacity: 0; pointer-events: none; }
+.choice strong { font-size: var(--step-0); }
+.choice span { font-size: var(--step--1); color: var(--text-muted); }
+.choice:has(input:checked) { box-shadow: inset 0 0 0 2px var(--text); background: var(--surface-sunk); }
+.choice:has(input:focus-visible) { box-shadow: inset 0 0 0 3px var(--focus); }
+
+/* ---------- Form fields ---------- */
+.field { display: grid; gap: var(--space-1); }
+.field label { font-size: var(--step--1); font-weight: var(--weight-bold); }
+.field input, .field select, .field textarea {
+  --sq-r: 14px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.6rem 0.9rem;
+  border: 0;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.field textarea { min-height: 7rem; resize: vertical; }
+.field-hint { font-size: var(--step--1); color: var(--text-muted); }
+
+/* ---------- Bed map: top-down view of one bed ----------
+   Two sides (columns) x three zones (rows): head, hips, legs.
+   Each block shows contour feel (shape) over support level (tag). */
+.bed-map {
+  --sq-r: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow), inset 0 0 0 1px var(--line);
+}
+.bed-map-head {
+  grid-column: 1 / -1;
+  height: 18px;
+  margin: -2px 8px 4px;
+  border-radius: 999px;
+  background: var(--surface-sunk);
+}
+.bed-block {
+  --sq-r: 16px;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 72px;
+  padding: var(--space-3);
+  border: 0;
+  text-align: left;
+  background: color-mix(in srgb, var(--side-color) 28%, var(--surface));
+  cursor: default;
+}
+.bed-block[data-side="left"] { --side-color: var(--sleeper-a); }
+.bed-block[data-side="right"] { --side-color: var(--sleeper-b); }
+button.bed-block { cursor: pointer; }
+button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, var(--surface)); }
+.bed-block .zone { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.bed-block .feel { font-size: var(--step--1); font-weight: var(--weight-bold); line-height: 1.2; }
+.bed-block .support { font-size: 0.72rem; color: var(--text-muted); }
+.bed-block.is-changed::after {
+  content: "";
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--overlap);
+}
+.bed-block.is-swapping { animation: swap-in 0.5s var(--ease); }
+@keyframes swap-in {
+  0% { transform: translateY(-10px) scale(0.96); opacity: 0.2; }
+  100% { transform: none; opacity: 1; }
+}
+
+/* Firmness shapes from the icon language: square firm, leaf medium, circle plush */
+.shape { width: 26px; height: 26px; background: var(--side-color, var(--text)); flex: none; }
+.shape-firm { border-radius: 6px; corner-shape: squircle; }
+.shape-medium { border-radius: 0 70% 0 70%; }
+.shape-plush { border-radius: 50%; }
+.shape-legend { display: flex; flex-wrap: wrap; gap: var(--space-4); font-size: var(--step--1); color: var(--text-muted); }
+.shape-legend span { display: inline-flex; align-items: center; gap: var(--space-2); }
+.shape-legend .shape { width: 16px; height: 16px; --side-color: var(--text-muted); }
+
+/* ---------- Cards ---------- */
+.card {
+  --sq-r: 28px;
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  padding: var(--space-5);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  width: fit-content;
+  padding: 0.15rem 0.65rem;
+  border-radius: 999px;
+  background: var(--surface-sunk);
+  font-size: 0.75rem;
+  font-weight: var(--weight-bold);
+}
+.pill-honey { background: var(--color-honey); color: var(--color-ink); }
+
+/* ---------- Store handoff (shared by Sleep Fit and Store finder) ---------- */
+.handoff { display: grid; gap: var(--space-4); }
+.handoff-preview {
+  --sq-r: 20px;
+  padding: var(--space-4);
+  background: var(--surface-sunk);
+  font-size: var(--step--1);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.call-ahead {
+  --sq-r: 20px;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: color-mix(in srgb, var(--color-honey) 35%, var(--surface));
+}
+.call-ahead .phone { font-size: var(--step-1); font-weight: var(--weight-bold); user-select: all; }
+
+/* ---------- Toast ---------- */
+.toast {
+  --sq-r: 18px;
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+  z-index: 60;
+  translate: -50% 0;
+  padding: 0.8rem 1.2rem;
+  background: var(--text);
+  color: var(--bg);
+  font-weight: var(--weight-bold);
+  font-size: var(--step--1);
+  max-width: calc(100% - 32px);
+}
