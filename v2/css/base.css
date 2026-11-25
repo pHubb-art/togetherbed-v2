@@ -96,12 +96,13 @@ p { margin: 0; text-wrap: pretty; }
   background: var(--glass-tint);
   -webkit-backdrop-filter: blur(18px) saturate(1.4);
   backdrop-filter: blur(18px) saturate(1.4);
-  box-shadow: inset 0 1px 0 var(--glass-edge), inset 0 0 0 1px var(--glass-edge);
+  /* No outline stroke on glass. Depth comes from a soft curved inner highlight and a drop shadow. */
+  box-shadow: inset 0 10px 14px -10px var(--glass-edge), inset 0 -8px 12px -10px rgb(0 0 0 / 0.08), 0 8px 24px -12px rgb(0 0 0 / 0.18);
 }
 
 /* ---------- Buttons ---------- */
 .btn {
-  --sq-r: 18px;
+  --sq-r: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;

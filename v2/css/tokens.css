@@ -44,7 +44,8 @@
   --step-3: clamp(2rem, 1.6rem + 2vw, 3.3rem);
   --step-4: clamp(2.6rem, 1.9rem + 3.6vw, 5rem);
 
-  /* Space and shape. Shapes are squircles: see .sq in base.css */
+  /* Space and shape. Shapes are squircles: see .sq in base.css.
+     Corners stay tight so a shape reads as close to a square, but not quite. */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -53,9 +54,9 @@
   --space-6: 2rem;
   --space-7: 3rem;
   --space-8: 5rem;
-  --radius-s: 14px;
-  --radius-m: 24px;
-  --radius-l: 40px;
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 22px;
   --page-max: 72rem;
   --text-max: 34rem;
 
