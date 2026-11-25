@@ -1,0 +1,183 @@
+{
+  "_cms": "Every string in this file maps to one CMS field, so editors can change copy without touching code.",
+  "home": {
+    "chapters": [
+      {
+        "id": "meet",
+        "eyebrow": "Meet Maya",
+        "headline": "She has tried a lot of mattresses.",
+        "body": "Showroom after showroom, Maya lies down, closes her eyes and tries to guess how she will feel in a year. Every bed feels fine for two minutes. None of them feel like hers."
+      },
+      {
+        "id": "struggle",
+        "eyebrow": "The shopping struggle",
+        "headline": "Too soft here, too firm there.",
+        "body": "Her shoulders want to sink in. Her hips want to stay level. Most beds ask her to pick one and live with the other."
+      },
+      {
+        "id": "suit",
+        "eyebrow": "A better idea",
+        "headline": "The best suit isn't off the shelf.",
+        "body": "You would never buy a suit by size alone. It gets taken in at the shoulders and let out at the waist until it fits you. Your bed can work the same way."
+      },
+      {
+        "id": "open",
+        "eyebrow": "Meet TogetherBed",
+        "headline": "A bed that opens up.",
+        "body": "Unzip the top and look inside. TogetherBed is built from blocks that sit side by side, with nothing glued in place, so every part can be chosen for you."
+      },
+      {
+        "id": "zones",
+        "eyebrow": "Zones and layers",
+        "headline": "Shoulders, hips and legs, each tuned.",
+        "body": "Each side has three zones. In every zone, a comfort block sits on a support block. Choose plush, medium or firm on top and the support you need underneath.",
+        "cta": {
+          "label": "See how it's built",
+          "href": "#zones"
+        }
+      },
+      {
+        "id": "partner",
+        "eyebrow": "And then there's Sam",
+        "headline": "Two people, one bed.",
+        "body": "Maya sleeps on her side. Sam sleeps on his back. With TogetherBed, each side is built for the person sleeping on it, so neither of you has to meet in the middle."
+      },
+      {
+        "id": "swap",
+        "eyebrow": "Bodies change",
+        "headline": "Swap a section, keep the bed.",
+        "body": "If one zone stops feeling right, you change that block, not the whole mattress. Your bed can keep up with you over the years.",
+        "cta": {
+          "label": "How swapping works",
+          "href": "#swap"
+        }
+      },
+      {
+        "id": "start",
+        "eyebrow": "Your turn",
+        "headline": "Find your fit, together.",
+        "body": "Sleep Fit asks a few simple questions about how you sleep, then suggests a build for each side. It takes a few minutes, and you can do it side by side.",
+        "cta": {
+          "label": "Start Sleep Fit",
+          "href": "/fit"
+        }
+      }
+    ]
+  },
+  "fit": {
+    "headline": "Find the bed that fits you both.",
+    "intro": "A few questions about how you sleep, and we will suggest a build for your side. Then hand the phone to your partner for theirs.",
+    "paths": {
+      "quick": {
+        "label": "Quick fit",
+        "blurb": "Three questions, about a minute. A great place to start."
+      },
+      "engineer": {
+        "label": "Fine-tune it",
+        "blurb": "Go deeper with your body details and adjust each zone yourself."
+      },
+      "skip": {
+        "label": "Just browse",
+        "blurb": "Skip the questions and look through our pre-built beds."
+      }
+    },
+    "questions": {
+      "pose": {
+        "prompt": "How do you usually fall asleep?",
+        "options": {
+          "back": "On my back",
+          "side": "On my side",
+          "stomach": "On my stomach"
+        }
+      },
+      "build": {
+        "prompt": "How would you describe your build?",
+        "options": {
+          "lighter": "Lighter",
+          "average": "Average",
+          "heavier": "Heavier"
+        }
+      },
+      "pain": {
+        "prompt": "Where do you tend to wake up stiff or sore?",
+        "options": {
+          "neck": "Neck",
+          "shoulders": "Shoulders",
+          "back": "Lower back",
+          "hips": "Hips",
+          "knees": "Knees"
+        },
+        "none": "Nowhere in particular"
+      }
+    },
+    "passThePhone": {
+      "headline": "Now pass the phone.",
+      "body": "Your side is ready. Hand this over so your partner can answer for their side. Their answers stay theirs, and you will see both sides together at the end.",
+      "cta": "My partner is ready"
+    },
+    "reveal": {
+      "headline": "Here's your bed, side by side.",
+      "body": "One bed, two builds. Each side is shaped around the person sleeping on it, zone by zone, so you can see exactly where you match and where you differ."
+    },
+    "result": {
+      "headline": "Your TogetherBed, built for both of you.",
+      "onlineLine": "Happy with one feel per side? Order the Fit line online.",
+      "storeLine": "Want each zone tuned? Tailored and Bespoke are built with you in store."
+    }
+  },
+  "swap": {
+    "headline": "Change one block, not the bed.",
+    "body": "Every comfort and support block can be rotated, flipped or replaced on its own. When your body or your sleep changes, your bed changes with you.",
+    "steps": [
+      "Unzip the top panel.",
+      "Lift out the block you want to change.",
+      "Drop in the new one and zip it closed."
+    ]
+  },
+  "storeHandoff": {
+    "headline": "Take your result to a store.",
+    "body": "Pick a store near you and email them your Sleep Fit result. It includes both sides, zone by zone, so the team can see exactly what to build.",
+    "emailCta": "Email my result to this store",
+    "callAhead": {
+      "headline": "Give them a call first.",
+      "body": "A quick call ahead lets the store build your bed before you arrive, so you can lie down on your own setup when you walk in."
+    },
+    "emailSubject": "My TogetherBed Sleep Fit result",
+    "emailBodyIntro": "Hello, I used Sleep Fit on the TogetherBed site and would like to try this build in store. My result is below, side by side and zone by zone."
+  },
+  "shop": {
+    "headline": "Finish your bed with PureCare.",
+    "body": "Sheets and pillows from PureCare, chosen to go with the bed you built. Order them here and they arrive ready for your first night."
+  },
+  "seo": {
+    "home": {
+      "title": "TogetherBed | One bed, each side your own",
+      "description": "A modular mattress for two. Each side has three zones with swappable comfort and support blocks, so each of you sleeps on a bed built for you."
+    },
+    "fit": {
+      "title": "Sleep Fit | Find your TogetherBed build",
+      "description": "Answer a few questions about how you sleep and get a suggested build for each side of the bed. Do it together in a few minutes."
+    },
+    "stores": {
+      "title": "Find a TogetherBed store near you",
+      "description": "Find a nearby store, email them your Sleep Fit result and call ahead so they can build your bed before you visit."
+    },
+    "shop": {
+      "title": "PureCare sheets and pillows | TogetherBed",
+      "description": "Shop PureCare sheets and pillows chosen to go with your TogetherBed, delivered to your door."
+    }
+  },
+  "ui": {
+    "sleepers": [
+      "Sleeper one",
+      "Sleeper two"
+    ],
+    "back": "Back",
+    "next": "Next",
+    "justMe": "It's just me",
+    "startOver": "Start over",
+    "support": "support",
+    "pillow": "Pillow",
+    "bedMapLabel": "Top-down view of your bed: two sides, three zones each"
+  }
+}

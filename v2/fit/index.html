@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sleep Fit | TogetherBed</title>
+  <meta name="description" content="Answer three quick questions each and see a TogetherBed built for both of you.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages/fit.css">
+</head>
+<body>
+  <a class="skip-link" href="#fit-app">Skip to Sleep Fit</a>
+  <main class="wrap fit-shell">
+    <a class="logo" href="../" aria-label="TogetherBed home">
+      <svg viewBox="0 0 256 66" width="132" height="34" role="img" aria-label="TogetherBed"><use href="../img/logo.svg#wordmark"></use></svg>
+    </a>
+    <progress id="fit-progress" max="1" value="0" aria-label="Sleep Fit progress"></progress>
+    <div id="fit-app" aria-live="polite"></div>
+    <noscript><p>Sleep Fit needs JavaScript. You can also visit a store and we will build your bed with you.</p></noscript>
+  </main>
+  <script type="module" src="../js/fit-page/main.js"></script>
+</body>
+</html>
