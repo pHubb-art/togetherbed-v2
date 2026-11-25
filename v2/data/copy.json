@@ -123,6 +123,22 @@
       "headline": "Your TogetherBed, built for both of you.",
       "onlineLine": "Happy with one feel per side? Order the Fit line online.",
       "storeLine": "Want each zone tuned? Tailored and Bespoke are built with you in store."
+    },
+    "tune": {
+      "headline": "Fine-tune each zone.",
+      "body": "We started you on the build we suggest. Change any block and watch how your alignment responds.",
+      "comfort": "Comfort on top",
+      "support": "Support underneath",
+      "bodyDetails": "Add your height and weight (optional)",
+      "bodyNote": "This sharpens the suggestion. It stays on this device.",
+      "height": "Height",
+      "heightUnknown": "Not sure",
+      "weight": "Weight in pounds",
+      "alignment": "Alignment",
+      "reset": "Back to the suggested build",
+      "yourOwn": "Your own build",
+      "suggested": "Suggested build",
+      "done": "See my bed"
     }
   },
   "swap": {

@@ -3,9 +3,9 @@
  */
 import { loadJson } from "../shared/load-json.js";
 import { saveState, readState, clearState } from "../shared/storage.js";
-import { newFlow, nextScreen, previousScreen, withAnswer, skipToResult, continueSolo, progress, QUESTION_ORDER } from "./flow.js";
+import { newFlow, nextScreen, previousScreen, withAnswer, skipToResult, continueSolo, progress, QUESTION_ORDER, startEngineer, openTuning, withZoneLevel, resetTuning, withBody } from "./flow.js";
 import { buildBed } from "./build-bed.js";
-import { introView, questionView, partnerView, resultView } from "./views.js";
+import { introView, questionView, partnerView, resultView, tuneView } from "./views.js";
 
 const app = document.getElementById("fit-app");
 const bar = document.getElementById("fit-progress");
@@ -14,6 +14,7 @@ let copy, bedData, flow;
 function render({ moveFocus = true } = {}) {
   if (flow.screen === "intro") app.innerHTML = introView(copy);
   else if (flow.screen === "partner") app.innerHTML = partnerView(copy);
+  else if (flow.screen === "tune") app.innerHTML = tuneView(copy, flow, buildBed(flow, bedData), bedData);
   else if (flow.screen === "result") app.innerHTML = resultView(copy, buildBed(flow, bedData), bedData);
   else app.innerHTML = questionView(copy, flow);
 
@@ -34,15 +35,42 @@ const ACTIONS = {
   back: () => go(previousScreen(flow)),
   skip: () => go(skipToResult(flow)),
   solo: () => go(continueSolo(flow)),
+  engineer: () => go(startEngineer(flow)),
+  tune: () => go(openTuning(flow)),
+  reset: button => retune(resetTuning(flow, Number(button.dataset.side))),
   restart: () => { clearState("fit-flow"); go(newFlow()); }
 };
 
 app.addEventListener("click", event => {
-  const action = event.target.closest("[data-action]")?.dataset.action;
-  if (action && ACTIONS[action]) ACTIONS[action]();
+  const button = event.target.closest("[data-action]");
+  if (button && ACTIONS[button.dataset.action]) ACTIONS[button.dataset.action](button);
 });
 
+/** Redraw the tuning screen after a change, keeping the keyboard on the control just used. */
+function retune(nextFlow, usedControl) {
+  flow = nextFlow;
+  const scroll = window.scrollY;
+  render({ moveFocus: false });
+  window.scrollTo({ top: scroll });
+  if (!usedControl) return;
+  const value = usedControl.type === "radio" ? `[value="${CSS.escape(usedControl.value)}"]` : "";
+  app.querySelector(`[name="${usedControl.name}"]${value}`)?.focus({ preventScroll: true });
+}
+
+/** A block was changed by hand: names look like "tune-0-comfort-1" (side, layer, zone). */
+function onTuneChange(control) {
+  const [kind, side, field, zone] = control.name.split("-");
+  if (kind === "tune") {
+    const current = buildBed(flow, bedData).sides[Number(side)];
+    retune(withZoneLevel(flow, Number(side), field, Number(zone), control.value, current), control);
+  } else if (kind === "body") {
+    const read = name => Number(app.querySelector(`[name="body-${side}-${name}"]`).value) || null;
+    retune(withBody(flow, Number(side), { height: read("height"), weight: read("weight") }), control);
+  }
+}
+
 app.addEventListener("change", event => {
+  if (flow.screen === "tune") return onTuneChange(event.target);
   if (event.target.name !== "answer" || !QUESTION_ORDER.includes(flow.screen)) return;
   const picked = [...app.querySelectorAll("input[name=answer]:checked")].map(input => input.value);
   flow = withAnswer(flow, flow.screen, flow.screen === "pain" ? picked : picked[0]);

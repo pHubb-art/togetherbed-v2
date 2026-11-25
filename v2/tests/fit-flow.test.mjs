@@ -50,3 +50,52 @@ test("skip and solo give a mirrored bed", () => {
   const solo = continueSolo(withAnswer({ ...newFlow(), screen: "pose" }, "pose", "side"));
   assert.equal(buildBed(solo, beds).sameBothSides, true);
 });
+
+test("engineer path: questions end on the tuning screen, then the result", async () => {
+  const { startEngineer } = await import("../js/fit-page/flow.js");
+  let flow = startEngineer(newFlow());
+  assert.equal(flow.screen, "pose");
+  for (let step = 0; step < 20 && flow.screen !== "tune"; step++) flow = nextScreen(flow);
+  assert.equal(flow.screen, "tune");
+  assert.equal(nextScreen(flow).screen, "result");
+  assert.equal(previousScreen(flow).screen, "result");
+});
+
+test("changing one block by hand changes only that block and can be undone", async () => {
+  const { openTuning, withZoneLevel, resetTuning } = await import("../js/fit-page/flow.js");
+  let flow = newFlow();
+  flow.answers = [{ pose: "side", build: "lighter", pain: [] }, { pose: "back", build: "average", pain: [] }];
+  flow = openTuning({ ...flow, screen: "result" });
+  const before = buildBed(flow, beds);
+  const other = before.sides[0].comfort[1] === "Firm" ? "Plush" : "Firm";
+  flow = withZoneLevel(flow, 0, "comfort", 1, other, before.sides[0]);
+  const after = buildBed(flow, beds);
+  assert.equal(after.sides[0].comfort[1], other);
+  assert.equal(after.sides[0].comfort[0], before.sides[0].comfort[0]);
+  assert.deepEqual(after.sides[0].support, before.sides[0].support);
+  assert.deepEqual(after.sides[1].comfort, before.sides[1].comfort);
+  assert.equal(after.sides[0].isTuned, true);
+  assert.ok(after.sides[0].hint);
+  assert.deepEqual(buildBed(resetTuning(flow, 0), beds).sides[0].comfort, before.sides[0].comfort);
+});
+
+test("a hand-tuned zone moves the bed to an in-store line", async () => {
+  const { withZoneLevel } = await import("../js/fit-page/flow.js");
+  let flow = skipToResult(newFlow());
+  const side = buildBed(flow, beds).sides[0];
+  flow = withZoneLevel(flow, 0, "support", 0, side.support[0] === "Medium" ? "Extra Firm" : "Medium", { comfort: ["Medium", "Medium", "Medium"], support: [side.support[0], side.support[0], side.support[0]] });
+  assert.equal(buildBed(flow, beds).line.where, "in store");
+});
+
+test("height and weight sharpen the sleeper, and old saved flows still build", async () => {
+  const { withBody } = await import("../js/fit-page/flow.js");
+  let flow = { ...newFlow(), screen: "result" };
+  flow.answers = [{ pose: "side", build: "average", pain: [] }, { pose: "side", build: "average", pain: [] }];
+  flow = withBody(flow, 0, { height: 74, weight: 260 });
+  const bed = buildBed(flow, beds);
+  assert.deepEqual(bed.sides[0].sleeper, { height: 74, weight: 260 });
+  assert.notDeepEqual(bed.sides[1].sleeper, bed.sides[0].sleeper);
+  assert.equal(withBody(flow, 0, { height: null, weight: null }).body[0], null);
+  const { body, tuned, engineer, ...oldFlow } = flow;
+  assert.ok(buildBed(oldFlow, beds).line.name);
+});
