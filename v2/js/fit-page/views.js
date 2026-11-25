@@ -94,6 +94,7 @@ export function resultView(copy, bed, bedData) {
       <p>${escapeHtml(online ? copy.fit.result.onlineLine : copy.fit.result.storeLine)}</p>
     </section>
     <div class="btn-row">
+      <a class="btn btn-accent sq" href="../stores/">${escapeHtml(copy.ui.sendToStore)}</a>
       <button class="btn btn-quiet sq" type="button" data-action="back">${escapeHtml(copy.ui.back)}</button>
       <button class="btn btn-quiet sq" type="button" data-action="restart">${escapeHtml(copy.ui.startOver)}</button>
     </div>`;

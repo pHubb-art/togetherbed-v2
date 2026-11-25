@@ -12,10 +12,13 @@ folder is changed, so the live site (`index.html`, `compare/`) is unaffected.
 | `data/` | Content the site reads: beds, products, stores. Maps one-to-one onto CMS fields. Prices and stores are samples. |
 | `index.html` | Homepage. Generated from `data/copy.json` by `npm run build`; do not edit by hand |
 | `fit/` | Sleep Fit page |
+| `stores/` | Store finder and the email handoff (no booking) |
+| `shop/` | PureCare shop with a cart (sample products, no checkout) |
 | `models/` | Optimized 3D models for the first view (3.4 MB, down from the originals on Sirv) |
 | `js/home/` | Homepage story: bed poses per chapter, scroll tracking, 3D scene |
 | `js/fit/` | Sleep Fit logic, one small file per job |
 | `js/fit-page/` | Sleep Fit screens and flow |
+| `js/stores/`, `js/shop/` | Store handoff and cart logic, each split into pure logic and page wiring |
 | `tools/` | The script that writes `index.html` from the copy |
 | `tests/` | Automated checks |
 

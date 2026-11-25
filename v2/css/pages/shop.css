@@ -1,0 +1,57 @@
+/* PureCare shop page: product grid and cart summary */
+.shop-shell { padding-block: var(--space-5) var(--space-7); }
+.shop-shell > * + * { margin-top: var(--space-5); }
+.shop-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.shop-cart-link { min-height: 40px; padding-inline: var(--space-4); text-decoration: none; font-size: var(--step--1); }
+.shop-cart-link[hidden] { display: none; }
+
+#shop-app { outline: none; }
+#shop-app > * + * { margin-top: var(--space-4); }
+#shop-app h1 { font-size: var(--step-3); outline: none; }
+#shop-app h2 { font-size: var(--step-1); font-weight: var(--weight-bold); outline: none; }
+#shop-app > .pill { white-space: normal; }
+
+.shop-layout { display: grid; gap: var(--space-5); align-items: start; }
+@media (min-width: 60rem) {
+  .shop-layout { grid-template-columns: minmax(0, 1fr) 22rem; }
+  .cart { position: sticky; top: var(--space-5); }
+}
+
+.product-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.product-card { padding: var(--space-4); min-width: 0; }
+.product-card .btn { width: 100%; }
+.product-image {
+  --sq-r: 20px;
+  aspect-ratio: 4 / 3;
+  background: color-mix(in srgb, var(--swatch, var(--surface-sunk)) 30%, var(--surface-sunk));
+}
+.product-image[data-swatch="apricot"] { --swatch: var(--sleeper-a); }
+.product-image[data-swatch="rose"] { --swatch: var(--sleeper-b); }
+.product-image[data-swatch="lilac"] { --swatch: var(--color-lilac); }
+.product-image[data-swatch="honey"] { --swatch: var(--color-honey); }
+.product-price strong { font-size: var(--step-1); }
+
+.cart { padding: var(--space-4); min-width: 0; }
+.cart-lines { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+.cart-line {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--line);
+}
+.cart-line-name { grid-column: 1 / -1; overflow-wrap: anywhere; }
+.cart-quantity input { min-height: 44px; }
+.cart-line-price { font-weight: var(--weight-bold); }
+.cart-total { display: flex; justify-content: space-between; gap: var(--space-3); font-size: var(--step-1); }
+.cart > .btn, #cart-body > .btn { width: 100%; }
+
+.toast[hidden] { display: none; }

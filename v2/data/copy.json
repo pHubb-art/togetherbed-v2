@@ -143,11 +143,57 @@
       "body": "A quick call ahead lets the store build your bed before you arrive, so you can lie down on your own setup when you walk in."
     },
     "emailSubject": "My TogetherBed Sleep Fit result",
-    "emailBodyIntro": "Hello, I used Sleep Fit on the TogetherBed site and would like to try this build in store. My result is below, side by side and zone by zone."
+    "emailBodyIntro": "Hello, I used Sleep Fit on the TogetherBed site and would like to try this build in store. My result is below, side by side and zone by zone.",
+    "skipLink": "Skip to the store finder",
+    "noscript": "The store finder needs JavaScript. You can still visit any TogetherBed store and the team will build your bed with you.",
+    "resultReady": "Your Sleep Fit result is ready to send: {left} on one side, {right} on the other, in the {line} line.",
+    "noResult": "You have not taken Sleep Fit yet. You can still pick a store and call them, or take Sleep Fit first so the team knows what to build.",
+    "fitLink": "Take Sleep Fit",
+    "sampleNote": "These are sample stores for the concept. The real list is on its way.",
+    "filterLabel": "City, state or ZIP",
+    "filterHint": "Type part of a city, a state or a ZIP to narrow the list.",
+    "matchCount": "Showing {shown} of {total} stores",
+    "noMatches": "No stores match that search. Try a nearby city, or clear the box to see every store.",
+    "listLabel": "Stores",
+    "hasSamples": "Has beds to lie on",
+    "chooseCta": "Send my result here",
+    "chooseCtaNoResult": "See this store",
+    "changeStore": "Choose a different store",
+    "lineNotListed": "This store does not list the {line} line. Ask about it when you call.",
+    "previewHeading": "Your email to {store}",
+    "previewHint": "This is the email that opens in your mail app. You can also copy it and paste it anywhere.",
+    "copyCta": "Copy the email",
+    "copied": "Copied. Paste it into any email.",
+    "copyFallback": "Copying is blocked here. The text is selected, so you can copy it yourself.",
+    "callLabel": "Call {store}",
+    "emailStoreLine": "For the team at {store}, {city}",
+    "emailPrebuild": "Closest pre-build",
+    "emailLine": "Product line",
+    "emailSignoff": "I will call ahead before I visit. Thank you."
   },
   "shop": {
     "headline": "Finish your bed with PureCare.",
-    "body": "Sheets and pillows from PureCare, chosen to go with the bed you built. Order them here and they arrive ready for your first night."
+    "body": "Sheets and pillows from PureCare, chosen to go with the bed you built.",
+    "skipLink": "Skip to the shop",
+    "noscript": "The shop needs JavaScript. You can also find PureCare sheets and pillows at any TogetherBed store.",
+    "samplePriceNote": "Prices on this page are sample prices for the concept, not real prices.",
+    "samplePrice": "Sample price",
+    "imageTag": "Photo to come",
+    "optionLabel": "Choose an option",
+    "addCta": "Add to cart",
+    "added": "Added to your cart.",
+    "productsLabel": "Products",
+    "cartLink": "Cart: {count}",
+    "cartHeadline": "Your cart",
+    "cartEmpty": "Your cart is empty. Add sheets or pillows and they show up here.",
+    "quantityLabel": "Quantity for {product}, {option}",
+    "removeCta": "Remove",
+    "removeLabel": "Remove {product}, {option}",
+    "removed": "Removed from your cart.",
+    "itemCount": "Items: {count}",
+    "totalLabel": "Sample total",
+    "checkoutCta": "Checkout",
+    "checkoutNote": "Checkout is not part of this concept, so this button stays off."
   },
   "seo": {
     "home": {
@@ -178,6 +224,8 @@
     "startOver": "Start over",
     "support": "support",
     "pillow": "Pillow",
-    "bedMapLabel": "Top-down view of your bed: two sides, three zones each"
+    "bedMapLabel": "Top-down view of your bed: two sides, three zones each",
+    "comfort": "comfort",
+    "sendToStore": "Send this to a store"
   }
 }
