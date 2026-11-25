@@ -1,0 +1,49 @@
+/* Homepage: the bed stays pinned while the story scrolls over it. */
+.story { position: relative; }
+.bed-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);   /* stops the picture's natural width from stretching the stage */
+  align-items: center;
+  overflow: hidden;
+  z-index: 0;
+}
+.bed-stage img, .bed-stage canvas {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 62svh;
+  align-self: start;
+  margin-top: 9svh;
+  object-fit: contain;
+}
+.bed-stage canvas { opacity: 0; transition: opacity 0.6s var(--ease, ease); }
+.bed-stage.is-3d canvas { opacity: 1; }
+.bed-stage.is-3d img { opacity: 0; transition: opacity 0.6s var(--ease, ease); }
+
+.chapters { position: relative; z-index: 1; margin-top: -100svh; }
+.chapter { min-height: 100svh; display: grid; align-items: end; padding-bottom: 7svh; }
+.chapter-card {
+  --sq-r: var(--radius-l);
+  max-width: 30rem;
+  padding: var(--space-5);
+  display: grid;
+  gap: var(--space-3);
+  opacity: 0.35;
+  transform: translateY(12px);
+  transition: opacity 0.4s var(--ease, ease), transform 0.4s var(--ease, ease);
+}
+.chapter.is-current .chapter-card, .chapter:first-child .chapter-card { opacity: 1; transform: none; }
+.chapter-card h1, .chapter-card h2 { font-size: var(--step-2); font-weight: var(--weight-light); line-height: 1.12; text-wrap: balance; margin: 0; }
+.chapter-card p { margin: 0; }
+.home-header { position: absolute; inset: 0 0 auto; z-index: 2; padding-block: var(--space-4); display: flex; justify-content: space-between; align-items: center; }
+
+@media (min-width: 60rem) {
+  .bed-stage img, .bed-stage canvas { height: 80svh; margin-top: 10svh; width: 62%; justify-self: end; }
+  .chapter { align-items: center; padding-bottom: 0; }
+  .chapter-card { max-width: 26rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chapter-card { opacity: 1; transform: none; transition: none; }
+}

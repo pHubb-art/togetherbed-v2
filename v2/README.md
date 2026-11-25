@@ -10,7 +10,13 @@ folder is changed, so the live site (`index.html`, `compare/`) is unaffected.
 | `css/` | Design tokens (colors, type, spacing), base styles, components |
 | `img/` | Logo, favicon, squircle mask |
 | `data/` | Content the site reads: beds, products, stores. Maps one-to-one onto CMS fields. Prices and stores are samples. |
+| `index.html` | Homepage. Generated from `data/copy.json` by `npm run build`; do not edit by hand |
+| `fit/` | Sleep Fit page |
+| `models/` | Optimized 3D models for the first view (3.4 MB, down from the originals on Sirv) |
+| `js/home/` | Homepage story: bed poses per chapter, scroll tracking, 3D scene |
 | `js/fit/` | Sleep Fit logic, one small file per job |
+| `js/fit-page/` | Sleep Fit screens and flow |
+| `tools/` | The script that writes `index.html` from the copy |
 | `tests/` | Automated checks |
 
 ## Sleep Fit logic (`js/fit/`)
