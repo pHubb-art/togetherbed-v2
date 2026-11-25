@@ -3,6 +3,8 @@
  * when the device can take it, and follows the visitor's own scrolling.
  */
 import { chapterProgress } from "./scroll-progress.js";
+import { panesForChapter } from "./story-glass.js";
+import { drawGlassStack } from "../shared/glass-stack.js";
 
 const stage = document.getElementById("bed-stage");
 const canvas = document.getElementById("bed-canvas");
@@ -31,13 +33,23 @@ async function start3d() {
   }
 }
 
+/** The glass cards behind the bed follow the story: one more card as each idea arrives. */
+function showGlassFor(chapterId) {
+  const { panes, blended } = panesForChapter(chapterId);
+  drawGlassStack(document.getElementById("story-glass"), panes, { blended });
+}
+
 function markCurrentChapter() {
   const observer = new IntersectionObserver(entries => {
-    for (const entry of entries) entry.target.classList.toggle("is-current", entry.isIntersecting);
+    for (const entry of entries) {
+      entry.target.classList.toggle("is-current", entry.isIntersecting);
+      if (entry.isIntersecting) showGlassFor(entry.target.dataset.chapter);
+    }
   }, { rootMargin: "-45% 0px -45% 0px" });
   chapters.forEach(chapter => observer.observe(chapter));
 }
 
+showGlassFor(chapters[0].dataset.chapter);
 markCurrentChapter();
 if (shouldLoad3d()) {
   // Wait until the page is idle so the 3D never delays the first view.

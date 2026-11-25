@@ -24,7 +24,7 @@ export function lineForBed(sides) {
 }
 
 /** Middle value of a list of feels, on that feel's soft-to-firm scale. */
-function typicalLevel(values, scale) {
+export function typicalLevel(values, scale) {
   const ranks = values.map(value => scale.indexOf(value)).sort((a, b) => a - b);
   return scale[ranks[Math.floor(ranks.length / 2)]];
 }

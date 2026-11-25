@@ -139,6 +139,11 @@
       "yourOwn": "Your own build",
       "suggested": "Suggested build",
       "done": "See my bed"
+    },
+    "color": {
+      "label": "Your build color",
+      "number": "No. {number}",
+      "note": "Every layer of your bed has its own color. Laid together, they make this one. It is yours."
     }
   },
   "swap": {

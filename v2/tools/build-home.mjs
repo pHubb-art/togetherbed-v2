@@ -66,6 +66,7 @@ const html = `<!doctype html>
   ${siteHeaderHtml(copy.nav, "home", "./")}
   <main class="story" id="story">
     <div class="bed-stage" id="bed-stage" aria-hidden="true">
+      <div class="glass-stack story-glass" id="story-glass"></div>
       <img src="img/bed-poster.webp" width="1200" height="900" alt="" decoding="async" fetchpriority="high">
       <canvas id="bed-canvas"></canvas>
     </div>

@@ -18,6 +18,9 @@
   margin-top: 9svh;
   object-fit: contain;
 }
+/* Glass cards sit behind the bed and add color; the bed stays the subject */
+.story-glass { grid-area: 1 / 1; align-self: start; justify-self: center; margin-top: 6svh; height: 66svh; aspect-ratio: 1; max-width: 120%; opacity: 0.7; }
+.bed-stage img, .bed-stage canvas { position: relative; }
 .bed-stage canvas { opacity: 0; transition: opacity 0.6s var(--ease, ease); }
 .bed-stage.is-3d canvas { opacity: 1; }
 .bed-stage.is-3d img { opacity: 0; transition: opacity 0.6s var(--ease, ease); }
@@ -41,6 +44,7 @@
 .site-header { position: absolute; inset: 0 0 auto; z-index: 2; }
 
 @media (min-width: 60rem) {
+  .story-glass { justify-self: end; margin-right: 8%; margin-top: 8svh; height: 84svh; }
   .bed-stage img, .bed-stage canvas { height: 80svh; margin-top: 10svh; width: 62%; justify-self: end; }
   .chapter { align-items: center; padding-bottom: 0; }
   .chapter-card { max-width: 26rem; }

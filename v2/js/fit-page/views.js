@@ -84,9 +84,21 @@ function sideSummary(copy, side, index) {
     </div>`;
 }
 
-export function resultView(copy, bed, bedData) {
+/** The finished build as one color with its number. */
+function buildColorCard(copy, color) {
+  const text = copy.fit.color;
+  return `
+    <section class="build-color sq">
+      <p class="eyebrow">${escapeHtml(text.label)}</p>
+      <p class="build-number">${escapeHtml(text.number.replace("{number}", color.number))}</p>
+      <p>${escapeHtml(text.note)}</p>
+    </section>`;
+}
+
+export function resultView(copy, bed, bedData, color) {
   const online = bed.line.where === "online";
   return `
+    ${buildColorCard(copy, color)}
     <h1 tabindex="-1">${escapeHtml(copy.fit.reveal.headline)}</h1>
     <p class="lede">${escapeHtml(copy.fit.reveal.body)}</p>
     ${bedMap(copy, bed, bedData.zones)}

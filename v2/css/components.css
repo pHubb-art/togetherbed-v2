@@ -250,3 +250,27 @@ button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, v
   font-size: var(--step--1);
   max-width: calc(100% - 32px);
 }
+
+/* ---------- Glass cards: the background element (drawn by js/shared/glass-stack.js) ----------
+   Colored glass panes laid loosely on top of each other. Where they overlap the
+   colors deepen. No outlines: the edge comes from the soft thickness under each pane. */
+.glass-stack { pointer-events: none; }
+.glass-stack svg { width: 100%; height: 100%; overflow: visible; }
+.glass-stack .panes { isolation: isolate; }
+.glass-stack .pane {
+  mix-blend-mode: multiply;
+  transform: translate(var(--x), var(--y)) rotate(var(--turn));
+  transition: transform 0.9s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.glass-stack .pane.is-new { animation: pane-drop 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes pane-drop {
+  from { opacity: 0; transform: translate(var(--x), calc(var(--y) - 46px)) rotate(calc(var(--turn) * 2.5)); }
+}
+/* Finished: every pane slides to the middle and they read as one color */
+.glass-stack.is-blended .pane { transform: none; transition-duration: 1.2s; }
+.glass-stack .pane-mark { transition: opacity 0.6s; }
+.glass-stack.is-blended .pane-mark { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .glass-stack .pane, .glass-stack .pane-mark { transition: none; }
+  .glass-stack .pane.is-new { animation: none; }
+}

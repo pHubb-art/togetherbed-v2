@@ -15,7 +15,7 @@
   --color-lilac: #b7a3d9;          /* quiet accent, night */
 
   /* Roles (components use these, never the raw brand colors) */
-  --bg: var(--color-pillow);
+  --bg: #fff;                     /* white ground, so the glass colors read true (Patrick, 2026-11-25) */
   --surface: #fffcf9;
   --surface-sunk: #f8ece3;
   --text: var(--color-ink);
@@ -63,25 +63,8 @@
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #120e0d;
-    --surface: #1c1716;
-    --surface-sunk: #241d1b;
-    --text: #fff7f1;
-    --text-muted: #c2b0a8;
-    --line: #3a2f2b;
-    --accent: #e07aa6;
-    --on-accent: #16110f;
-    --focus: #f4c866;
-    --layer-blend: screen;
-    --glass-tint: rgb(28 23 22 / 0.5);
-    --glass-edge: rgb(255 255 255 / 0.14);
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.6);
-    color-scheme: dark;
-  }
-}
-
+/* Dark theme: only when a page asks for it with data-theme="dark". The color glass is designed
+   on white, so the site does not switch on its own until a dark version of the glass is designed. */
 :root[data-theme="dark"] {
   --bg: #120e0d;
   --surface: #1c1716;
