@@ -106,3 +106,10 @@
 .real-bed-view canvas { display: block; width: 100%; aspect-ratio: 4 / 3; opacity: 0; transition: opacity 0.6s var(--ease, ease); }
 .real-bed-view.is-ready canvas { opacity: 1; }
 .real-bed p { margin: 0; font-size: var(--step--1); }
+
+/* Two ways to buy, side by side on wide screens */
+.fit-choices { display: grid; gap: var(--space-3); }
+.fit-choice h2 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin: 0; }
+.fit-choice p { margin: 0; }
+.fit-choice .btn { justify-self: start; }
+@media (min-width: 48rem) { .fit-choices { grid-template-columns: 1fr 1fr; } }

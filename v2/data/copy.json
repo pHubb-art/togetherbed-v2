@@ -122,7 +122,22 @@
     "result": {
       "headline": "Your TogetherBed, built for both of you.",
       "onlineLine": "Happy with one feel per side? Order the Fit line online.",
-      "storeLine": "Want each zone tuned? Tailored and Bespoke are built with you in store."
+      "storeLine": "Want each zone tuned? Tailored and Bespoke are built with you in store.",
+      "custom": {
+        "eyebrow": "Built for you",
+        "headline": "Your custom build",
+        "body": "Every zone tuned the way you see it above. Send it to a store and they build it with you."
+      },
+      "ready": {
+        "eyebrow": "Ready now",
+        "headline": "The closest ready-made bed",
+        "body": "One feel per side, the nearest match to your build, to order online.",
+        "both": "{left} on one side, {right} on the other.",
+        "same": "{name} on both sides.",
+        "soon": "Online ordering opens at launch.",
+        "differs": "It changes {count} of your {total} blocks to one feel per side."
+      },
+      "exact": "Your build is one of our ready-made beds, so you can order it online or see it in a store."
     },
     "tune": {
       "headline": "Fine-tune each zone.",

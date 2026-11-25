@@ -5,6 +5,7 @@
 import { COMFORT_LEVELS, SUPPORT_LEVELS } from "../fit/constants.js";
 import { reasonsFor, EXPLAIN_ZONES } from "../fit/explain.js";
 import { zoneColors } from "./build-panes.js";
+import { blocksDifferent } from "../fit/bed-lines.js";
 
 const escapeHtml = text => String(text ?? "").replace(/[&<>"']/g, char =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
@@ -101,12 +102,46 @@ function sideExplained(copy, flow, side, index, zones) {
       <ul class="zone-list">${zones.map((zone, zoneIndex) =>
         zoneExplained(copy, side, zone, zoneIndex, colors[zoneIndex], reasons[EXPLAIN_ZONES[zoneIndex]])).join("")}</ul>
       <p class="muted">${escapeHtml(copy.ui.pillow)}: ${escapeHtml(side.pillow)} · ${escapeHtml(copy.fit.tune.alignment)}: ${escapeHtml(side.alignment)}</p>
-      <p><strong>${escapeHtml(side.prebuild.name)}</strong><br><span class="muted">${escapeHtml(side.prebuild.blurb)}</span></p>
     </section>`;
 }
 
+/** The closest ready-made bed in words: one pre-build per side. */
+function readyMadeLine(text, sides) {
+  const [left, right = left] = sides.map(side => side.prebuild.name);
+  return left === right ? text.same.replace("{name}", left) : text.both.replace("{left}", left).replace("{right}", right);
+}
+
+/**
+ * Two ways to buy, shown together: the custom build to take to a store,
+ * and the closest ready-made bed to order online.
+ */
+function buildChoices(copy, bed, sides, color) {
+  const text = copy.fit.result, alreadyReadyMade = bed.line.where === "online";
+  const changed = sides.reduce((count, side) => count + blocksDifferent(side, side.prebuild), 0);
+  const number = `<p class="build-number"><span class="zone-chip sq" style="background:${color.hex}" aria-hidden="true"></span>${escapeHtml(copy.fit.color.label)} ${escapeHtml(copy.fit.color.number.replace("{number}", color.number))}</p>`;
+  const custom = alreadyReadyMade ? "" : `
+      <section class="card sq fit-choice">
+        <p class="eyebrow">${escapeHtml(text.custom.eyebrow)}</p>
+        <h2>${escapeHtml(text.custom.headline)} <span class="pill pill-honey">${escapeHtml(bed.line.name)}</span></h2>
+        <p>${escapeHtml(text.custom.body)}</p>
+        ${number}
+        <a class="btn btn-accent sq" href="../stores/">${escapeHtml(copy.ui.sendToStore)}</a>
+      </section>`;
+  const ready = `
+      <section class="card sq fit-choice">
+        <p class="eyebrow">${escapeHtml(text.ready.eyebrow)}</p>
+        <h2>${escapeHtml(text.ready.headline)}</h2>
+        <p>${escapeHtml(alreadyReadyMade ? text.exact : text.ready.body)}</p>
+        <p><strong>${escapeHtml(readyMadeLine(text.ready, sides))}</strong></p>
+        ${alreadyReadyMade ? "" : `<p class="muted">${escapeHtml(text.ready.differs.replace("{count}", changed).replace("{total}", sides.length * 6))}</p>`}
+        ${alreadyReadyMade ? number : ""}
+        <p class="field-hint">${escapeHtml(text.ready.soon)}</p>
+        ${alreadyReadyMade ? `<a class="btn btn-accent sq" href="../stores/">${escapeHtml(copy.ui.sendToStore)}</a>` : ""}
+      </section>`;
+  return `<div class="fit-choices">${custom}${ready}</div>`;
+}
+
 export function resultView(copy, flow, bed, bedData, color) {
-  const online = bed.line.where === "online";
   const sides = flow.solo ? [bed.sides[0]] : bed.sides;
   return `
     <h1 tabindex="-1">${escapeHtml(copy.fit.reveal.headline)}</h1>
@@ -116,14 +151,8 @@ export function resultView(copy, flow, bed, bedData, color) {
       <button class="btn btn-accent sq" type="button" data-action="real-bed">${escapeHtml(copy.fit.realBed.cta)}</button>
     </div>
     <div class="fit-sides" data-count="${sides.length}">${sides.map((side, index) => sideExplained(copy, flow, side, index, bedData.zones)).join("")}</div>
-    <section class="card sq fit-line">
-      <span class="pill pill-honey">${escapeHtml(bed.line.name)}</span>
-      <h2>${escapeHtml(copy.fit.result.headline)}</h2>
-      <p>${escapeHtml(online ? copy.fit.result.onlineLine : copy.fit.result.storeLine)}</p>
-      <p class="build-number"><span class="zone-chip sq" style="background:${color.hex}" aria-hidden="true"></span>${escapeHtml(copy.fit.color.label)} ${escapeHtml(copy.fit.color.number.replace("{number}", color.number))}</p>
-    </section>
+    ${buildChoices(copy, bed, sides, color)}
     <div class="btn-row">
-      <a class="btn btn-accent sq" href="../stores/">${escapeHtml(copy.ui.sendToStore)}</a>
       <button class="btn btn-quiet sq" type="button" data-action="tune">${escapeHtml(copy.fit.paths.engineer.label)}</button>
       <button class="btn btn-quiet sq" type="button" data-action="back">${escapeHtml(copy.ui.back)}</button>
       <button class="btn btn-quiet sq" type="button" data-action="restart">${escapeHtml(copy.ui.startOver)}</button>

@@ -99,3 +99,10 @@ test("height and weight sharpen the sleeper, and old saved flows still build", a
   const { body, tuned, engineer, ...oldFlow } = flow;
   assert.ok(buildBed(oldFlow, beds).line.name);
 });
+
+test("counts how many blocks the ready-made bed changes", async () => {
+  const { blocksDifferent } = await import("../js/fit/bed-lines.js");
+  const prebuild = { contour: "medium", support: "F" };
+  assert.equal(blocksDifferent({ comfort: ["Medium", "Medium", "Medium"], support: ["Firm", "Firm", "Firm"] }, prebuild), 0);
+  assert.equal(blocksDifferent({ comfort: ["Plush", "Medium", "Medium"], support: ["Firm", "Extra Firm", "Firm"] }, prebuild), 2);
+});

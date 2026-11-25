@@ -49,3 +49,13 @@ export function closestPrebuild(side, prebuilds) {
   }
   return best;
 }
+
+/**
+ * How many of a side's six blocks (three comfort, three support) a pre-build
+ * would change. Used to say honestly how far the ready-made bed is from the custom one.
+ */
+export function blocksDifferent(side, prebuild) {
+  const comfort = side.comfort.filter(feel => feel !== COMFORT_BY_ID[prebuild.contour]).length;
+  const support = side.support.filter(feel => feel !== SUPPORT_BY_ID[prebuild.support]).length;
+  return comfort + support;
+}
