@@ -3,11 +3,29 @@
  * All visible words come from data/copy.json; nothing is written here.
  */
 import { COMFORT_LEVELS, SUPPORT_LEVELS } from "../fit/constants.js";
+import { reasonsFor, EXPLAIN_ZONES } from "../fit/explain.js";
+import { zoneColors } from "./build-panes.js";
 
 const escapeHtml = text => String(text ?? "").replace(/[&<>"']/g, char =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
 
 const sleeperLabel = (copy, index) => copy.ui.sleepers[index];
+
+/**
+ * The bed seen from above, drawn in glass by main.js after each screen is shown.
+ * Decoration for sighted visitors; the same facts are in the text of the result.
+ */
+function glassBed(copy, zones, sideCount, caption = "") {
+  const who = Array.from({ length: sideCount }, (_, index) =>
+    `<span class="fit-who" data-sleeper="${index}">${escapeHtml(sleeperLabel(copy, index))}</span>`).join("");
+  return `
+    <div class="glass-bed" aria-hidden="true">
+      ${caption ? `<p class="eyebrow">${escapeHtml(caption)}</p>` : ""}
+      <div class="glass-bed-who" data-count="${sideCount}">${who}</div>
+      <div class="glass-bed-zones">${zones.map(zone => `<span>${escapeHtml(zone.label)}</span>`).join("")}</div>
+      <div class="glass-stack glass-bed-art" id="fit-bed"></div>
+    </div>`;
+}
 
 export function introView(copy) {
   const { quick, engineer, skip } = copy.fit.paths;
@@ -21,7 +39,7 @@ export function introView(copy) {
     </div>`;
 }
 
-export function questionView(copy, flow) {
+export function questionView(copy, flow, bedData) {
   const question = copy.fit.questions[flow.screen];
   const chosen = flow.answers[flow.sleeper][flow.screen];
   const many = flow.screen === "pain";
@@ -40,10 +58,11 @@ export function questionView(copy, flow) {
     <div class="btn-row">
       <button class="btn btn-quiet sq" type="button" data-action="back">${escapeHtml(copy.ui.back)}</button>
       <button class="btn btn-accent sq" type="button" data-action="next"${canContinue ? "" : " disabled"}>${escapeHtml(copy.ui.next)}</button>
-    </div>`;
+    </div>
+    ${glassBed(copy, bedData.zones, 2, copy.fit.building)}`;
 }
 
-export function partnerView(copy) {
+export function partnerView(copy, bedData) {
   const pass = copy.fit.passThePhone;
   return `
     <p class="eyebrow fit-who" data-sleeper="1">${escapeHtml(sleeperLabel(copy, 1))}</p>
@@ -53,60 +72,52 @@ export function partnerView(copy) {
       <button class="btn btn-accent sq" type="button" data-action="next">${escapeHtml(pass.cta)}</button>
       <button class="btn btn-quiet sq" type="button" data-action="solo">${escapeHtml(copy.ui.justMe)}</button>
       <button class="btn btn-quiet sq" type="button" data-action="back">${escapeHtml(copy.ui.back)}</button>
-    </div>`;
+    </div>
+    ${glassBed(copy, bedData.zones, 2, copy.fit.building)}`;
 }
 
-function bedBlock(copy, side, sideIndex, zone, zoneIndex) {
-  const feel = side.comfort[zoneIndex];
+/** One zone of one side in words: its color, its feel and why. */
+function zoneExplained(copy, side, zone, zoneIndex, color, reasonIds) {
+  const text = copy.fit.explain, zoneKey = EXPLAIN_ZONES[zoneIndex];
+  const feel = text.feel.replace("{comfort}", side.comfort[zoneIndex]).replace("{support}", side.support[zoneIndex]);
+  const why = reasonIds.map(id => text[zoneKey][id]).filter(Boolean).join(" ");
   return `
-    <div class="bed-block sq" data-side="${sideIndex === 0 ? "left" : "right"}">
-      <span class="shape shape-${feel.toLowerCase()}" aria-hidden="true"></span>
-      <span>
-        <span class="zone">${escapeHtml(zone.label)}</span><br>
-        <span class="feel">${escapeHtml(feel)}</span><br>
-        <span class="support">${escapeHtml(side.support[zoneIndex])} ${escapeHtml(copy.ui.support)}</span>
-      </span>
-    </div>`;
+      <li class="zone-why">
+        <span class="zone-chip sq" style="background:${color}" aria-hidden="true"></span>
+        <div>
+          <h3>${escapeHtml(zone.label)}</h3>
+          <p><strong>${escapeHtml(feel)}</strong></p>
+          <p class="muted">${escapeHtml(why)}</p>
+        </div>
+      </li>`;
 }
 
-function bedMap(copy, bed, zones) {
-  const rows = zones.map((zone, zoneIndex) =>
-    bed.sides.map((side, sideIndex) => bedBlock(copy, side, sideIndex, zone, zoneIndex)).join("")).join("");
-  return `<div class="bed-map sq" role="img" aria-label="${escapeHtml(copy.ui.bedMapLabel)}"><div class="bed-map-head"></div>${rows}</div>`;
-}
-
-function sideSummary(copy, side, index) {
+function sideExplained(copy, flow, side, index, zones) {
+  const reasons = reasonsFor(flow.skipped ? {} : flow.answers[index]);
+  const colors = zoneColors(side, index);
   return `
-    <div class="card sq fit-side" data-sleeper="${index}">
-      <p class="eyebrow">${escapeHtml(sleeperLabel(copy, index))}</p>
+    <section class="card sq fit-side" data-sleeper="${index}">
+      <p class="eyebrow fit-who" data-sleeper="${index}">${escapeHtml(sleeperLabel(copy, index))}</p>
+      <ul class="zone-list">${zones.map((zone, zoneIndex) =>
+        zoneExplained(copy, side, zone, zoneIndex, colors[zoneIndex], reasons[EXPLAIN_ZONES[zoneIndex]])).join("")}</ul>
+      <p class="muted">${escapeHtml(copy.ui.pillow)}: ${escapeHtml(side.pillow)} · ${escapeHtml(copy.fit.tune.alignment)}: ${escapeHtml(side.alignment)}</p>
       <p><strong>${escapeHtml(side.prebuild.name)}</strong><br><span class="muted">${escapeHtml(side.prebuild.blurb)}</span></p>
-      <p class="muted">${escapeHtml(copy.ui.pillow)}: ${escapeHtml(side.pillow)}</p>
-    </div>`;
-}
-
-/** The finished build as one color with its number. */
-function buildColorCard(copy, color) {
-  const text = copy.fit.color;
-  return `
-    <section class="build-color sq">
-      <p class="eyebrow">${escapeHtml(text.label)}</p>
-      <p class="build-number">${escapeHtml(text.number.replace("{number}", color.number))}</p>
-      <p>${escapeHtml(text.note)}</p>
     </section>`;
 }
 
-export function resultView(copy, bed, bedData, color) {
+export function resultView(copy, flow, bed, bedData, color) {
   const online = bed.line.where === "online";
+  const sides = flow.solo ? [bed.sides[0]] : bed.sides;
   return `
-    ${buildColorCard(copy, color)}
     <h1 tabindex="-1">${escapeHtml(copy.fit.reveal.headline)}</h1>
     <p class="lede">${escapeHtml(copy.fit.reveal.body)}</p>
-    ${bedMap(copy, bed, bedData.zones)}
-    <div class="fit-sides">${bed.sides.map((side, index) => sideSummary(copy, side, index)).join("")}</div>
+    ${glassBed(copy, bedData.zones, sides.length)}
+    <div class="fit-sides" data-count="${sides.length}">${sides.map((side, index) => sideExplained(copy, flow, side, index, bedData.zones)).join("")}</div>
     <section class="card sq fit-line">
       <span class="pill pill-honey">${escapeHtml(bed.line.name)}</span>
       <h2>${escapeHtml(copy.fit.result.headline)}</h2>
       <p>${escapeHtml(online ? copy.fit.result.onlineLine : copy.fit.result.storeLine)}</p>
+      <p class="build-number"><span class="zone-chip sq" style="background:${color.hex}" aria-hidden="true"></span>${escapeHtml(copy.fit.color.label)} ${escapeHtml(copy.fit.color.number.replace("{number}", color.number))}</p>
     </section>
     <div class="btn-row">
       <a class="btn btn-accent sq" href="../stores/">${escapeHtml(copy.ui.sendToStore)}</a>
@@ -179,6 +190,7 @@ export function tuneView(copy, flow, bed, bedData) {
   return `
     <h1 tabindex="-1">${escapeHtml(copy.fit.tune.headline)}</h1>
     <p class="lede">${escapeHtml(copy.fit.tune.body)}</p>
+    ${glassBed(copy, bedData.zones, sides.length)}
     <div class="tune-sides" data-count="${sides.length}">${sides.map((side, index) => sideTuner(copy, flow, side, index, bedData.zones)).join("")}</div>
     <p class="fit-line-now" aria-live="polite"><span class="pill pill-honey">${escapeHtml(bed.line.name)}</span></p>
     <div class="btn-row">

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
 import { MATERIALS, FEELS, mixPanes, buildCode } from "../js/fit/build-color.js";
-import { panesSoFar, buildColor } from "../js/fit-page/build-panes.js";
+import { bedSoFar, zoneColors, buildColor } from "../js/fit-page/build-panes.js";
 import { buildBed } from "../js/fit-page/build-bed.js";
 import { newFlow, nextScreen, withAnswer, skipToResult } from "../js/fit-page/flow.js";
 
@@ -29,16 +29,33 @@ test("matches the design system library when it is available", t => {
   }
 });
 
-test("each answer lays one more pane, four in all for two sleepers", () => {
+test("each answer adds a pane to every zone of that sleeper's side", () => {
   let flow = nextScreen(newFlow());
-  const count = () => panesSoFar(flow, buildBed(flow, beds)).length;
-  assert.equal(count(), 0);
-  flow = withAnswer(flow, "pose", "side"); assert.equal(count(), 1);
-  flow = withAnswer(flow, "build", "lighter"); assert.equal(count(), 2);
-  flow = withAnswer({ ...flow, sleeper: 1 }, "pose", "back"); assert.equal(count(), 3);
-  flow = withAnswer(flow, "build", "heavier"); assert.equal(count(), 4);
-  const color = buildColor({ ...flow, screen: "result" }, buildBed(flow, beds));
-  assert.match(color.hex, /^#[0-9A-F]{6}$/);
+  const perZone = () => bedSoFar(flow, buildBed(flow, beds)).map(side => side.map(zone => zone.length));
+  assert.deepEqual(perZone(), [[0, 0, 0], [0, 0, 0]]);
+  flow = withAnswer(flow, "pose", "side"); assert.deepEqual(perZone(), [[1, 1, 1], [0, 0, 0]]);
+  flow = withAnswer(flow, "build", "lighter"); assert.deepEqual(perZone(), [[2, 2, 2], [0, 0, 0]]);
+  flow = withAnswer({ ...flow, sleeper: 1 }, "pose", "back"); assert.deepEqual(perZone(), [[2, 2, 2], [1, 1, 1]]);
+  flow = withAnswer(flow, "build", "heavier"); assert.deepEqual(perZone(), [[2, 2, 2], [2, 2, 2]]);
+
+  const bed = buildBed({ ...flow, screen: "result" }, beds);
+  const color = buildColor({ ...flow, screen: "result" }, bed);
   assert.match(color.number, /^1\d·4\d \/ 1\d·5\d$/);
-  assert.equal(panesSoFar(skipToResult(newFlow()), buildBed(skipToResult(newFlow()), beds)).length, 4);
+  zoneColors(bed.sides[0], 0).forEach(hex => assert.match(hex, /^#[0-9A-F]{6}$/));
+  assert.equal(bedSoFar({ ...skipToResult(newFlow()), solo: true }, bed).length, 1);
+});
+
+test("every reason the explanation can give has a sentence in the copy", async () => {
+  const { reasonsFor, EXPLAIN_ZONES } = await import("../js/fit/explain.js");
+  const copy = JSON.parse(fs.readFileSync(new URL("../data/copy.json", import.meta.url), "utf8"));
+  const pains = ["neck", "shoulders", "back", "hips", "knees"];
+  for (const pose of [undefined, "back", "side", "stomach"]) for (const build of [undefined, "lighter", "average", "heavier"]) {
+    const reasons = reasonsFor({ pose, build, pain: pains });
+    for (const zone of EXPLAIN_ZONES) {
+      assert.ok(reasons[zone].length > 0);
+      for (const id of reasons[zone]) assert.ok(copy.fit.explain[zone][id], `${zone} ${id}`);
+    }
+  }
+  assert.deepEqual(reasonsFor({}), { shoulders: ["start"], hips: ["start"], legs: ["start"] });
+  assert.ok(reasonsFor({ pose: "side", pain: ["shoulders"] }).shoulders.includes("pain-shoulders"));
 });

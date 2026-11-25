@@ -142,9 +142,35 @@
     },
     "color": {
       "label": "Your build color",
-      "number": "No. {number}",
-      "note": "Every layer of your bed has its own color. Laid together, they make this one. It is yours."
-    }
+      "number": "No. {number}"
+    },
+    "explain": {
+      "feel": "{comfort} comfort on {support} support",
+      "shoulders": {
+        "pose-side": "You sleep on your side, so your shoulder needs room to sink in and keep your spine straight.",
+        "pose-back": "On your back your shoulders rest flat, so they need even, steady comfort.",
+        "pose-stomach": "On your stomach, a flatter shoulder zone keeps your neck from bending back.",
+        "pain-shoulders": "Sore shoulders need less pressure, so softer comfort helps here.",
+        "pain-neck": "A sore neck needs your head and shoulders in one line. Your pillow height matters here too.",
+        "start": "A balanced starting point. Answer the questions and this zone is shaped to you."
+      },
+      "hips": {
+        "pose-side": "On your side your hips carry the most weight. They sink a little while the support below keeps them level with your shoulders.",
+        "pose-back": "On your back your hips should stay level, so your lower back keeps its natural curve.",
+        "pose-stomach": "On your stomach, hips that sink arch the lower back, so this zone holds you up more.",
+        "build-lighter": "A lighter build does not press as deep, so a softer surface lets you settle in.",
+        "build-heavier": "A heavier build presses deeper, so the support here does more of the work.",
+        "pain-back": "A sore lower back needs firm support under the hips.",
+        "pain-hips": "Sore hips need less pressure, so softer comfort helps here.",
+        "start": "A balanced starting point. Answer the questions and this zone is shaped to you."
+      },
+      "legs": {
+        "steady": "Your legs carry the least weight, so this zone stays even and steady.",
+        "pain-knees": "Sore knees do best when your legs stay level with your hips.",
+        "start": "A balanced starting point. Answer the questions and this zone is shaped to you."
+      }
+    },
+    "building": "Your bed so far"
   },
   "swap": {
     "headline": "Change one block, not the bed.",

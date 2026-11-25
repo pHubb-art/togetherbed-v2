@@ -28,19 +28,34 @@ function panesEarned(flow, sideIndex) {
   return (answers.pose ? 1 : 0) + (answers.build ? 1 : 0);
 }
 
-/**
- * @param flow  the Sleep Fit flow
- * @param bed   result of buildBed() for that flow
- * @returns panes on screen now, bottom to top
- */
-export function panesSoFar(flow, bed) {
-  const sides = flow.solo ? [0] : [0, 1];
-  return sides.flatMap(sideIndex => panesForSide(bed.sides[sideIndex], sideIndex).slice(0, panesEarned(flow, sideIndex)));
-}
-
 /** The finished build's color and number. One number per side, since each side is its own build. */
 export function buildColor(flow, bed) {
   const sides = flow.solo ? [0] : [0, 1];
   const panes = sides.flatMap(sideIndex => panesForSide(bed.sides[sideIndex], sideIndex));
   return { hex: mixPanes(panes), number: sides.map(sideIndex => buildCode(panesForSide(bed.sides[sideIndex], sideIndex))).join(" / "), panes };
+}
+
+/* ---------- Zone by zone: the bed that builds under the questions ---------- */
+
+/** The two panes of one zone on one side: support underneath, comfort on top. */
+function panesForZone(side, sideIndex, zone) {
+  return [
+    { material: "coil", feel: FEEL_BY_NAME[side.support[zone]] },
+    { material: COMFORT_MATERIAL[sideIndex], feel: FEEL_BY_NAME[side.comfort[zone]] }
+  ];
+}
+
+/**
+ * The bed as it stands now: for each side, three zones, each with the panes earned so far.
+ * @returns [ side: [ zone: [panes] ] ]  (one side when the sleeper is on their own)
+ */
+export function bedSoFar(flow, bed) {
+  const sides = flow.solo ? [0] : [0, 1];
+  return sides.map(sideIndex =>
+    [0, 1, 2].map(zone => panesForZone(bed.sides[sideIndex], sideIndex, zone).slice(0, panesEarned(flow, sideIndex))));
+}
+
+/** The color each finished zone blends into, shoulders to legs. */
+export function zoneColors(side, sideIndex) {
+  return [0, 1, 2].map(zone => mixPanes(panesForZone(side, sideIndex, zone)));
 }

@@ -5,13 +5,12 @@ import { loadJson } from "../shared/load-json.js";
 import { saveState, readState, clearState } from "../shared/storage.js";
 import { newFlow, nextScreen, previousScreen, withAnswer, skipToResult, continueSolo, progress, QUESTION_ORDER, startEngineer, openTuning, withZoneLevel, resetTuning, withBody } from "./flow.js";
 import { buildBed } from "./build-bed.js";
-import { panesSoFar, buildColor } from "./build-panes.js";
-import { drawGlassStack } from "../shared/glass-stack.js";
+import { bedSoFar, buildColor } from "./build-panes.js";
+import { drawGlassBed } from "../shared/glass-stack.js";
 import { introView, questionView, partnerView, resultView, tuneView } from "./views.js";
 
 const app = document.getElementById("fit-app");
 const bar = document.getElementById("fit-progress");
-const stack = document.getElementById("fit-stack");
 let copy, bedData, flow;
 
 function render({ moveFocus = true } = {}) {
@@ -20,13 +19,14 @@ function render({ moveFocus = true } = {}) {
   const finished = flow.screen === "result";
 
   if (flow.screen === "intro") app.innerHTML = introView(copy);
-  else if (flow.screen === "partner") app.innerHTML = partnerView(copy);
+  else if (flow.screen === "partner") app.innerHTML = partnerView(copy, bedData);
   else if (flow.screen === "tune") app.innerHTML = tuneView(copy, flow, bed, bedData);
-  else if (finished) app.innerHTML = resultView(copy, bed, bedData, color);
-  else app.innerHTML = questionView(copy, flow);
+  else if (finished) app.innerHTML = resultView(copy, flow, bed, bedData, color);
+  else app.innerHTML = questionView(copy, flow, bedData);
 
-  // The panes pile up behind the questions, then blend into one color on the result.
-  drawGlassStack(stack, flow.screen === "intro" ? [] : panesSoFar(flow, bed), { blended: finished });
+  // The bed builds under the questions, one pane per answer, then each zone blends into its color.
+  const bedArt = document.getElementById("fit-bed");
+  if (bedArt) drawGlassBed(bedArt, bedSoFar(flow, bed), { blended: finished || flow.screen === "tune" });
   // One theme color for the whole page, driven by the build.
   document.documentElement.style.setProperty("--build-color", color.hex);
 
