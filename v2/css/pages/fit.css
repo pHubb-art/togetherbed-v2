@@ -99,3 +99,10 @@
 @media (prefers-reduced-motion: reduce) {
   .fit-page { transition: none; }
 }
+
+/* The real bed in 3D, opened on request */
+.real-bed { display: grid; gap: var(--space-2); justify-items: center; text-align: center; }
+.real-bed-view { width: 100%; }
+.real-bed-view canvas { display: block; width: 100%; aspect-ratio: 4 / 3; opacity: 0; transition: opacity 0.6s var(--ease, ease); }
+.real-bed-view.is-ready canvas { opacity: 1; }
+.real-bed p { margin: 0; font-size: var(--step--1); }

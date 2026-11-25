@@ -43,6 +43,7 @@ export function createBedScene(canvas) {
   const parts = {};          // name -> { object, rest }
   const cubeMaterials = {};  // cube name -> [{ material, original }]
   const sideColors = { left: readCssColor("--sleeper-a"), right: readCssColor("--sleeper-b") };
+  let buildColors = null;    // cube name -> color, when showing one visitor's own build
   let progress = 0, frameQueued = false, loaded = false;
 
   function addPart(name, object) {
@@ -67,8 +68,10 @@ export function createBedScene(canvas) {
     }
     for (const [side, cubes] of Object.entries(CUBES_BY_SIDE))
       for (const cube of cubes)
-        for (const entry of cubeMaterials[cube] || [])
-          entry.material.color.copy(entry.original).lerp(sideColors[side], pose.sideTint * 0.75);
+        for (const entry of cubeMaterials[cube] || []) {
+          if (buildColors) entry.material.color.copy(entry.original).lerp(buildColors[cube], 0.85);
+          else entry.material.color.copy(entry.original).lerp(sideColors[side], pose.sideTint * 0.75);
+        }
     turntable.rotation.y = pose.yaw;
   }
 
@@ -116,6 +119,15 @@ export function createBedScene(canvas) {
   return {
     ready,
     resize,
-    setProgress(value) { if (value !== progress) { progress = value; queueFrame(); } }
+    setProgress(value) { if (value !== progress) { progress = value; queueFrame(); } },
+    /**
+     * Color each comfort block for one visitor's build.
+     * @param colors { left: [3 hex colors], right: [3 hex colors] }, zones head to foot. Pass null to clear.
+     */
+    setBuildColors(colors) {
+      buildColors = colors && Object.fromEntries(Object.entries(CUBES_BY_SIDE).flatMap(([side, cubes]) =>
+        cubes.map((cube, zone) => [cube, new THREE.Color(colors[side][zone])])));
+      queueFrame();
+    }
   };
 }

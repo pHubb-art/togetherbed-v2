@@ -5,7 +5,8 @@ import { loadJson } from "../shared/load-json.js";
 import { saveState, readState, clearState } from "../shared/storage.js";
 import { newFlow, nextScreen, previousScreen, withAnswer, skipToResult, continueSolo, progress, QUESTION_ORDER, startEngineer, openTuning, withZoneLevel, resetTuning, withBody } from "./flow.js";
 import { buildBed } from "./build-bed.js";
-import { bedSoFar, buildColor } from "./build-panes.js";
+import { bedSoFar, buildColor, zoneColors } from "./build-panes.js";
+import { showRealBed, realBedIsOpen } from "./real-bed.js";
 import { drawGlassBed } from "../shared/glass-stack.js";
 import { introView, questionView, partnerView, resultView, tuneView } from "./views.js";
 
@@ -30,11 +31,26 @@ function render({ moveFocus = true } = {}) {
   // One theme color for the whole page, driven by the build.
   document.documentElement.style.setProperty("--build-color", color.hex);
 
+  if (finished && realBedIsOpen()) openRealBed();
+
   app.dataset.screen = flow.screen;
   document.body.dataset.fitScreen = flow.screen;
   bar.value = progress(flow);
   saveState("fit-flow", flow);
   if (moveFocus) app.querySelector("h1")?.focus({ preventScroll: true });
+}
+
+/** Show this build on the 3D bed, in the slot on the result screen. */
+async function openRealBed() {
+  const slot = document.getElementById("real-bed");
+  const bed = buildBed(flow, bedData);
+  const left = zoneColors(bed.sides[0], 0), right = flow.solo ? left : zoneColors(bed.sides[1], 1);
+  slot.innerHTML = `<p class="muted" role="status">${copy.fit.realBed.loading}</p>`;
+  const worked = await showRealBed(slot, { left, right });
+  const note = document.createElement("p");
+  note.className = "muted";
+  note.textContent = worked ? copy.fit.realBed.caption : copy.fit.realBed.failed;
+  if (worked) slot.append(note); else slot.replaceChildren(note);
 }
 
 function go(nextFlow) {
@@ -49,6 +65,7 @@ const ACTIONS = {
   skip: () => go(skipToResult(flow)),
   solo: () => go(continueSolo(flow)),
   engineer: () => go(startEngineer(flow)),
+  "real-bed": () => openRealBed(),
   tune: () => go(openTuning(flow)),
   reset: button => retune(resetTuning(flow, Number(button.dataset.side))),
   restart: () => { clearState("fit-flow"); go(newFlow()); }

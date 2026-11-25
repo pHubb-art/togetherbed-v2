@@ -112,6 +112,9 @@ export function resultView(copy, flow, bed, bedData, color) {
     <h1 tabindex="-1">${escapeHtml(copy.fit.reveal.headline)}</h1>
     <p class="lede">${escapeHtml(copy.fit.reveal.body)}</p>
     ${glassBed(copy, bedData.zones, sides.length)}
+    <div class="real-bed" id="real-bed">
+      <button class="btn btn-accent sq" type="button" data-action="real-bed">${escapeHtml(copy.fit.realBed.cta)}</button>
+    </div>
     <div class="fit-sides" data-count="${sides.length}">${sides.map((side, index) => sideExplained(copy, flow, side, index, bedData.zones)).join("")}</div>
     <section class="card sq fit-line">
       <span class="pill pill-honey">${escapeHtml(bed.line.name)}</span>

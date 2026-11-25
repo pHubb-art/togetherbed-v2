@@ -170,7 +170,13 @@
         "start": "A balanced starting point. Answer the questions and this zone is shaped to you."
       }
     },
-    "building": "Your bed so far"
+    "building": "Your bed so far",
+    "realBed": {
+      "cta": "See it on the real bed",
+      "loading": "Loading your bed…",
+      "failed": "The 3D view could not load on this device. Your build is saved, and a store can show you the real thing.",
+      "caption": "The top is off so you can see your comfort blocks, each in its own color."
+    }
   },
   "swap": {
     "headline": "Change one block, not the bed.",
