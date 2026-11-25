@@ -1,7 +1,7 @@
 /* PureCare shop page: product grid and cart summary */
 .shop-shell { padding-block: var(--space-5) var(--space-7); }
 .shop-shell > * + * { margin-top: var(--space-5); }
-.shop-top { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.shop-top { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-4); }
 .shop-cart-link { min-height: 40px; padding-inline: var(--space-4); text-decoration: none; font-size: var(--step--1); }
 .shop-cart-link[hidden] { display: none; }
 

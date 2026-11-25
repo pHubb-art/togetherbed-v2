@@ -35,3 +35,16 @@ test("scroll position maps to a chapter number", () => {
   assert.equal(chapterProgress(boxes([-400, 400, 1200]), 800), 0.5);
   assert.equal(chapterProgress(boxes([-5000, -4200, -3400]), 800), 2);
 });
+
+test("every page carries the shared header and marks its own link as current", async () => {
+  const fs = await import("node:fs");
+  const pages = { home: "index.html", fit: "fit/index.html", stores: "stores/index.html", shop: "shop/index.html" };
+  for (const [id, file] of Object.entries(pages)) {
+    const html = fs.readFileSync(new URL("../" + file, import.meta.url), "utf8");
+    assert.equal((html.match(/<header class="site-header">/g) || []).length, 1, file);
+    assert.equal((html.match(/aria-current="page"/g) || []).length, 1, file);
+    const current = html.match(/<a href="([^"]*)" aria-current="page">/)[1];
+    const expected = (id === "home" ? "./" : "../") + (id === "home" ? "" : id + "/");
+    assert.equal(current, expected, file);
+  }
+});

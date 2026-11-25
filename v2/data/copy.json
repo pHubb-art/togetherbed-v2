@@ -227,5 +227,13 @@
     "bedMapLabel": "Top-down view of your bed: two sides, three zones each",
     "comfort": "comfort",
     "sendToStore": "Send this to a store"
+  },
+  "nav": {
+    "label": "Main",
+    "home": "Story",
+    "fit": "Sleep Fit",
+    "stores": "Stores",
+    "shop": "Shop",
+    "logoLabel": "TogetherBed home"
   }
 }

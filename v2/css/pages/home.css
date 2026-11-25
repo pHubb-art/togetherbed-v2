@@ -37,7 +37,8 @@
 .chapter.is-current .chapter-card, .chapter:first-child .chapter-card { opacity: 1; transform: none; }
 .chapter-card h1, .chapter-card h2 { font-size: var(--step-2); font-weight: var(--weight-light); line-height: 1.12; text-wrap: balance; margin: 0; }
 .chapter-card p { margin: 0; }
-.home-header { position: absolute; inset: 0 0 auto; z-index: 2; padding-block: var(--space-4); display: flex; justify-content: space-between; align-items: center; }
+/* The header floats over the first screen of the story */
+.site-header { position: absolute; inset: 0 0 auto; z-index: 2; }
 
 @media (min-width: 60rem) {
   .bed-stage img, .bed-stage canvas { height: 80svh; margin-top: 10svh; width: 62%; justify-self: end; }

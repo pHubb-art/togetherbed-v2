@@ -5,6 +5,7 @@
  * When the CMS is connected, this same template is filled from the CMS instead.
  */
 import fs from "node:fs";
+import { siteHeaderHtml } from "./site-header.mjs";
 
 const root = new URL("../", import.meta.url);
 const copy = JSON.parse(fs.readFileSync(new URL("data/copy.json", root), "utf8"));
@@ -62,12 +63,7 @@ const html = `<!doctype html>
 </head>
 <body>
   <a class="skip-link" href="#story">Skip to the story</a>
-  <header class="home-header wrap">
-    <a class="logo" href="./" aria-label="TogetherBed home">
-      <svg viewBox="0 0 256 66" width="132" height="34" role="img" aria-label="TogetherBed"><use href="img/logo.svg#wordmark"></use></svg>
-    </a>
-    <a class="btn btn-small btn-quiet sq" href="fit/">${escapeHtml(copy.fit.paths.quick.label)}</a>
-  </header>
+  ${siteHeaderHtml(copy.nav, "home", "./")}
   <main class="story" id="story">
     <div class="bed-stage" id="bed-stage" aria-hidden="true">
       <img src="img/bed-poster.webp" width="1200" height="900" alt="" decoding="async" fetchpriority="high">
