@@ -26,7 +26,7 @@ export function siteHeaderHtml(nav, current, toRoot) {
   return `<header class="site-header">
     <div class="wrap">
       <a class="logo" href="${toRoot}" aria-label="${escapeHtml(nav.logoLabel)}">
-        <svg viewBox="0 0 256 66" width="132" height="34" role="img" aria-label="TogetherBed"><use href="${toRoot}img/logo.svg#wordmark"></use></svg>
+        <svg viewBox="0 0 454.1 121" width="150" height="40" role="img" aria-label="TogetherBed"><use href="${toRoot}img/logo.svg#wordmark"></use></svg>
       </a>
       <nav class="site-nav" aria-label="${escapeHtml(nav.label)}">
         <ul>

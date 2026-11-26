@@ -21,7 +21,7 @@
   padding-block: var(--space-3);
 }
 .logo { display: inline-flex; color: var(--text); }
-.logo svg { width: 132px; height: auto; aspect-ratio: 256 / 66; }
+.logo svg { width: 150px; height: auto; aspect-ratio: 454.1 / 121; }
 /* Phones: the four links sit on their own row under the logo, always visible, no menu button */
 .site-nav { flex: 1 0 100%; }
 .site-nav ul {
