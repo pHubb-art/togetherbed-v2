@@ -40,7 +40,7 @@ test("each answer colors that sleeper's shape in every zone, and the color chang
   flow = withAnswer(flow, "build", "lighter");
   stacksSoFar(flow, buildBed(flow, beds)).forEach(zone => {
     assert.equal(zone.left.length, 2); assert.equal(zone.left[0].color, MATERIALS.coil.color);
-    assert.deepEqual(zone.right.map(card => card.opacity), [FEELS.medium.opacity, FEELS.medium.opacity], "the sleeper who has not answered keeps the generic bed");
+    assert.deepEqual(zone.right.map(card => card.opacity), [0.4, 0.4], "the sleeper who has not answered keeps the generic bed");
   });
   flow = withAnswer({ ...flow, sleeper: 1 }, "pose", "back");
   pairs().forEach(pair => assert.match(pair.right, /^#[0-9A-F]{6}$/));

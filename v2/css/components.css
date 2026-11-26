@@ -300,6 +300,8 @@ button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, v
     inset 10px 14px 26px rgb(255 255 255 / 0.5),
     inset -10px -16px 30px rgb(60 20 30 / 0.1);
 }
+/* A light frost through the glass, only where there is power to spare (it is costly on phones) */
+@media (min-width: 60rem) and (hover: hover) { .zone-stack b { -webkit-backdrop-filter: blur(3px) saturate(1.25); backdrop-filter: blur(3px) saturate(1.25); } }
 .zone-stack.is-empty { mix-blend-mode: normal; z-index: -1; }   /* a place held for a sleeper who has not answered yet */
 .zone-stack.is-empty i { opacity: 0.6; mix-blend-mode: normal; filter: none; }
 /* A new or changed panel flops down onto the pile, slightly crooked, like a photo dropped on a table */

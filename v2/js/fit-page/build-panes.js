@@ -9,7 +9,7 @@
  */
 import { COMFORT_LEVELS, SUPPORT_LEVELS } from "../fit/constants.js";
 import { typicalLevel } from "../fit/bed-lines.js";
-import { FEEL_BY_NAME, FEELS, MATERIALS, mixPanes, buildCode } from "../fit/build-color.js";
+import { FEEL_BY_NAME, MATERIALS, mixPanes, buildCode } from "../fit/build-color.js";
 
 const COMFORT_MATERIAL = ["memory", "hybrid"];
 
@@ -65,11 +65,14 @@ export function pairsSoFar(flow, bed) {
  * fuller in color, so the hips usually deepen and the shoulders lighten.
  * @returns [{ left: [card], right: [card] }] head to foot, ready for zonePairsHtml
  */
+/** How full a glass panel's color is for each feel. Wider apart than the paint-chip opacities, so a firmer zone clearly reads deeper. */
+const PANEL_ALPHA = { plush: 0.18, medium: 0.4, firm: 0.64, xfirm: 0.82 };
+
 export function stacksSoFar(flow, bed) {
   const generic = sideIndex => [{ material: "coil", feel: "medium" }, { material: COMFORT_MATERIAL[sideIndex], feel: "medium" }];
   const cardsFor = (sideIndex, zone) =>
     (panesEarned(flow, sideIndex) ? panesForZone(bed.sides[sideIndex], sideIndex, zone) : generic(sideIndex))
-      .map(pane => ({ color: MATERIALS[pane.material].color, opacity: FEELS[pane.feel]?.opacity ?? 0.7 }));
+      .map(pane => ({ color: MATERIALS[pane.material].color, opacity: PANEL_ALPHA[pane.feel] ?? 0.4 }));
   return [0, 1, 2].map(zone => flow.solo ? { left: cardsFor(0, zone) } : { left: cardsFor(0, zone), right: cardsFor(1, zone) });
 }
 
