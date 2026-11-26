@@ -1,0 +1,814 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><style>:root{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><script>window.TB_CONFIG={"url": "", "key": ""}</script></head><body><title>Sleep Fit Tune-Up</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;600;700&family=Gabarito:wght@500;700;800&display=swap">
+<style>
+/* Layout: black and white UI on paper; one full-bleed color stage of offset glass squircle stacks that shuffles with every answer.
+   Phone: stage is a wide band on top, question below. Desktop: question left, stage fills the right half edge to edge. Single light look by choice (brand). */
+:root {
+  --ink: #231f20; --paper: #ffffff; --pillow: #fff7f1; --hair: #ece8e6; --soft: #f4f1ef; --mute: #57504f; --lift: 0 1px 2px rgb(35 31 32 / .07), 0 12px 26px -16px rgb(35 31 32 / .32);
+  --apricot: #f6a47a; --rose: #eb86a6; --mulberry: #8e2f5e; --honey: #f4c866; --lilac: #b7a3d9;
+  --head: "Gabarito", "Avenir Next", system-ui, sans-serif;
+  --sans: "Albert Sans", "Avenir Next", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-l: 28px; --r-m: 18px; --ease: cubic-bezier(.2,.7,0,1);
+  --gut-l: max(22px, env(safe-area-inset-left, 0px)); --gut-r: max(22px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { background: var(--soft); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.wrap { padding-left: var(--gut-l); padding-right: var(--gut-r); }
+
+/* Header */
+.top { background: var(--paper); display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-block: 10px; }
+.top svg { height: 24px; flex: none; width: auto; display: block; color: var(--ink); }
+.nav { display: flex; gap: 4px; }
+.nav button { background: none; border: 0; padding: 7px 10px; border-radius: 999px; font-weight: 600; font-size: 14px; white-space: nowrap; }
+.nav button[aria-current="true"] { background: var(--ink); color: #fff; }
+.nav .ic { width: 36px; height: 36px; padding: 0; font-family: var(--head); font-weight: 800; font-size: 17px; background: var(--soft); }
+#snd[aria-pressed="false"] { text-decoration: line-through; opacity: .55; }
+
+.banner { background: var(--ink); color: #fff; font-size: 15px; padding-block: 10px; }
+
+/* Play */
+.play { display: grid; grid-template-columns: minmax(0, 1fr); }
+.stage { position: relative; height: 138px; overflow: hidden; background: var(--pillow); isolation: isolate; }
+.stack { position: absolute; width: 56%; aspect-ratio: 1; top: 50%; transform: translateY(-50%); }
+.stack.k1 { left: -22%; } .stack.k2 { left: 22%; } .stack.k3 { left: 66%; }
+.card { position: absolute; inset: 0; border-radius: 26%; corner-shape: squircle;
+  background-color: var(--bg, transparent);
+  background-image: linear-gradient(150deg, rgb(255 255 255 / .42), rgb(255 255 255 / 0) 38%, rgb(255 255 255 / 0) 70%, rgb(80 30 50 / .06));
+  box-shadow: inset 12px 14px 22px -14px rgb(255 255 255 / .9), inset -14px -16px 26px -16px rgb(80 30 50 / .22), 0 26px 36px -24px rgb(80 30 50 / .38);
+  translate: var(--x, 0) var(--y, 0); rotate: var(--r, 0deg);
+  transition: translate 1.1s var(--ease), rotate 1.1s var(--ease), background-color 1s ease; }
+.card.flip { animation: flip 1s var(--ease); }
+@keyframes flip { 0% { transform: none; } 45% { transform: perspective(900px) rotateY(72deg) scale(.95); } 100% { transform: none; } }
+.count { position: absolute; z-index: 2; left: var(--gut-l); bottom: 18px; display: grid; }
+.count b { font-family: var(--head); font-weight: 800; font-size: 52px; line-height: .9; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.count b small { font-family: var(--sans); font-weight: 300; font-size: .5em; letter-spacing: 0; }
+.count span { font-size: 14px; font-weight: 600; }
+.pulse { position: absolute; z-index: 2; right: var(--gut-r); bottom: 20px; font-size: 13px; font-weight: 600; line-height: 1.35; width: 52%; display: grid; gap: 5px; }
+.meter { position: relative; height: 12px; border-radius: 6px; background: rgb(255 255 255 / .75); overflow: hidden; }
+.meter i { position: absolute; inset: 0 auto 0 0; border-radius: 6px; transition: width .6s var(--ease); }
+.meter i.a { background: rgb(35 31 32 / .32); } .meter i.v { background: var(--ink); }
+.meter.big { height: 18px; border-radius: 9px; background: #fff; } .meter.big i { border-radius: 9px; }
+.key { display: flex; gap: 6px 18px; flex-wrap: wrap; font-size: 14.5px; font-weight: 600; }
+.key u { display: inline-block; width: 12px; height: 12px; border-radius: 30%; margin-right: 6px; text-decoration: none; vertical-align: -1px; }
+.pips { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 6px; display: grid; grid-template-columns: repeat(20, 1fr); gap: 2px; }
+.pips i { background: rgb(255 255 255 / .7); transition: background .3s; } .pips i.on { background: var(--ink); }
+.pop { position: absolute; z-index: 3; left: var(--gut-l); bottom: 86px; font-family: var(--head); font-weight: 800; font-size: 30px; pointer-events: none; animation: pop 1.3s var(--ease) forwards; }
+@keyframes pop { 0% { opacity: 0; translate: 0 14px; scale: .8; } 18% { opacity: 1; translate: 0 0; scale: 1.1; } 70% { opacity: 1; scale: 1; } 100% { opacity: 0; translate: 0 -34px; } }
+.count b.bump { animation: bump .45s var(--ease); transform-origin: left bottom; }
+@keyframes bump { 40% { transform: scale(1.12); } }
+.scoreline { font-family: var(--head); font-weight: 800; font-size: clamp(64px, 17vw, 132px); line-height: .9; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.scoreline small { font-family: var(--sans); font-weight: 300; font-size: .26em; letter-spacing: 0; margin-left: .3em; }
+.panel > * { animation: rise .35s var(--ease) both; }
+@keyframes rise { from { opacity: .0; translate: 0 8px; } }
+.trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.quad { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.trio { grid-template-columns: minmax(0, 1fr); } .trio .opt, .quad .opt { min-height: 68px; padding: 16px 18px; }
+.trio .opt b, .quad .opt b { font-size: 21px; }
+@media (min-width: 520px) { .trio { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.else { font-size: 15px; color: var(--mute); max-width: 58ch; }
+.ansline { font-size: 18px; } .ansline b { font-family: var(--head); font-weight: 800; }
+.board { display: grid; gap: 0; max-width: 560px; padding: 4px 18px; margin: 0; background: var(--paper); border-radius: var(--r-m); corner-shape: squircle; box-shadow: var(--lift); list-style: none; counter-reset: rank; }
+.board li { counter-increment: rank; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto auto; gap: 14px; align-items: baseline; padding: 9px 0; border-top: 1px solid var(--hair); font-variant-numeric: tabular-nums; }
+.board li:first-child { border-top: 0; }
+.board li::before { content: counter(rank); font-family: var(--head); font-weight: 800; font-size: 20px; }
+.board b { font-weight: 700; overflow-wrap: anywhere; } .board em { font-style: normal; font-size: 14px; color: var(--mute); } .board strong { font-family: var(--head); font-weight: 800; font-size: 20px; }
+.h2 { font-family: var(--head); font-weight: 800; font-size: 24px; }
+
+.panel { padding-block: 22px 48px; display: grid; gap: 16px; align-content: start; min-width: 0; }
+.why-tag { justify-self: start; font-size: 13px; font-weight: 700; background: var(--ink); color: #fff; border-radius: 999px; padding: 3px 11px; }
+.kicker { font-size: 16px; color: var(--mute); font-weight: 500; }
+.qcard { background: var(--paper); border-radius: var(--r-l); corner-shape: squircle; padding: 22px 20px; display: grid; gap: 10px; box-shadow: var(--lift); min-width: 0; }
+.big.sm { font-size: clamp(25px, 6.4vw, 40px); line-height: 1.08; }
+.fact { font-size: 16.5px; font-weight: 600; }
+.big { font-family: var(--head); font-weight: 800; font-size: clamp(31px, 8.2vw, 54px); line-height: 1.04; letter-spacing: -.02em; text-wrap: balance; }
+.spec { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 16px; font-size: 16px; }
+.spec dt { color: var(--mute); } .spec dd { margin: 0; font-weight: 600; }
+.reason { font-size: 16px; max-width: 58ch; }
+.ask { font-family: var(--head); font-weight: 800; font-size: 23px; line-height: 1.2; margin-top: 8px; text-wrap: balance; }
+.ask + .kicker { margin-top: -10px; }
+.duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.opt { background: var(--paper); box-shadow: var(--lift); border: 0; border-radius: var(--r-l); corner-shape: squircle; padding: 20px 16px; min-height: 124px; display: grid; gap: 6px; align-content: center; text-align: left; transition: background .2s, color .2s, transform .2s var(--ease); }
+.opt b { font-family: var(--head); font-weight: 800; font-size: clamp(20px, 5.2vw, 27px); line-height: 1.08; }
+.opt span { font-size: 14.5px; line-height: 1.35; }
+.opt:hover:not(:disabled) { background: var(--ink); color: #fff; transform: translateY(-2px); }
+.opt[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.opt:disabled { cursor: default; } .opt:disabled:not([aria-pressed="true"]) { opacity: .45; }
+.mid { display: flex; gap: 8px 22px; flex-wrap: wrap; align-items: center; }
+.link { background: none; border: 0; padding: 6px 0; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.link.q { font-weight: 500; color: var(--mute); }
+.link[aria-pressed="true"] { background: var(--ink); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 999px; }
+.link:disabled { cursor: default; } .link:disabled:not([aria-pressed="true"]) { opacity: .4; }
+.dial { position: relative; height: 34px; margin-top: 2px; }
+.dial::before { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 6px; border-radius: 3px; background: var(--hair); }
+.dial i { position: absolute; top: 2px; width: 4px; height: 18px; margin-left: -2px; border-radius: 2px; background: var(--ink); }
+.dial i.team { background: var(--mulberry); width: 14px; height: 14px; margin-left: -7px; top: 4px; border-radius: 30%; transition: left .6s var(--ease); }
+.dial u { position: absolute; top: 20px; font-size: 12px; text-decoration: none; color: var(--mute); font-variant-numeric: tabular-nums; }
+.reveal { background: var(--paper); box-shadow: var(--lift); border-radius: var(--r-l); corner-shape: squircle; padding: 22px 20px; display: grid; gap: 12px; }
+.reveal .btn { flex: 1 1 100%; padding-block: 16px; font-size: 17px; }
+textarea.field { flex-basis: 100%; min-height: 92px; font-size: 13px; font-family: ui-monospace, Menlo, monospace; word-break: break-all; }
+.reveal h3 { font-family: var(--head); font-weight: 800; font-size: 22px; line-height: 1.15; }
+.reveal p { font-size: 16px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.field { flex: 1 1 200px; min-width: 0; font: inherit; padding: 13px 14px; border: 2px solid var(--ink); border-radius: 16px; corner-shape: squircle; background: #fff; color: var(--ink); }
+.btn { background: var(--ink); color: #fff; border: 0; border-radius: 16px; corner-shape: squircle; padding: 14px 24px; font-weight: 700; font-size: 16px; }
+.btn.ghost { background: none; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+.btn:disabled { opacity: .4; cursor: default; }
+.lead { font-size: 18px; max-width: 54ch; }
+.steps { display: grid; gap: 10px; padding: 0; margin: 0; list-style: none; max-width: 56ch; }
+.steps li { display: grid; gap: 2px; } .steps b { font-family: var(--head); font-size: 18px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+.tile { background: var(--paper); box-shadow: var(--lift); border-radius: var(--r-m); corner-shape: squircle; padding: 16px; display: grid; gap: 2px; }
+.tile b { font-family: var(--head); font-weight: 800; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.tile span { font-size: 14px; }
+
+/* Results */
+.hero { position: relative; overflow: hidden; background: var(--pillow); isolation: isolate; }
+.hero .sq { position: absolute; width: max(46%, 300px); aspect-ratio: 1; border-radius: 28%; corner-shape: squircle; mix-blend-mode: multiply; z-index: -1; }
+.hero .sq.a { background: var(--apricot); right: 8%; top: -34%; } .hero .sq.b { background: var(--rose); right: -18%; top: 4%; }
+.hero-in { padding-block: 34px 30px; display: grid; gap: 20px; }
+.hero h1, .doc h1 { font-family: var(--head); font-weight: 800; font-size: clamp(36px, 6vw, 72px); line-height: 1; letter-spacing: -.02em; }
+.hero .tile { background: rgb(255 255 255 / .82); }
+.tools { padding-block: 18px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chips button { background: var(--paper); border: 0; border-radius: 999px; padding: 7px 14px; font-weight: 600; font-size: 14.5px; }
+.chips button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.list { padding-bottom: 20px; }
+.list { display: grid; gap: 10px; }
+.r { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 18px; background: var(--paper); border-radius: var(--r-m); corner-shape: squircle; box-shadow: var(--lift); }
+.r .id { font-size: 12.5px; font-weight: 700; color: var(--mute); font-variant-numeric: tabular-nums; }
+.r .t b { display: block; font-weight: 700; } .r .t span { font-size: 15px; color: var(--mute); }
+.r .nums { display: flex; gap: 6px 18px; flex-wrap: wrap; font-size: 15px; font-variant-numeric: tabular-nums; align-items: baseline; }
+.r .nums em { font-style: normal; color: var(--mute); font-size: 13px; display: block; }
+.r .team { font-weight: 700; }
+.bar { height: 8px; border-radius: 4px; background: var(--hair); width: 110px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 8px; }
+.bar i { display: block; height: 100%; background: var(--ink); }
+.pill { font-size: 13px; font-weight: 700; border-radius: 999px; padding: 2px 10px; background: var(--soft); white-space: nowrap; }
+.pill.strong { background: var(--ink); color: #fff; } .pill.split { background: var(--mulberry); color: #fff; }
+.r .notes { font-size: 15px; color: var(--mute); }
+.people { display: flex; gap: 6px; flex-wrap: wrap; }
+.people span { background: var(--soft); border-radius: 999px; padding: 4px 12px; font-size: 14.5px; font-weight: 600; }
+.foot { padding-block: 24px 60px; display: grid; gap: 14px; }
+.empty { padding-block: 30px; color: var(--mute); }
+.doc { padding-block: 30px 70px; display: grid; gap: 14px; }
+.doc section { background: var(--paper); border-radius: var(--r-l); corner-shape: squircle; padding: 22px 20px; box-shadow: var(--lift); }
+.doc h2 { font-family: var(--head); font-weight: 800; font-size: 26px; }
+.doc section { display: grid; gap: 8px; max-width: 66ch; }
+
+@media (min-width: 900px) {
+  :root { --gut-l: max(44px, env(safe-area-inset-left, 0px)); --gut-r: max(44px, env(safe-area-inset-right, 0px)); }
+  .top svg { height: 36px; } .nav button { font-size: 15.5px; padding: 8px 14px; }
+  .card { -webkit-backdrop-filter: blur(3px) saturate(1.25); backdrop-filter: blur(3px) saturate(1.25); }
+  .quad { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .trio .opt, .quad .opt { min-height: 104px; padding: 18px 18px; }
+  .qcard, .reveal { padding: 30px 28px; }
+  .duo .opt { min-height: 150px; padding: 26px 24px; }
+  .r { grid-template-columns: 110px minmax(0, 1.5fr) minmax(0, 1.3fr) 250px; gap: 20px; align-items: start; }
+  .r .notes { grid-column: 2 / -1; }
+}
+@media (prefers-reduced-motion: reduce) { .card, .opt, .meter i { transition: none; } .card.flip, .panel > *, .count b.bump { animation: none; } }
+
+/* Glass pass: color stacks fill the whole screen behind everything; every piece of UI is a frosted pane, no outlines. */
+:root { --glass: linear-gradient(150deg, rgb(255 255 255 / .80), rgb(255 255 255 / .58)); --glow: inset 0 1px 0 rgb(255 255 255 / .95), inset 0 -10px 18px -14px rgb(80 30 50 / .12), 0 16px 30px -20px rgb(80 30 50 / .5); }
+body { background: var(--pillow); }
+.top { background: rgb(255 255 255 / .72); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.stage { position: fixed; inset: 0; height: auto; z-index: -1; }
+.stack { width: 108vw; top: auto; transform: none; }
+.stack.k1 { left: -34vw; top: -8vh; } .stack.k2 { left: 26vw; top: 30vh; } .stack.k3 { left: -22vw; top: 66vh; }
+.qcard, .opt, .reveal, .tile, .board, .doc section, .hud, .chips button, .mid .link { background: var(--glass); box-shadow: var(--glow); -webkit-backdrop-filter: blur(18px) saturate(1.35); backdrop-filter: blur(18px) saturate(1.35); }
+.opt[aria-pressed="true"], .chips button[aria-pressed="true"], .mid .link[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.mid .link { padding: 9px 16px; border-radius: 999px; text-decoration: none; color: var(--ink); font-size: 15.5px; }
+.r { background: rgb(255 255 255 / .88); }
+.play { padding-top: 14px; gap: 14px; }
+.hud { position: relative; overflow: hidden; margin-left: var(--gut-l); margin-right: var(--gut-r); border-radius: var(--r-l); corner-shape: squircle; padding: 12px 18px 18px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 18px; align-items: center; }
+.count, .pulse { position: static; width: auto; }
+.count b { font-size: 42px; } .count span { font-size: 13.5px; white-space: nowrap; }
+.meter { background: rgb(35 31 32 / .1); }
+.pips i { background: rgb(35 31 32 / .12); }
+.pop { left: auto; right: 16px; top: 4px; bottom: auto; font-size: 26px; }
+.panel { padding-top: 0; padding-left: var(--gut-l); padding-right: var(--gut-r); }
+.qcard .ask { margin-top: 10px; } .qcard .board { background: none; box-shadow: none; padding: 0; -webkit-backdrop-filter: none; backdrop-filter: none; }
+h2.ask.solo { justify-self: start; background: var(--glass); box-shadow: var(--glow); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); padding: 8px 16px; border-radius: 999px; font-size: 19px; margin-top: 2px; }
+.hero { background: none; } .hero .sq { display: none; }
+.hero h1, .doc h1 { text-shadow: 0 1px 0 rgb(255 255 255 / .4); }
+.nav .ic { background: rgb(35 31 32 / .07); }
+@media (min-width: 900px) {
+  .stack { width: auto; height: 86vh; }
+  .stack.k1 { left: -8vw; top: 12vh; } .stack.k2 { left: 30vw; top: 4vh; } .stack.k3 { left: 66vw; top: 16vh; }
+  .play { grid-template-columns: minmax(0, 700px) minmax(0, 1fr); min-height: calc(100dvh - 64px); padding-top: 0; }
+  .panel { padding: 40px 30px 60px var(--gut-l); gap: 18px; align-content: center; }
+  .hud { order: 2; align-self: end; justify-self: end; margin: 0 44px 44px 0; width: min(440px, 90%); padding: 22px 26px 30px; gap: 8px 24px; }
+  .count b { font-size: 92px; } .count span { font-size: 16px; } .pulse { font-size: 15px; } .meter { height: 14px; }
+  .pips { height: 8px; } .pop { font-size: 44px; right: 26px; top: 10px; }
+}
+/* A phone game everywhere: three choices side by side, and on big screens the game stays a phone-width column in the middle. */
+.trio { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.trio .opt { text-align: center; padding: 14px 6px; min-height: 66px; }
+.trio .opt b { font-size: clamp(17px, 4.9vw, 21px); } .trio .opt span { font-size: 13px; }
+@media (min-width: 900px) {
+  .play { grid-template-columns: minmax(0, 1fr); max-width: 500px; margin-inline: auto; min-height: 0; padding-top: 22px; }
+  .hud { order: 0; align-self: auto; justify-self: stretch; width: auto; margin: 0 var(--gut-r) 0 var(--gut-l); padding: 12px 18px 18px; gap: 4px 18px; }
+  .count b { font-size: 42px; } .count span { font-size: 13.5px; } .pulse { font-size: 13px; } .meter { height: 12px; }
+  .panel { padding: 0 var(--gut-r) 60px var(--gut-l); align-content: start; }
+  .quad { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trio .opt, .quad .opt { min-height: 68px; } .trio .opt { padding: 14px 6px; }
+  .qcard, .reveal { padding: 22px 20px; }
+  .big { font-size: 40px; } .big.sm { font-size: 30px; }
+  .pop { font-size: 26px; right: 16px; top: 4px; }
+}
+@media (prefers-reduced-transparency: reduce) { .qcard, .opt, .reveal, .tile, .board, .doc section, .hud, .chips button, .mid .link, h2.ask.solo { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; } }
+</style>
+
+<header class="top wrap">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 492.30 120.56" role="img" aria-label="together bed"><g fill="currentColor"><path d="M31.418 34.441L54 34.441L54 38.39C58.255 35.677 63.556 34.164 69.765 34.164C76.503 34.164 82.23 36.164 86.648 39.715C86.714 39.668 86.777 39.617 86.843 39.57C90.418 37.07 94.652 35.75 99.207 35.75C107.988 35.75 112.769 39.059 115.101 42.582C115.515 43.207 116.488 42.914 116.511 42.164C116.55 40.941 116.648 36.848 116.648 35.895C116.648 35.859 117.156 35.848 117.851 35.871C119.363 35.934 121.75 37.613 121.761 39.785C121.771 41.487 121.722 43.711 121.671 46.021C121.621 48.28 121.57 50.62 121.57 52.633L121.57 87.145C121.57 104.352 113.937 113.383 98.343 113.383C85.625 113.383 79.671 106.883 77.73 99.555C77.437 98.445 78.293 97.363 79.441 97.363L81.132 97.363C82.031 97.363 82.875 97.898 83.179 98.746C85.484 105.223 91.316 108.328 98.558 108.328C112.539 108.328 116.41 99.297 116.41 85.641L116.41 80.051C113.507 87.039 108.238 90.805 98.453 90.805C93.804 90.805 89.554 89.398 86.043 86.801C85.98 86.754 85.918 86.703 85.855 86.656C81.476 89.91 75.839 91.793 69.046 91.793C51.964 91.793 41.996 79.605 41.996 63.164C41.996 56.649 43.506 50.868 46.354 46.215L31.418 46.215L31.418 74.133C31.418 78.426 33.098 80.098 37.766 80.098L37.793 80.098C39.746 80.098 41.332 81.68 41.332 83.637L41.332 90.695C38.223 91.75 33.965 91.773 30.805 91.773C19.77 91.773 16.121 85.871 16.121 75.973L16.121 46.215L13.504 46.215C11.211 46.215 9.352 44.355 9.352 42.062L9.352 34.441L16.121 34.441L16.117 18.863C16.299 18.944 16.775 18.929 17.453 18.906L17.453 18.906L17.453 18.906L17.453 18.906C20.937 18.793 29.757 18.505 31.418 30.207L31.418 34.441Z M134.613 63.113C133.898 63.41 133.421 64.172 133.46 65.008C134.078 78.32 141.988 86.512 153.488 86.512C164.343 86.512 168.527 81.469 170.847 77.152C171.164 76.57 171.742 76.223 172.363 76.223C174.929 76.223 176.41 79.441 174.871 81.695C171.21 87.043 164.66 91.652 153.242 91.652C134.414 91.652 127.105 77.32 127.105 63.418C127.105 47.77 135.902 34.312 153.984 34.312C173.062 34.312 179.132 48.867 179.132 59.152C179.132 59.871 179.093 60.863 179.046 61.715C178.996 62.727 178.25 63.527 177.324 63.551C176.035 63.582 174.296 63.559 173.382 63.262L173.2 63.202C168.089 61.535 160.586 59.087 153.816 59.16C144.828 59.254 137.406 61.953 134.613 63.113Z M265.117 63.109C264.402 63.406 263.925 64.168 263.964 65.004C264.582 78.316 272.488 86.508 283.992 86.508C294.847 86.508 299.027 81.465 301.351 77.148C301.664 76.566 302.246 76.219 302.863 76.219C305.433 76.219 306.914 79.438 305.371 81.691C301.714 87.039 295.164 91.648 283.746 91.648C264.918 91.648 257.609 77.316 257.609 63.418C257.609 47.766 266.402 34.309 284.488 34.309C303.566 34.309 309.636 48.863 309.636 59.148C309.636 59.867 309.593 60.859 309.55 61.711C309.5 62.723 308.753 63.523 307.828 63.547C306.539 63.578 304.8 63.555 303.886 63.258L303.704 63.198C298.593 61.531 291.09 59.083 284.316 59.156C275.332 59.25 267.906 61.949 265.117 63.109Z M98.988 85.75C112.433 85.75 116.515 76.824 116.515 62.848C116.515 48.652 112.214 40.801 99.312 40.801C95.769 40.801 92.847 41.699 90.453 43.234C84.484 47.055 81.894 54.961 81.894 63.707C81.894 72.293 84.953 79.266 90.082 82.934C92.593 84.73 95.593 85.75 98.988 85.75Z M233.277 36.02C240.996 36.02 251.656 39.934 251.656 57.113L251.656 90.164C251.656 91.008 250.968 91.695 250.121 91.695L247.75 91.695C246.902 91.695 246.218 91.008 246.218 90.164L246.218 58.203C246.218 47.438 241.324 41.348 232.296 41.348C221.531 41.348 215.335 47.98 215.335 61.355L215.335 90.164C215.335 91.008 214.648 91.695 213.804 91.695L211.429 91.695C210.582 91.695 209.898 91.008 209.898 90.164L209.914 18.816C209.918 18.793 210.496 18.785 211.273 18.766C212.878 18.73 215.335 19.191 215.335 23.191L215.335 41.52C215.335 42.938 217.089 43.59 218.011 42.516C221.242 38.746 226.05 36.02 233.277 36.02Z M69.378 79.859C73.117 79.859 76.023 78.273 77.992 75.375C76.836 72.02 76.195 68.184 76.195 63.922C76.195 58.984 76.988 54.668 78.367 50.961C76.367 47.695 73.261 46.098 69.164 46.098C62.093 46.098 57.472 51.332 57.472 62.977C57.472 73.578 62.031 79.859 69.378 79.859Z M187.265 18.797C187.273 18.801 187.851 18.793 188.601 18.766C190.21 18.707 192.695 19.109 192.695 23.188L192.695 35.941C192.695 36.41 193.078 36.793 193.55 36.793L198.96 36.793C199.433 36.793 199.816 37.172 199.816 37.645L199.816 39C199.816 40.59 198.519 41.879 196.921 41.879L193.55 41.879C193.078 41.879 192.695 42.262 192.695 42.73L192.695 77.051C192.695 83.113 194 86.578 199.218 86.578C200.117 86.578 201.21 86.543 202.3 86.426C203.671 86.273 204.875 87.32 204.875 88.691L204.875 90.086C204.875 90.449 204.656 90.781 204.312 90.898C202.519 91.488 200.195 91.664 198.132 91.664C191.171 91.664 187.257 88.199 187.257 79.543L187.257 42.73C187.257 42.262 186.875 41.879 186.402 41.879L184.515 41.879C182.585 41.879 181.027 40.324 181.027 38.406L181.027 37.645C181.027 37.172 181.41 36.793 181.882 36.793L186.402 36.793C186.875 36.793 187.257 36.41 187.257 35.941L187.265 18.797Z M321.445 43.824C321.453 44.879 322.82 45.258 323.375 44.359C326.929 38.602 332.746 35.086 339.816 34.422C340.421 34.367 340.949 34.867 340.949 35.477L340.949 39.445C340.949 39.98 340.535 40.418 340 40.473C328.878 41.621 321.461 49.605 321.461 62.57L321.461 90.648C321.461 91.227 320.992 91.695 320.414 91.695L316.906 91.695C316.328 91.695 315.859 91.227 315.859 90.648L315.859 50.922C315.859 43.027 315.882 36.531 315.882 34.352C315.882 34.301 316.124 34.304 316.496 34.308C316.729 34.311 317.013 34.314 317.32 34.305C318.957 34.25 321.382 35.246 321.289 37.941C321.262 38.661 321.291 39.265 321.332 40.097L321.332 40.098L321.332 40.099C321.375 40.964 321.429 42.077 321.445 43.824Z M300.683 56.387C301.996 56.992 303.375 55.738 303.113 54.207C301.609 45.375 294.949 39.449 284.242 39.449C272.98 39.449 267.226 44.707 265.093 53.84C264.734 55.383 266.097 56.734 267.453 56.164C270.644 54.82 276.324 53.078 284.316 53.078C292.078 53.078 297.625 54.973 300.683 56.387Z M170.179 56.391C171.492 56.996 172.871 55.742 172.609 54.211C171.105 45.379 164.445 39.453 153.738 39.453C142.476 39.453 136.722 44.711 134.593 53.844C134.23 55.387 135.593 56.738 136.949 56.168C140.14 54.824 145.82 53.082 153.816 53.082C161.574 53.082 167.125 54.977 170.179 56.391Z"/><path d="M358.949 18.863C359.129 18.944 359.605 18.928 360.282 18.906C363.763 18.793 372.585 18.505 374.246 30.207L374.246 39.667C374.246 40.424 374.785 40.744 375.449 40.382C382.867 36.486 392.248 34.16 402.449 34.16C409.064 34.16 415.335 35.138 420.949 36.889C426.563 35.138 432.833 34.16 439.449 34.16C449.65 34.16 459.03 36.486 466.448 40.382C467.113 40.744 467.652 40.424 467.652 39.667L467.652 30.207C469.313 18.505 478.134 18.793 481.615 18.906C482.293 18.928 482.768 18.944 482.949 18.863L482.949 89.2C482.949 90.581 481.83 91.7 480.449 91.7L468.902 91.7C468.211 91.7 467.652 91.14 467.652 90.45L467.652 86.293C467.652 85.536 467.113 85.216 466.448 85.578C459.03 89.474 449.65 91.8 439.449 91.8C432.833 91.8 426.563 90.822 420.949 89.071C415.335 90.822 409.064 91.8 402.449 91.8C392.248 91.8 382.867 89.474 375.449 85.578C374.785 85.216 374.246 85.536 374.246 86.293L374.246 90.45C374.246 91.14 373.686 91.7 372.996 91.7L361.449 91.7C360.068 91.7 358.949 90.581 358.949 89.2L358.949 18.863Z M445.846 60.984C445.903 62.086 445.053 62.98 443.949 62.98L430.663 62.98C430.655 62.98 430.649 62.974 430.649 62.966L430.649 62.963C430.649 62.955 430.643 62.949 430.635 62.949C429.356 62.911 428.077 62.846 426.799 62.78C421.816 62.524 416.833 62.269 411.851 63.682C411.527 63.778 411.278 64.129 411.294 64.467C411.767 72.23 415.909 78.3 420.949 78.3C424.23 78.3 427.13 75.727 428.886 71.79C429.175 71.066 430.041 70.48 430.82 70.48L441.492 70.48C443.132 70.48 443.88 71.675 443.164 73.149C441.916 75.34 440.277 77.405 438.303 79.304C437.994 79.594 438.087 79.839 438.511 79.851C438.822 79.857 439.135 79.86 439.449 79.86C455.025 79.86 467.652 72.303 467.652 62.98C467.652 53.657 455.025 46.1 439.449 46.1C439.135 46.1 438.822 46.103 438.511 46.109C438.087 46.121 437.994 46.366 438.303 46.656C442.591 50.783 445.299 55.686 445.846 60.984Z M403.387 79.851C403.81 79.839 403.903 79.594 403.595 79.304C398.772 74.663 395.949 69.04 395.949 62.98C395.949 56.92 398.772 51.296 403.595 46.656C403.904 46.366 403.81 46.121 403.387 46.109C403.075 46.103 402.763 46.1 402.449 46.1C386.873 46.1 374.246 53.657 374.246 62.98C374.246 72.303 386.873 79.86 402.449 79.86C402.763 79.86 403.075 79.857 403.387 79.851Z M412.336 55.926C412.122 56.66 412.55 57.104 413.291 56.918C417.793 55.918 422.296 56.149 426.799 56.38C427.41 56.411 428.022 56.443 428.634 56.471C429.248 56.497 429.592 56.044 429.402 55.459C427.737 50.803 424.575 47.66 420.949 47.66C417.202 47.66 413.952 51.015 412.336 55.926Z"/></g><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTpkZmU1ZWMzYy00NDFlLTRhNTYtOWE3Ni1kYTc2NTMwOGE0OTYAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaN5Rc5QFoZl6HQ/qiQumqosAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDo4N2QxMmZjYi01MTYxLTRjMGMtODA5Zi03Yzc2ZWU0Nzg4ZjNscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoRl7NicASJonEwoJoKwjDUgAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggMiRTMrH+JWBJYR1w05xErwoqwczTfnySFOxwDBodkB+kZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaN+rMWZ9AhEUXAqLHT2Mp9sAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYIJX/s/Zn4oxJdocIgfFVq7oBcSgaFCEWVr6BqCBJNDbKZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GSJZZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOmRmZTVlYzNjLTQ0MWUtNGE1Ni05YTc2LWRhNzY1MzA4YTQ5Ni9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjQxOGJlNTQzLTMxZTItNDliZi04YTU2LTVkZGIwNGY3MWU5ZnJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCAyJFMysf4lYElhHXDTnESvCirBzNN+fJIU7HAMGh2QH6JjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggjf8hk0mcZErQHkDUNehNbfVfY9AB8GjG8XRMlz/oF1WiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggeiS5FksZ69X2D5NQ8YuzsqyIGhpp8O15Ba88RcGByaJ0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQIVU5EE47DhnQ1eKO52SLo0Dy3b5PVF/rB3PHM1zxHWR0W91iF+Ifi+SCR/yGonqk7v/OsEvQJC/QQfsy1UJRjc=</c2pa:manifest></metadata></svg>
+  <nav class="nav" aria-label="Sections">
+    <button type="button" data-go="play">Play</button>
+    <button type="button" data-go="results">Team</button>
+    <button type="button" class="ic" data-go="how" aria-label="How it works">i</button>
+    <button type="button" class="ic" id="snd" aria-pressed="true" aria-label="Sound">♪</button>
+  </nav>
+</header>
+<div class="banner wrap" id="banner" hidden></div>
+
+<div class="stage" id="stage" aria-hidden="true"><div class="stack k1"></div><div class="stack k2"></div><div class="stack k3"></div></div>
+<main>
+  <section class="play" id="v-play">
+    <div class="hud" id="hud">
+      <div class="count"><b id="cnt">0<small>/20</small></b><span id="rnd">Round 1</span></div>
+      <div class="pulse"><div class="meter" role="img" id="meter" aria-label="Team progress"><i class="a" id="m-a" style="width:0"></i><i class="v" id="m-v" style="width:0"></i></div><span id="pulse">Loading the team's answers</span></div>
+      <div class="pips" id="pips"></div>
+    </div>
+    <div class="panel" id="panel"></div>
+  </section>
+
+  <section id="v-results" hidden>
+    <div class="hero"><i class="sq a"></i><i class="sq b"></i>
+      <div class="hero-in wrap"><h1>Where the team stands</h1><div style="display:grid;gap:8px;max-width:760px"><div class="meter big" role="img" id="meter2" aria-label="Team progress"><i class="a" id="m2-a" style="width:0"></i><i class="v" id="m2-v" style="width:0"></i></div><div class="key"><span><u style="background:rgb(35 31 32 / .32)"></u><span id="k-a">Answered</span></span><span><u style="background:var(--ink)"></u><span id="k-v">Validated</span></span></div></div><div class="tiles" id="sum"></div><h2 class="h2">Leaderboard</h2><ol class="board" id="board"></ol></div>
+    </div>
+    <div class="tools wrap">
+      <div class="chips" id="chips"></div>
+      <div class="row"><button class="btn" type="button" id="x-xlsx">Download Excel</button><button class="btn ghost" type="button" id="x-csv">Download CSV</button></div>
+    </div>
+    <p class="wrap" id="x-msg" role="status"></p>
+    <div class="list wrap" id="list"></div>
+    <div class="foot wrap" id="owner" hidden>
+      <p><b>Owner only.</b> If a teammate sends you an answer code, paste it here to add their answers to the team.</p>
+      <div class="row"><textarea class="field" id="import-code" placeholder="Paste an answer code" aria-label="Answer code"></textarea><button class="btn" type="button" id="import">Add answers</button><span id="import-msg" role="status"></span></div>
+      <p>Clear every answer to start the game fresh, for example after a test run.</p>
+      <div class="row"><button class="btn ghost" type="button" id="reset">Clear all answers</button><button class="btn" type="button" id="reset2" hidden>Yes, delete everything</button><button class="link" type="button" id="reset3" hidden>Cancel</button></div>
+    </div>
+  </section>
+
+    <section id="v-how" hidden>
+    <div class="doc wrap">
+      <h1>How it works</h1>
+      <section><h2>What you are teaching</h2><p>Sleep Fit turns a sleeper's answers into a bed. Behind it sits a table of 99 rules. 61 are already built, with numbers one developer tuned by hand. 38 are proposed and have no weight yet. This game asks the whole team about every one of them.</p></section>
+      <section><h2>The questions</h2>
+        <p><b>Meet a sleeper.</b> Most questions show you one person. Everything about them is average except one thing, like sleeping on the side or waking with a sore shoulder. You say what that one thing should do to one part of the bed: softer, firmer, or the same. If you pick softer or firmer, you say by how much. You do not see the draft number until after you answer, so your gut is not steered.</p>
+        <p><b>Should it steer the bed.</b> For preferences like sleeping hot or wanting natural materials. You say whether the answer should count, and how hard.</p>
+        <p><b>Keep it or drop it.</b> For fixed rules with no number, like an allergy ruling out latex.</p>
+        <p><b>Turn it down or up.</b> For a handful of technical numbers under the hood that do not fit a sleeper story.</p></section>
+      <section><h2>How answers move the table</h2>
+        <p>Every softer or firmer answer is worth a number of feel steps. One step is the jump from Medium to Plush. The team weight for a rule is the average of everyone's answers, turned back into the same unit the rule table uses. "The same" counts as zero, and an answer in the opposite direction pulls the average down.</p>
+        <p>For proposed rules the team weight is the average strength from 0 (ignore it) to 3 (it outranks the body answers), which is the scale the rule table asks for.</p>
+        <p>Nothing here changes the live site. It fills the team weight and team notes columns of the rule table, which you download from the Team page as Excel or CSV with the same columns and rule IDs.</p></section>
+      <section><h2>Why your questions differ from your neighbor's</h2><p>The game looks at what the team has answered so far and picks your next question from what it still needs. Rules nobody has touched come first, then rules with only one or two answers, then rules where the team is split. Rules that are already validated show up rarely, mostly as warm-ups. Your first three questions confirm something the team already agrees on.</p></section>
+      <section><h2>Answered, then validated</h2><p>The progress bar has two fills. The light one is rules with at least one answer. The dark one follows behind it: rules that are validated, meaning at least three people answered and a clear majority, six in ten or more, said the same thing. If three or more people answered and there is no majority, the rule is Split and the game keeps bringing it back until one side wins. When the dark fill reaches the end, the whole table is validated.</p></section>
+      <section><h2>Points</h2><p>10 points for every answer. 15 if you are the first to answer a rule. 12 if you are the second or third, because those are the answers that validate it. 2 more for leaving a note.</p></section>
+      <section><h2>What this is not</h2><p>This is the team's judgment, pooled. It has not been tested on real sleepers or pressure data, so treat the result as a better starting point, not as proof.</p></section>
+    </div>
+  </section>
+</main>
+
+<script>
+const RULES = [{"rule_id": "POS-BACK-00", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my back", "zone": "All zones", "layer": "Comfort and support", "effect": "No change", "current_value": 0, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Back sleeping is the baseline. Every other position is measured against it.", "source": "recommend.js"}, {"rule_id": "POS-SIDE-01", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my side", "zone": "Shoulders", "layer": "Comfort", "effect": "Softer", "current_value": 0.22, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "The shoulder has to sink in so the spine stays level.", "source": "recommend.js"}, {"rule_id": "POS-SIDE-02", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my side", "zone": "Hips", "layer": "Comfort", "effect": "Softer", "current_value": 0.14, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "The hip presses in on its side, so it gets more give.", "source": "recommend.js"}, {"rule_id": "POS-SIDE-03", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my side", "zone": "Shoulders", "layer": "Support", "effect": "Softer", "current_value": 0.06, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Slightly softer coils under the shoulder help it drop.", "source": "recommend.js"}, {"rule_id": "POS-SIDE-04", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my side", "zone": "Shoulders", "layer": "Load on the bed", "effect": "More load", "current_value": 1.5, "unit": "times the back-sleeping load", "team_weight": null, "team_notes": null, "plain_explanation": "On your side the same weight lands on a narrower area.", "source": "constants.js"}, {"rule_id": "POS-SIDE-05", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my side", "zone": "Hips", "layer": "Load on the bed", "effect": "More load", "current_value": 1.6, "unit": "times the back-sleeping load", "team_weight": null, "team_notes": null, "plain_explanation": "Same reason, and the hip carries the most.", "source": "constants.js"}, {"rule_id": "POS-SIDE-06", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my side", "zone": "Legs", "layer": "Load on the bed", "effect": "More load", "current_value": 1.1, "unit": "times the back-sleeping load", "team_weight": null, "team_notes": null, "plain_explanation": "Legs stack, so slightly more load.", "source": "constants.js"}, {"rule_id": "POS-SIDE-07", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my side", "zone": "Shoulders and hips", "layer": "Alignment goal", "effect": "Wider part must sink further", "current_value": null, "unit": "rule", "team_weight": null, "team_notes": null, "plain_explanation": "For side sleepers the spine is straight when the wider of shoulders and hips sinks deeper.", "source": "alignment.js"}, {"rule_id": "POS-STOM-01", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my stomach", "zone": "Shoulders", "layer": "Comfort", "effect": "Firmer", "current_value": 0.14, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Stomach sleepers do better lying on the bed than in it.", "source": "recommend.js"}, {"rule_id": "POS-STOM-02", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my stomach", "zone": "Hips", "layer": "Comfort", "effect": "Firmer", "current_value": 0.32, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Firm at the hips stops them dropping and arching the lower back.", "source": "recommend.js"}, {"rule_id": "POS-STOM-03", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my stomach", "zone": "Hips", "layer": "Support", "effect": "Firmer", "current_value": 0.2, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Firmer coils hold the hips up.", "source": "recommend.js"}, {"rule_id": "POS-STOM-04", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my stomach", "zone": "Legs", "layer": "Comfort", "effect": "Set to Firm", "current_value": null, "unit": "fixed result", "team_weight": null, "team_notes": null, "plain_explanation": "Legs always get firm comfort for stomach sleepers.", "source": "recommend.js"}, {"rule_id": "POS-STOM-05", "status": "Built", "chapter": "How you sleep", "question": "How do you fall asleep?", "answer": "On my stomach", "zone": "Hips", "layer": "Load on the bed", "effect": "More load", "current_value": 1.15, "unit": "times the back-sleeping load", "team_weight": null, "team_notes": null, "plain_explanation": "A little more weight lands on the hips face down.", "source": "constants.js"}, {"rule_id": "FRM-MALE-01", "status": "Built", "chapter": "Your body", "question": "Which body frame is closer to yours?", "answer": "Typical male frame", "zone": "Shoulders", "layer": "Comfort", "effect": "Softer", "current_value": 0.12, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Assumes broader shoulders that press deeper.", "source": "recommend.js"}, {"rule_id": "FRM-MALE-02", "status": "Built", "chapter": "Your body", "question": "Which body frame is closer to yours?", "answer": "Typical male frame", "zone": "Shoulders", "layer": "Support", "effect": "Firmer", "current_value": 0.12, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Broader shoulders also need more push back underneath.", "source": "recommend.js"}, {"rule_id": "FRM-MALE-03", "status": "Built", "chapter": "Your body", "question": "Which body frame is closer to yours?", "answer": "Typical male frame", "zone": "Legs", "layer": "Support", "effect": "At least Firm", "current_value": null, "unit": "fixed result", "team_weight": null, "team_notes": null, "plain_explanation": "Legs never get medium support on this frame.", "source": "recommend.js"}, {"rule_id": "FRM-MALE-04", "status": "Built", "chapter": "Your body", "question": "Which body frame is closer to yours?", "answer": "Typical male frame with narrow hips", "zone": "Legs", "layer": "Comfort", "effect": "Set to Firm", "current_value": null, "unit": "fixed result", "team_weight": null, "team_notes": null, "plain_explanation": "Applies when the hip setting is below 0.4 on the 0 to 1 scale.", "source": "recommend.js"}, {"rule_id": "FRM-FEM-01", "status": "Built", "chapter": "Your body", "question": "Which body frame is closer to yours?", "answer": "Typical female frame", "zone": "Hips", "layer": "Comfort", "effect": "Softer", "current_value": 0.12, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Assumes fuller hips that press deeper.", "source": "recommend.js"}, {"rule_id": "FRM-FEM-02", "status": "Built", "chapter": "Your body", "question": "Which body frame is closer to yours?", "answer": "Typical female frame", "zone": "Hips", "layer": "Support", "effect": "Firmer", "current_value": 0.12, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Fuller hips also need more push back underneath.", "source": "recommend.js"}, {"rule_id": "FRM-NEU-01", "status": "Built", "chapter": "Your body", "question": "Which body frame is closer to yours?", "answer": "Rather not say", "zone": "Shoulders", "layer": "Comfort", "effect": "Softer", "current_value": 0.06, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Half of the male-frame shoulder adjustment.", "source": "recommend.js"}, {"rule_id": "FRM-NEU-02", "status": "Built", "chapter": "Your body", "question": "Which body frame is closer to yours?", "answer": "Rather not say", "zone": "Shoulders", "layer": "Support", "effect": "Firmer", "current_value": 0.06, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Half of the male-frame shoulder adjustment.", "source": "recommend.js"}, {"rule_id": "FRM-NEU-03", "status": "Built", "chapter": "Your body", "question": "Which body frame is closer to yours?", "answer": "Rather not say", "zone": "Hips", "layer": "Comfort", "effect": "Softer", "current_value": 0.06, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Half of the female-frame hip adjustment.", "source": "recommend.js"}, {"rule_id": "FRM-NEU-04", "status": "Built", "chapter": "Your body", "question": "Which body frame is closer to yours?", "answer": "Rather not say", "zone": "Hips", "layer": "Support", "effect": "Firmer", "current_value": 0.06, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "Half of the female-frame hip adjustment.", "source": "recommend.js"}, {"rule_id": "SHP-SHO-01", "status": "Built", "chapter": "Your body", "question": "How wide are your shoulders?", "answer": "Narrow to wide (full range)", "zone": "Shoulders", "layer": "Comfort", "effect": "Softer as shoulders widen", "current_value": 1, "unit": "score points across the full range", "team_weight": null, "team_notes": null, "plain_explanation": "Wider shoulders press deeper, so they get more relief on top.", "source": "recommend.js"}, {"rule_id": "SHP-SHO-02", "status": "Built", "chapter": "Your body", "question": "How wide are your shoulders?", "answer": "Narrow to wide (full range)", "zone": "Shoulders", "layer": "Support", "effect": "Firmer as shoulders widen", "current_value": 1, "unit": "score points across the full range", "team_weight": null, "team_notes": null, "plain_explanation": "And firmer coils underneath to hold them.", "source": "recommend.js"}, {"rule_id": "SHP-SHO-03", "status": "Built", "chapter": "Your body", "question": "How wide are your shoulders?", "answer": "Narrow to wide (full range)", "zone": "Shoulders", "layer": "Share of body weight", "effect": "More weight on this zone", "current_value": 0.06, "unit": "share of body weight across the full range (base 33%)", "team_weight": null, "team_notes": null, "plain_explanation": "Wider shoulders carry a little more of the body's weight.", "source": "pressure.js"}, {"rule_id": "SHP-SHO-04", "status": "Built", "chapter": "Your body", "question": "How wide are your shoulders?", "answer": "Everyone", "zone": "Shoulders", "layer": "Support", "effect": "Softer", "current_value": 0.08, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "A fixed starting offset: shoulder support begins slightly softer for everyone.", "source": "recommend.js"}, {"rule_id": "SHP-HIP-01", "status": "Built", "chapter": "Your body", "question": "How wide are your hips?", "answer": "Narrow to wide (full range)", "zone": "Hips", "layer": "Comfort", "effect": "Softer as hips widen", "current_value": 1, "unit": "score points across the full range", "team_weight": null, "team_notes": null, "plain_explanation": "Wider hips press deeper, so they get more relief on top.", "source": "recommend.js"}, {"rule_id": "SHP-HIP-02", "status": "Built", "chapter": "Your body", "question": "How wide are your hips?", "answer": "Narrow to wide (full range)", "zone": "Hips", "layer": "Support", "effect": "Firmer as hips widen", "current_value": 1, "unit": "score points across the full range", "team_weight": null, "team_notes": null, "plain_explanation": "And firmer coils underneath to hold them.", "source": "recommend.js"}, {"rule_id": "SHP-HIP-03", "status": "Built", "chapter": "Your body", "question": "How wide are your hips?", "answer": "Narrow to wide (full range)", "zone": "Hips", "layer": "Share of body weight", "effect": "More weight on this zone", "current_value": 0.06, "unit": "share of body weight across the full range (base 47%)", "team_weight": null, "team_notes": null, "plain_explanation": "Wider hips carry a little more of the body's weight.", "source": "pressure.js"}, {"rule_id": "SHP-CRV-01", "status": "Built", "chapter": "Your body", "question": "How curvy are your waist and seat?", "answer": "Straight to curvy (full range)", "zone": "Hips", "layer": "Comfort", "effect": "Softer as curve increases", "current_value": 0.6, "unit": "score points across the full range", "team_weight": null, "team_notes": null, "plain_explanation": "A curvier seat presses deeper at the hips.", "source": "recommend.js"}, {"rule_id": "SHP-CRV-02", "status": "Built", "chapter": "Your body", "question": "How curvy are your waist and seat?", "answer": "Straight to curvy (full range)", "zone": "Hips", "layer": "Support", "effect": "Firmer as curve increases", "current_value": 0.6, "unit": "score points across the full range", "team_weight": null, "team_notes": null, "plain_explanation": "And needs more support under it.", "source": "recommend.js"}, {"rule_id": "SHP-CRV-03", "status": "Built", "chapter": "Your body", "question": "How curvy are your waist and seat?", "answer": "Straight to curvy (full range)", "zone": "Hips", "layer": "Share of body weight", "effect": "More weight on this zone", "current_value": 0.04, "unit": "share of body weight across the full range", "team_weight": null, "team_notes": null, "plain_explanation": "A curvier seat shifts a little more weight to the hips.", "source": "pressure.js"}, {"rule_id": "SHP-CRV-04", "status": "Built", "chapter": "Your body", "question": "How curvy are your waist and seat?", "answer": "Straight to curvy (full range)", "zone": "Hips", "layer": "Alignment goal", "effect": "Hips may sink slightly more (back sleepers)", "current_value": 0.006, "unit": "meters across the full range", "team_weight": null, "team_notes": null, "plain_explanation": "On the back, a curvier seat is allowed to sit a few millimetres deeper before it counts as sagging.", "source": "alignment.js"}, {"rule_id": "SHP-LEG-01", "status": "Built", "chapter": "Your body", "question": "How long are your legs?", "answer": "Long legs (above 0.72 on the 0 to 1 scale)", "zone": "Legs", "layer": "Support", "effect": "At least Firm", "current_value": null, "unit": "fixed result", "team_weight": null, "team_notes": null, "plain_explanation": "Long legs get firm support.", "source": "recommend.js"}, {"rule_id": "WGT-BMI-01", "status": "Built", "chapter": "Your body", "question": "Height and weight", "answer": "Each BMI point above 24", "zone": "Shoulders", "layer": "Comfort", "effect": "Firmer", "current_value": 0.012, "unit": "score points per BMI point", "team_weight": null, "team_notes": null, "plain_explanation": "Heavier builds sink further, so comfort firms up slightly.", "source": "recommend.js"}, {"rule_id": "WGT-BMI-02", "status": "Built", "chapter": "Your body", "question": "Height and weight", "answer": "Each BMI point above 24", "zone": "Hips", "layer": "Comfort", "effect": "Firmer", "current_value": 0.012, "unit": "score points per BMI point", "team_weight": null, "team_notes": null, "plain_explanation": "Same at the hips.", "source": "recommend.js"}, {"rule_id": "WGT-BMI-03", "status": "Built", "chapter": "Your body", "question": "Height and weight", "answer": "Each BMI point above 24", "zone": "Shoulders", "layer": "Support", "effect": "Firmer", "current_value": 0.025, "unit": "score points per BMI point", "team_weight": null, "team_notes": null, "plain_explanation": "Support firms up about twice as fast as comfort.", "source": "recommend.js"}, {"rule_id": "WGT-BMI-04", "status": "Built", "chapter": "Your body", "question": "Height and weight", "answer": "Each BMI point above 24", "zone": "Hips", "layer": "Support", "effect": "Firmer", "current_value": 0.025, "unit": "score points per BMI point", "team_weight": null, "team_notes": null, "plain_explanation": "Same at the hips.", "source": "recommend.js"}, {"rule_id": "WGT-BMI-05", "status": "Built", "chapter": "Your body", "question": "Height and weight", "answer": "BMI above 30", "zone": "Legs", "layer": "Support", "effect": "At least Firm", "current_value": null, "unit": "fixed result", "team_weight": null, "team_notes": null, "plain_explanation": "Leg support steps up to firm.", "source": "recommend.js"}, {"rule_id": "WGT-BMI-06", "status": "Built", "chapter": "Your body", "question": "Height and weight", "answer": "BMI above 40", "zone": "Legs", "layer": "Support", "effect": "Set to Extra Firm", "current_value": null, "unit": "fixed result", "team_weight": null, "team_notes": null, "plain_explanation": "Leg support steps up to extra firm.", "source": "recommend.js"}, {"rule_id": "WGT-BMI-07", "status": "Built", "chapter": "Your body", "question": "Height and weight", "answer": "Any", "zone": "All zones", "layer": "Limit", "effect": "Weight effect is capped", "current_value": null, "unit": "counted between BMI 18 and BMI 54", "team_weight": null, "team_notes": null, "plain_explanation": "Below 18 or above 54 the adjustment stops growing.", "source": "recommend.js"}, {"rule_id": "WGT-QCK-01", "status": "Built", "chapter": "Your body", "question": "How would you describe your build? (quick version)", "answer": "Lighter", "zone": "All zones", "layer": "Assumed weight", "effect": "Lower", "current_value": -0.18, "unit": "share of the default weight", "team_weight": null, "team_notes": null, "plain_explanation": "Used only when height and weight are not given.", "source": "quick-path.js"}, {"rule_id": "WGT-QCK-02", "status": "Built", "chapter": "Your body", "question": "How would you describe your build? (quick version)", "answer": "Average", "zone": "All zones", "layer": "Assumed weight", "effect": "No change", "current_value": 0, "unit": "share of the default weight", "team_weight": null, "team_notes": null, "plain_explanation": "Default weights: 150 lb female frame, 185 lb male frame, 165 lb otherwise.", "source": "quick-path.js"}, {"rule_id": "WGT-QCK-03", "status": "Built", "chapter": "Your body", "question": "How would you describe your build? (quick version)", "answer": "Heavier", "zone": "All zones", "layer": "Assumed weight", "effect": "Higher", "current_value": 0.25, "unit": "share of the default weight", "team_weight": null, "team_notes": null, "plain_explanation": "Used only when height and weight are not given.", "source": "quick-path.js"}, {"rule_id": "SOR-SHO-01", "status": "Built", "chapter": "Shoulders and neck", "question": "Where do you wake up sore?", "answer": "Shoulders", "zone": "Shoulders", "layer": "Comfort", "effect": "Softer", "current_value": 0.28, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "A sore shoulder gets more pressure relief. This is the single biggest answer-driven shift.", "source": "recommend.js"}, {"rule_id": "SOR-SHO-02", "status": "Built", "chapter": "Shoulders and neck", "question": "Where do you wake up sore?", "answer": "Shoulders", "zone": "Shoulders", "layer": "Comfort", "effect": "Prefer the softer of two close options", "current_value": 0.16, "unit": "penalty per step firmer", "team_weight": null, "team_notes": null, "plain_explanation": "When two builds are nearly as straight, the softer shoulder wins.", "source": "recommend.js"}, {"rule_id": "SOR-NCK-01", "status": "Built", "chapter": "Shoulders and neck", "question": "Where do you wake up sore?", "answer": "Neck", "zone": "Shoulders and hips", "layer": "Alignment goal", "effect": "Stricter", "current_value": 0.18, "unit": "allowed alignment error (normally 0.30)", "team_weight": null, "team_notes": null, "plain_explanation": "The spine has to sit straighter before a build is accepted.", "source": "recommend.js"}, {"rule_id": "SOR-HIP-01", "status": "Built", "chapter": "Lower back and hips", "question": "Where do you wake up sore?", "answer": "Hips", "zone": "Hips", "layer": "Comfort", "effect": "Softer", "current_value": 0.22, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "A sore hip gets more pressure relief.", "source": "recommend.js"}, {"rule_id": "SOR-HIP-02", "status": "Built", "chapter": "Lower back and hips", "question": "Where do you wake up sore?", "answer": "Hips", "zone": "Hips", "layer": "Support", "effect": "Firmer", "current_value": 0.12, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "With firmer support under it so the hip does not drop.", "source": "recommend.js"}, {"rule_id": "SOR-HIP-03", "status": "Built", "chapter": "Lower back and hips", "question": "Where do you wake up sore?", "answer": "Hips", "zone": "Hips", "layer": "Comfort", "effect": "Prefer the softer of two close options", "current_value": 0.1, "unit": "penalty per step firmer", "team_weight": null, "team_notes": null, "plain_explanation": "When two builds are nearly as straight, the softer hip wins.", "source": "recommend.js"}, {"rule_id": "SOR-BCK-01", "status": "Built", "chapter": "Lower back and hips", "question": "Where do you wake up sore?", "answer": "Lower back", "zone": "Hips", "layer": "Support", "effect": "Firmer", "current_value": 0.26, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "A stiff lower back gets firm support under the hips.", "source": "recommend.js"}, {"rule_id": "SOR-BCK-02", "status": "Built", "chapter": "Lower back and hips", "question": "Where do you wake up sore?", "answer": "Lower back", "zone": "Hips", "layer": "Comfort", "effect": "Firmer", "current_value": 0.1, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "And slightly less sink on top.", "source": "recommend.js"}, {"rule_id": "SOR-BCK-03", "status": "Built", "chapter": "Lower back and hips", "question": "Where do you wake up sore?", "answer": "Lower back", "zone": "Shoulders", "layer": "Support", "effect": "Firmer", "current_value": 0.06, "unit": "score points", "team_weight": null, "team_notes": null, "plain_explanation": "A small lift at the shoulders to keep the line.", "source": "recommend.js"}, {"rule_id": "SOR-BCK-04", "status": "Built", "chapter": "Lower back and hips", "question": "Where do you wake up sore?", "answer": "Lower back", "zone": "Hips", "layer": "Support", "effect": "Prefer the firmer of two close options", "current_value": 0.14, "unit": "penalty per step softer than Extra Firm", "team_weight": null, "team_notes": null, "plain_explanation": "When two builds are nearly as straight, the firmer hip support wins.", "source": "recommend.js"}, {"rule_id": "SOR-BCK-05", "status": "Built", "chapter": "Lower back and hips", "question": "Where do you wake up sore?", "answer": "Lower back", "zone": "Shoulders and hips", "layer": "Alignment goal", "effect": "Stricter", "current_value": 0.18, "unit": "allowed alignment error (normally 0.30)", "team_weight": null, "team_notes": null, "plain_explanation": "The spine has to sit straighter before a build is accepted.", "source": "recommend.js"}, {"rule_id": "SOR-KNE-01", "status": "Built", "chapter": "Legs and feet", "question": "Where do you wake up sore?", "answer": "Knees", "zone": "Legs", "layer": "Comfort", "effect": "One step softer", "current_value": null, "unit": "fixed result", "team_weight": null, "team_notes": null, "plain_explanation": "Firm becomes medium, medium becomes plush.", "source": "recommend.js"}, {"rule_id": "CHK-ALN-01", "status": "Built", "chapter": "The straight-spine check", "question": "Applies to every sleeper", "answer": "Any", "zone": "Shoulders and hips", "layer": "Comfort and support", "effect": "Tries all 81 combinations and keeps the straightest spine", "current_value": null, "unit": "rule", "team_weight": null, "team_notes": null, "plain_explanation": "After the starting point is set, the logic tests every shoulder and hip combination on a simple sink model.", "source": "recommend.js"}, {"rule_id": "CHK-ALN-02", "status": "Built", "chapter": "The straight-spine check", "question": "Applies to every sleeper", "answer": "Any", "zone": "Shoulders and hips", "layer": "Comfort and support", "effect": "Stay close to the starting point", "current_value": 0.12, "unit": "penalty per step away from the start", "team_weight": null, "team_notes": null, "plain_explanation": "Stops the check wandering far from what the body answers suggested.", "source": "recommend.js"}, {"rule_id": "CHK-ALN-03", "status": "Built", "chapter": "The straight-spine check", "question": "Applies to every sleeper", "answer": "Any", "zone": "Shoulders and hips", "layer": "Alignment goal", "effect": "Normal tolerance", "current_value": 0.3, "unit": "allowed alignment error", "team_weight": null, "team_notes": null, "plain_explanation": "Below this, a build counts as straight enough.", "source": "recommend.js"}, {"rule_id": "PIL-GAP-01", "status": "Built", "chapter": "Shoulders and neck", "question": "Applies to every sleeper", "answer": "Any", "zone": "Head", "layer": "Pillow", "effect": "Thin (3 in), Medium (5 in) or Thick (7 in)", "current_value": null, "unit": "rule", "team_weight": null, "team_notes": null, "plain_explanation": "Picks the pillow that fills the gap between head and mattress after the shoulder has sunk. Side sleepers start from a 12 cm gap, back and stomach from 3 cm.", "source": "pillow.js"}, {"rule_id": "NEW-01", "status": "Proposed", "chapter": "How you sleep", "question": "What position do you wake up in?", "answer": "Different from how I fall asleep", "zone": "All zones", "layer": "Comfort and support", "effect": "Blend the two positions", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Many people change position in the night. The build should suit both.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-02", "status": "Proposed", "chapter": "How you sleep", "question": "How much do you move at night?", "answer": "A lot", "zone": "Whole side", "layer": "Comfort material", "effect": "Adds weight toward a quicker-responding material", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A material that springs back makes turning easier. Material is chosen for the whole side, not zone by zone.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-03", "status": "Proposed", "chapter": "How you sleep", "question": "Do you sit or sleep on the edge?", "answer": "Often", "zone": "All zones", "layer": "Support", "effect": "Firmer on that side", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Firmer coils hold up better at the edge.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-04", "status": "Proposed", "chapter": "Shoulders and neck", "question": "Does your arm go numb at night?", "answer": "Yes", "zone": "Shoulders", "layer": "Comfort", "effect": "Softer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Numbness usually means too much pressure under the shoulder. Changes firmness in that zone only.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-05", "status": "Proposed", "chapter": "Shoulders and neck", "question": "Do you like your shoulder to sink in or be held?", "answer": "Sink in", "zone": "Shoulders", "layer": "Comfort", "effect": "Softer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A stated preference, used when two builds are equally straight.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-06", "status": "Proposed", "chapter": "Shoulders and neck", "question": "Do you like your shoulder to sink in or be held?", "answer": "Be held", "zone": "Shoulders", "layer": "Comfort", "effect": "Firmer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A stated preference, used when two builds are equally straight.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-07", "status": "Proposed", "chapter": "Shoulders and neck", "question": "Do you sleep with an arm under the pillow?", "answer": "Yes", "zone": "Head", "layer": "Pillow", "effect": "One size lower", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "The arm already adds height under the head.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-08", "status": "Proposed", "chapter": "Lower back and hips", "question": "Does your current bed sag like a hammock?", "answer": "Yes", "zone": "Hips", "layer": "Support", "effect": "Firmer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "The hips are dropping. More support brings them back up.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-09", "status": "Proposed", "chapter": "Lower back and hips", "question": "Is there a gap under your lower back when you lie flat?", "answer": "Yes", "zone": "Hips", "layer": "Comfort", "effect": "Softer, or add a second comfort layer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A softer top lets the hips settle so the lower back is supported.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-10", "status": "Proposed", "chapter": "Legs and feet", "question": "Do you feel pressure at your heels or knees?", "answer": "Yes", "zone": "Legs", "layer": "Comfort", "effect": "Softer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "More give under bony contact points.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-11", "status": "Proposed", "chapter": "Legs and feet", "question": "Do you have restless legs?", "answer": "Yes", "zone": "Whole side", "layer": "Comfort material", "effect": "Adds weight toward a quicker-responding material", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Easier to move against.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-12", "status": "Proposed", "chapter": "Legs and feet", "question": "Do your feet reach the end of the bed?", "answer": "Yes", "zone": "Whole bed", "layer": "Size", "effect": "Suggest the longer size", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A size recommendation, not a change to the blocks.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-13", "status": "Proposed", "chapter": "Feel", "question": "Sink in, or float on top?", "answer": "Sink in", "zone": "Whole side", "layer": "Comfort and material", "effect": "Softer, and adds weight toward a slower material", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A feel preference across the whole side.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-14", "status": "Proposed", "chapter": "Feel", "question": "Sink in, or float on top?", "answer": "Float on top", "zone": "Whole side", "layer": "Comfort and material", "effect": "Firmer, and adds weight toward a quicker material", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A feel preference across the whole side.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-15", "status": "Proposed", "chapter": "Feel", "question": "A slow hug, or a quick bounce?", "answer": "Slow hug", "zone": "Whole side", "layer": "Comfort material", "effect": "Adds weight toward memory foam", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A preference, never a lock. One answer does not narrow the range by itself.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-16", "status": "Proposed", "chapter": "Feel", "question": "A slow hug, or a quick bounce?", "answer": "Quick bounce", "zone": "Whole side", "layer": "Comfort material", "effect": "Adds weight toward latex", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A preference, never a lock. One answer does not narrow the range by itself.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-17", "status": "Proposed", "chapter": "Feel", "question": "A slow hug, or a quick bounce?", "answer": "Somewhere between", "zone": "Whole side", "layer": "Comfort material", "effect": "Adds weight toward hybrid foam, or latex with memory foam on top", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A preference, never a lock.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-18", "status": "Proposed", "chapter": "Feel", "question": "What is wrong with the bed you have now?", "answer": "Too soft", "zone": "All zones", "layer": "Comfort and support", "effect": "One step firmer than the body answers suggest", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Real experience outranks a calculation.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-19", "status": "Proposed", "chapter": "Feel", "question": "What is wrong with the bed you have now?", "answer": "Too firm", "zone": "All zones", "layer": "Comfort and support", "effect": "One step softer than the body answers suggest", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Real experience outranks a calculation.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-20", "status": "Proposed", "chapter": "Feel", "question": "How plush do you want the very top?", "answer": "Very plush", "zone": "All zones", "layer": "Second layer and fiber", "effect": "Add a second comfort layer or the fiber layer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Decides whether the optional layers go in.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-21", "status": "Proposed", "chapter": "Warm, cool and natural", "question": "Do you sleep hot?", "answer": "Yes", "zone": "Whole bed", "layer": "Edition and cover", "effect": "Adds weight toward the Performance edition and a cooling cover", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A preference. Does not rule out natural materials.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-22", "status": "Proposed", "chapter": "Warm, cool and natural", "question": "Do you sleep cold?", "answer": "Yes", "zone": "Whole bed", "layer": "Edition and fiber", "effect": "Adds weight toward the Naturals edition and the wool fiber layer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A preference.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-23", "status": "Proposed", "chapter": "Warm, cool and natural", "question": "How important is natural to you?", "answer": "Very important", "zone": "Whole bed", "layer": "Edition and material", "effect": "Adds weight toward the Naturals edition, latex and the fiber layer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Asked separately from performance, so a person can want both. Rules nothing out.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-24", "status": "Proposed", "chapter": "Warm, cool and natural", "question": "Do you have a latex allergy?", "answer": "Yes", "zone": "All zones", "layer": "Material", "effect": "Rule out latex everywhere", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A hard rule, not a weight. Overrides every other answer.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-25", "status": "Proposed", "chapter": "Warm, cool and natural", "question": "Are you sensitive to wool?", "answer": "Yes", "zone": "Whole bed", "layer": "Fiber", "effect": "Rule out the wool fiber layer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A hard rule, not a weight.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-26", "status": "Proposed", "chapter": "Your life in this bed", "question": "Does your partner's movement wake you?", "answer": "Yes", "zone": "Whole side", "layer": "Comfort material", "effect": "Adds weight toward a motion-absorbing material", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Less movement carries across the bed.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-27", "status": "Proposed", "chapter": "Your life in this bed", "question": "Is your body likely to change in the next few years?", "answer": "Yes", "zone": "Whole bed", "layer": "Swap plan", "effect": "Flag which blocks to expect to swap", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Does not change the build. It sets up the swap conversation.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-28", "status": "Proposed", "chapter": "Your body", "question": "Heavier build who also wants a soft top", "answer": "Both true", "zone": "Shoulders and hips", "layer": "Second layer", "effect": "Add a second comfort layer", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Softness on top without losing support underneath.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-29", "status": "Proposed", "chapter": "Feel", "question": "What would you like holding you up?", "answer": "Pocketed coils", "zone": "Whole side", "layer": "Support type", "effect": "Coil support in all three zones, firmness set zone by zone", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Coils last a long time and cradle the body well. Suggested as the default.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-30", "status": "Proposed", "chapter": "Feel", "question": "What would you like holding you up?", "answer": "All-natural latex", "zone": "Whole side", "layer": "Support type", "effect": "Latex core in all three zones, firmness set zone by zone", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "For people who love a natural bed and do not want coils again.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-31", "status": "Proposed", "chapter": "Feel", "question": "What would you like holding you up?", "answer": "All foam", "zone": "Whole side", "layer": "Support type", "effect": "Foam support in all three zones, firmness set zone by zone", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Team to confirm that an all-foam support block exists. The parts list on file shows coil and latex core only.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-32", "status": "Proposed", "chapter": "Feel", "question": "What would you like holding you up?", "answer": "No preference", "zone": "Whole side", "layer": "Support type", "effect": "Pocketed coils", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "The default when someone has no view.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-33", "status": "Proposed", "chapter": "Warm, cool and natural", "question": "How important is performance to you (cooling, pressure relief)?", "answer": "Very important", "zone": "Whole bed", "layer": "Edition and material", "effect": "Adds weight toward the Performance edition, memory foam or hybrid foam", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Asked separately from natural, so a person can want both. Rules nothing out.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-34", "status": "Proposed", "chapter": "Warm, cool and natural", "question": "Natural and performance both very important", "answer": "Both", "zone": "Whole side", "layer": "Combination", "effect": "Pocketed coils, latex as the first comfort layer, memory foam on top", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "A favorite combination: lasting coils, natural latex, and a memory foam feel on top. Team to confirm which cover goes with a mixed build.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-35", "status": "Proposed", "chapter": "Standard build rule", "question": "Applies to every standard build", "answer": "Any", "zone": "Whole side", "layer": "Support", "effect": "One support type for all three zones. Only the firmness changes by zone", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Once the support type is set, it is the same core head to foot.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-36", "status": "Proposed", "chapter": "Standard build rule", "question": "Applies to every standard build", "answer": "Any", "zone": "Whole side", "layer": "First comfort layer", "effect": "One material for all three zones. Only the firmness changes by zone", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Keeps standard builds simple to make and to explain.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-37", "status": "Proposed", "chapter": "Standard build rule", "question": "Applies to every standard build", "answer": "Any", "zone": "Whole side", "layer": "Second comfort layer", "effect": "One material for all three zones. Only the firmness changes by zone", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "Same rule for the optional second layer.", "source": "Not in the built logic. Proposed for the fuller fitting."}, {"rule_id": "NEW-38", "status": "Proposed", "chapter": "Standard build rule", "question": "Custom builder only", "answer": "Any", "zone": "Any zone", "layer": "Material", "effect": "A different material in each zone is allowed", "current_value": null, "unit": "to be weighted", "team_weight": null, "team_notes": null, "plain_explanation": "For someone who wants to build a completely different combination. Never suggested by the fitting.", "source": "Not in the built logic. Proposed for the fuller fitting."}];
+const COLS = ['rule_id','status','chapter','question','answer','zone','layer','effect','current_value','unit','team_weight','team_notes','plain_explanation','source'];
+const ROUND = 20;
+const GENERIC = new Set(['Any', 'Everyone', 'Both', 'Both true']);
+const STARTERS = ['POS-SIDE-01', 'SOR-SHO-01', 'NEW-24'];
+const NAMES = ['Maya', 'Sam', 'Jordan', 'Priya', 'Luis', 'Noor', 'Kai', 'Imani', 'Theo', 'Jun', 'Dana', 'Remy'];
+/* size choices: [label, hint, feel steps, strength 0-3] */
+const FEEL_SIZES = [['A touch', 'A quarter step', .25, 1], ['Half a step', '', .5, 1.5], ['A full step', 'Like Medium to Plush', 1, 2], ['Two steps', 'Like Firm to Plush', 2, 3]];
+const PULL_SIZES = [['A nudge', 'One voice among many', 0, 1], ['A real pull', 'Usually wins', 0, 2], ['It decides', 'Outranks the body answers', 0, 3]];
+/* sleeper presets for built rules: [field, what is different, compared with] */
+const SAME = 'a back sleeper with the same body', AVG = 'a sleeper with an average frame', NOSORE = 'the same sleeper with no sore spots';
+const SIDE = ['sleeps', 'Sleeps on the side', SAME], STOM = ['sleeps', 'Sleeps on the stomach', SAME];
+const MALE = ['frame', 'Typical male frame, broader shoulders', AVG], FEM = ['frame', 'Typical female frame, fuller hips', AVG];
+const SHO = ['frame', 'Very broad shoulders', 'a sleeper with average shoulders'], HIP = ['frame', 'Very wide hips', 'a sleeper with average hips'], CRV = ['frame', 'Very curvy waist and seat', 'a sleeper with an average shape'];
+const BMI = ['build', 'Heavier build: 5’8”, 224 lb', 'the same sleeper at 158 lb'];
+const sore = w => ['sore', 'Wakes up with ' + w, NOSORE];
+const P = {
+  'POS-SIDE-01': SIDE, 'POS-SIDE-02': SIDE, 'POS-SIDE-03': SIDE, 'POS-STOM-01': STOM, 'POS-STOM-02': STOM, 'POS-STOM-03': STOM, 'POS-STOM-04': STOM,
+  'FRM-MALE-01': MALE, 'FRM-MALE-02': MALE, 'FRM-MALE-03': MALE, 'FRM-MALE-04': ['frame', 'Typical male frame with narrow hips', AVG], 'FRM-FEM-01': FEM, 'FRM-FEM-02': FEM,
+  'SHP-SHO-01': SHO, 'SHP-SHO-02': SHO, 'SHP-HIP-01': HIP, 'SHP-HIP-02': HIP, 'SHP-CRV-01': CRV, 'SHP-CRV-02': CRV, 'SHP-LEG-01': ['frame', 'Very long legs', 'a sleeper with average legs'],
+  'WGT-BMI-01': BMI, 'WGT-BMI-02': BMI, 'WGT-BMI-03': BMI, 'WGT-BMI-04': BMI, 'WGT-BMI-05': ['build', 'Heavy build: 5’8”, 205 lb', 'the same sleeper at 158 lb'], 'WGT-BMI-06': ['build', 'Very heavy build: 5’8”, 270 lb', 'the same sleeper at 158 lb'],
+  'SOR-SHO-01': sore('sore shoulders'), 'SOR-HIP-01': sore('sore hips'), 'SOR-HIP-02': sore('sore hips'), 'SOR-BCK-01': sore('a stiff lower back'), 'SOR-BCK-02': sore('a stiff lower back'), 'SOR-BCK-03': sore('a stiff lower back'), 'SOR-KNE-01': sore('sore knees')
+};
+const AGREE_NEW = new Set(['NEW-01','NEW-07','NEW-12','NEW-24','NEW-25','NEW-27','NEW-28','NEW-29','NEW-30','NEW-31','NEW-32','NEW-34','NEW-35','NEW-36','NEW-37','NEW-38']);
+RULES.forEach((r, i) => {
+  const num = typeof r.current_value === 'number' && r.current_value !== 0, built = r.status === 'Built';
+  r.dir = /soft/i.test(r.effect) ? 'softer' : 'firmer';
+  r.who = NAMES[i % NAMES.length];
+  if (built) { if (P[r.rule_id]) { r.kind = 'feel'; r.fixed = !num; r.p = P[r.rule_id]; } else r.kind = num ? 'tune' : 'agree'; }
+  else if (AGREE_NEW.has(r.rule_id)) r.kind = 'agree';
+  else r.kind = /^(Softer|Firmer|One step)/.test(r.effect) ? 'feel' : 'pull';
+  r.step = r.layer === 'Support' ? 0.28 : r.layer === 'Comfort' ? 0.26 : 0.27;
+  r.mult = r.unit.startsWith('score points across') ? 2 : 1;      /* asked against an average sleeper = half the range */
+  r.per = r.unit.startsWith('score points per BMI') ? 10 : 1;     /* asked for a sleeper ten BMI points heavier */
+});
+const BY_ID = Object.fromEntries(RULES.map(r => [r.rule_id, r]));
+
+const S = { db: null, uid: null, mode: 'loading', name: '', mine: {}, team: {}, session: 0, skipped: new Set(), revisited: new Set(), cur: null, phase: 'intro', filter: 'All', saving: false, dirty: false, isOwner: false };
+const $ = id => document.getElementById(id);
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) { const v = attrs[k]; if (v == null || v === false) continue; if (k === 'class') e.className = v; else if (k.startsWith('on')) e.addEventListener(k.slice(2), v); else if (k === 'style') e.style.cssText = v; else e.setAttribute(k, v === true ? '' : v); }
+  for (const kid of kids.flat(3)) if (kid != null && kid !== false) e.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+  return e;
+}
+const fmt = v => { const a = Math.abs(v); const d = a >= 10 ? 1 : a >= 1 ? 2 : 3; return String(parseFloat(v.toFixed(d))); };
+const pc = x => Math.round(x * 100);
+const ls = { get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+
+/* ---------- scoring ---------- */
+function scaled(r, f) { const base = r.unit.startsWith('times') ? 1 : 0; return base + (r.current_value - base) * f; }
+function cleanVote(r, a) {
+  if (!a || typeof a !== 'object') return null;
+  const sz = n => Number.isInteger(a.s) && a.s >= 0 && a.s < n;
+  if (r.kind === 'tune') return ['less', 'right', 'more'].includes(a.c) ? a : null;
+  if (r.kind === 'agree') return ['keep', 'drop'].includes(a.c) ? a : null;
+  if (r.kind === 'pull') return a.c === 'no' || (a.c === 'yes' && sz(3)) ? a : null;
+  return a.c === 'same' || (['softer', 'firmer'].includes(a.c) && (r.fixed || sz(4))) ? a : null;
+}
+function votesFor(r) {
+  const out = [];
+  for (const uid in S.team) { const p = S.team[uid]; const a = cleanVote(r, (p.a || {})[r.rule_id]); if (a) out.push({ uid, name: p.name, c: a.c, s: a.s, t: typeof a.t === 'number' ? a.t : 0, n: typeof a.n === 'string' ? a.n.slice(0, 300) : '' }); }
+  return out;
+}
+/* what one vote is worth, in the unit the team weight is averaged in */
+function worth(r, v) {
+  if (r.kind === 'pull') return v.c === 'yes' ? PULL_SIZES[v.s][3] : 0;
+  if (r.status === 'Proposed') return v.c === r.dir ? FEEL_SIZES[v.s][3] : 0;
+  return v.c === 'same' ? 0 : (v.c === r.dir ? 1 : -1) * FEEL_SIZES[v.s][2];
+}
+function stat(r, exceptUid) {
+  const vs = votesFor(r).filter(v => v.uid !== exceptUid), n = vs.length;
+  const s = { n, vs, team: null, agree: 0, conf: 'none', c: {}, top: null, net: 0, keep: null };
+  if (!n) return s;
+  const c = { tune: { less: 0, right: 0, more: 0 }, agree: { keep: 0, drop: 0 }, pull: { yes: 0, no: 0 }, feel: { softer: 0, same: 0, firmer: 0 } }[r.kind];
+  vs.forEach(v => c[v.c]++); s.c = c;
+  s.top = Object.keys(c).sort((a, b) => c[b] - c[a])[0]; s.agree = c[s.top] / n;
+  if (r.kind === 'tune') { s.net = (c.more - c.less) / n; s.team = scaled(r, 1 + 0.5 * s.net); }
+  else if (r.kind === 'agree') s.keep = c.keep >= c.drop;
+  else if (r.kind === 'feel' && r.fixed) s.keep = c[r.dir] >= n / 2;
+  else { const mean = vs.reduce((t, v) => t + worth(r, v), 0) / n; s.team = (r.kind === 'feel' && r.status === 'Built') ? mean * r.step * r.mult / r.per : mean; }
+  s.conf = n < 3 ? 'thin' : s.agree >= 0.6 ? 'valid' : 'split';
+  return s;
+}
+const CONF = { none: 'No answers', thin: 'Answered', valid: 'Validated', split: 'Split' };
+const strengthWords = m => m < 0.5 ? 'ignore it' : m < 1.5 ? 'a nudge' : m < 2.5 ? 'a full step' : 'outranks the body answers';
+function teamText(r, s) {
+  if (!s.n) return '–';
+  if (s.keep != null) return s.keep ? 'Keep' : 'Drop';
+  if (r.kind === 'tune') { const d = Math.round(s.net * 50); return `${fmt(s.team)}${d ? ` (${d > 0 ? '+' : ''}${d}%)` : ' (no change)'}`; }
+  if (r.status === 'Proposed') return `${s.team.toFixed(1)} of 3, ${strengthWords(s.team)}`;
+  const opp = r.dir === 'softer' ? 'firmer' : 'softer';
+  return Math.abs(s.team) < 0.0005 ? '0 (no change)' : `${s.team < 0 ? opp : r.dir} by ${fmt(Math.abs(s.team))}`;
+}
+function draftText(r) {
+  if (r.kind === 'tune') return fmt(r.current_value);
+  if (r.status === 'Proposed') return r.kind === 'agree' ? 'Proposed rule' : 'No weight yet';
+  if (r.kind === 'agree' || r.fixed) return r.kind === 'agree' ? 'Fixed rule' : r.effect;
+  return `${r.dir} by ${fmt(r.current_value)}`;
+}
+function breakdown(r, s) {
+  if (!s.n) return 'No answers yet';
+  const c = s.c;
+  if (r.kind === 'tune') return `${c.less} down · ${c.right} right · ${c.more} up`;
+  if (r.kind === 'agree') return `${c.keep} keep · ${c.drop} drop`;
+  if (r.kind === 'pull') return `${c.yes} yes · ${c.no} no`;
+  return `${c.softer} softer · ${c.same} same · ${c.firmer} firmer`;
+}
+function scores() {
+  const pts = {}, cnt = {};
+  for (const r of RULES) votesFor(r).sort((a, b) => a.t - b.t).forEach((v, i) => { pts[v.uid] = (pts[v.uid] || 0) + (i === 0 ? 15 : i < 3 ? 12 : 10) + (v.n ? 2 : 0); cnt[v.uid] = (cnt[v.uid] || 0) + 1; });
+  return Object.keys(pts).map(uid => ({ uid, name: (S.team[uid] || {}).name || 'Someone', pts: pts[uid], n: cnt[uid] })).sort((a, b) => b.pts - a.pts);
+}
+function progress() {
+  let ans = 0, val = 0, split = 0, total = 0;
+  RULES.forEach(r => { const s = stat(r); total += s.n; if (s.n) ans++; if (s.conf === 'valid') val++; if (s.conf === 'split') split++; });
+  return { ans, val, split, total, N: RULES.length };
+}
+
+/* ---------- adaptive question picker ---------- */
+function pick() {
+  let pool = RULES.filter(r => !S.mine[r.rule_id] && !S.skipped.has(r.rule_id)), again = false;
+  if (!pool.length) { pool = RULES.filter(r => S.mine[r.rule_id] && !S.revisited.has(r.rule_id) && stat(r).conf === 'split'); again = true; }
+  if (!pool.length) return null;
+  const done = Object.keys(S.mine).length;
+  if (!again && done < 3) {
+    const strong = pool.map(r => [r, stat(r)]).filter(x => x[1].conf === 'valid').sort((a, b) => b[1].agree * b[1].n - a[1].agree * a[1].n).slice(0, 4);
+    const r = strong.length ? strong[Math.floor(Math.random() * strong.length)][0] : pool.find(r => r.rule_id === STARTERS[done]) || pool[0];
+    return { r, tag: 'Warm-up' };
+  }
+  const need = { none: 100, thin: 70, split: 45, valid: 4 };
+  let best = null, bestScore = -1, bestSt = null;
+  for (const r of pool) { const st = stat(r, S.uid); const sc = need[st.conf] - (st.conf === 'thin' ? st.n * 10 : 0) + Math.random() * 12; if (sc > bestScore) { bestScore = sc; best = r; bestSt = st; } }
+  const tag = again ? 'Team is split · second look' : { none: 'New', thin: bestSt.n === 2 ? 'One more validates it' : 'Needs a second answer', split: 'Team is split', valid: 'Confirming' }[bestSt.conf];
+  return { r: best, tag, again };
+}
+
+/* ---------- standalone database (used when the page is hosted outside Claude) ---------- */
+const CFG = (window.TB_CONFIG && /^https:\/\//.test(window.TB_CONFIG.url || '') && window.TB_CONFIG.key) ? window.TB_CONFIG : null;
+function remoteDb(cfg, secret) {
+  const base = cfg.url.replace(/\/+$/, '') + '/rest/v1', hd = { apikey: cfg.key, Authorization: 'Bearer ' + cfg.key, 'Content-Type': 'application/json' };
+  const fail = async res => { if (!res.ok) throw { code: res.status >= 500 || res.status === 429 ? 'unavailable' : 'invalid_argument', message: await res.text().catch(() => '') }; return res; };
+  let listener = null, onErr = null, timer = 0, failed = 0;
+  async function poll() {
+    clearTimeout(timer);
+    try {
+      const rows = await (await fail(await fetch(base + '/votes?select=id,name,a,u', { headers: hd, cache: 'no-store' }))).json();
+      failed = 0;
+      if (listener) listener({ docs: rows.map(r => ({ id: r.id, data: () => ({ name: r.name, a: r.a, u: r.u }) })), metadata: { fromCache: false } });
+    } catch (e) { if (++failed === 3 && onErr && !S.first) onErr(e); }
+    timer = setTimeout(poll, document.hidden ? 30000 : 8000);
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && listener) poll(); });
+  return {
+    doc: () => ({ set: async d => { await fail(await fetch(base + '/rpc/save_votes', { method: 'POST', headers: hd, body: JSON.stringify({ secret, player: d.name, answers: d.a }) })); } }),
+    collection: () => ({ onSnapshot: (next, err) => { listener = next; onErr = err; poll(); } })
+  };
+}
+async function deviceIdentity() {
+  let secret = ls.get('tb-secret');
+  if (typeof secret !== 'string' || secret.length < 32) { secret = [...crypto.getRandomValues(new Uint8Array(24))].map(b => b.toString(16).padStart(2, '0')).join(''); ls.set('tb-secret', secret); }
+  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(secret));
+  return { secret, uid: [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2, '0')).join('') };
+}
+function saveFile(filename, data) { const u = URL.createObjectURL(data instanceof Blob ? data : new Blob([data])); const a = h('a', { href: u, download: filename }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); }
+
+/* ---------- storage ---------- */
+function meDoc() { return { name: S.name, a: S.mine, u: Date.now() }; }
+function syncMe() { if (S.uid) S.team[S.uid] = { name: S.name, a: S.mine }; }
+async function save() {
+  syncMe();
+  if (S.mode !== 'team') { ls.set('tb-tune2', { name: S.name, a: S.mine }); return; }
+  if (S.saving) { S.dirty = true; return; }
+  S.saving = true;
+  do {
+    S.dirty = false;
+    try { await S.db.doc('votes/' + S.uid).set(meDoc()); }
+    catch (e) {
+      if (e && e.code === 'unavailable') { try { await new Promise(r => setTimeout(r, 800 + Math.random() * 800)); await S.db.doc('votes/' + S.uid).set(meDoc()); continue; } catch (e2) { e = e2; } }
+      S.mode = 'local'; ls.set('tb-tune2', { name: S.name, a: S.mine });
+      banner(LOCAL_MSG);
+      break;
+    }
+  } while (S.dirty);
+  S.saving = false;
+}
+const LOCAL_MSG = 'Your answers are saved on this device only. After a round, tap Send my answers.';
+function myCode() { return 'TB1:' + btoa(unescape(encodeURIComponent(JSON.stringify({ name: S.name, a: S.mine })))); }
+function sendBox() {
+  if (S.mode !== 'local' || !Object.keys(S.mine).length) return null;
+  const ta = h('textarea', { class: 'field', id: 'my-code', readonly: true, 'aria-label': 'Your answer code' }); ta.value = myCode();
+  const msg = h('span', { role: 'status' });
+  const copy = () => { const done = () => { msg.textContent = 'Copied. Paste it in a message to the game owner.'; }; try { navigator.clipboard.writeText(ta.value).then(done, () => { ta.select(); msg.textContent = 'Select all and copy it.'; }); } catch (e) { ta.select(); msg.textContent = 'Select all and copy it.'; } };
+  return h('div', { class: 'reveal' }, h('h3', null, 'Send my answers'), h('p', null, 'Your answers are not reaching the team from this device. Copy this code and send it to the game owner.'), h('div', { class: 'row' }, ta, h('button', { class: 'btn', type: 'button', onclick: copy }, 'Copy code'), msg));
+}
+function banner(t) { const b = $('banner'); b.textContent = t || ''; b.hidden = !t; }
+function ingest(docs) {
+  const team = {};
+  for (const d of docs) { const x = d.data() || {}; team[d.id] = { name: typeof x.name === 'string' ? x.name.slice(0, 40) : '', a: (x.a && typeof x.a === 'object') ? x.a : {} }; }
+  if (S.uid) {
+    const srv = team[S.uid];
+    if (srv && !S.gotMine) { S.mine = Object.assign({}, srv.a, S.mine); if (!S.name) S.name = srv.name; }
+    S.gotMine = true;
+    if (S.name || Object.keys(S.mine).length) team[S.uid] = { name: S.name, a: S.mine };
+  }
+  S.team = team;
+}
+async function boot() {
+  const use = n => (window.claude && window.claude.use) ? window.claude.use(n).catch(() => null) : Promise.resolve(null);
+  let db = null, user = null, uid = null;
+  if (CFG) { try { const me = await deviceIdentity(); uid = me.uid; db = remoteDb(CFG, me.secret); } catch (e) {} }
+  else [db, user] = await Promise.all([use('db'), use('user')]);
+  if (user) { try { uid = await user.id(); S.isOwner = !!(await user.isOwner()); } catch (e) {} }
+  const local = ls.get('tb-tune2');
+  if (!db) {
+    S.mode = 'local'; if (local) { S.name = local.name || ''; S.mine = local.a || {}; }
+    S.uid = 'me'; syncMe();
+    banner(LOCAL_MSG);
+    loaded(); return;
+  }
+  S.db = db; S.uid = uid;
+  if (!uid) { S.mode = 'local'; if (local) { S.name = local.name || ''; S.mine = local.a || {}; } banner(LOCAL_MSG); }
+  const timer = setTimeout(() => { if (!S.first) { $('pulse').textContent = 'The team answers cannot be reached yet'; if (S.mode === 'loading') { S.mode = 'team'; loaded(); } } }, 10000);
+  db.collection('votes').onSnapshot(snap => {
+    ingest(snap.docs);
+    if (!snap.metadata.fromCache) { clearTimeout(timer); S.first = true; }
+    if (S.mode === 'loading') { S.mode = 'team'; loaded(); } else live();
+  }, () => { clearTimeout(timer); if (S.mode === 'loading') { S.mode = 'local'; loaded(); } banner(LOCAL_MSG); });
+}
+function loaded() { if (S.phase === 'intro') intro(); live(); }
+let liveT = 0;
+function live() { clearTimeout(liveT); liveT = setTimeout(() => { pulse(); if (!$('v-results').hidden) results(); }, 150); }
+
+/* ---------- stage art ---------- */
+const MATS = ['241 228 234', '242 193 78', '247 215 116', '247 169 128', '240 155 184', '227 166 214'], ALPH = [.18, .4, .64, .82];
+const rnd = (a, b) => a + Math.random() * (b - a);
+const cards = [];
+for (let i = 0; i < ROUND; i++) $('pips').append(h('i'));
+document.querySelectorAll('.stack').forEach((st, si) => { for (let k = 0; k < 4; k++) { const c = h('i', { class: 'card' }); st.append(c); cards.push(c); setCard(c, (si + k) % 6); } });
+function setCard(c, m) { c.style.setProperty('--bg', `rgb(${MATS[m == null ? Math.floor(rnd(0, 6)) : m]} / ${ALPH[Math.floor(rnd(0, 4))]})`); c.style.setProperty('--x', rnd(-8, 8).toFixed(1) + '%'); c.style.setProperty('--y', rnd(-7, 7).toFixed(1) + '%'); c.style.setProperty('--r', rnd(-3, 3).toFixed(1) + 'deg'); }
+function shuffle() { for (let i = 0; i < 4; i++) setCard(cards[Math.floor(rnd(0, cards.length))]); const f = cards[Math.floor(rnd(0, cards.length))]; f.classList.remove('flip'); void f.offsetWidth; f.classList.add('flip'); }
+function progressLine(p) {
+  if (!p.total) return 'No answers yet. Be the first.';
+  if (p.ans < p.N) return `${p.N - p.ans} rules still need a first answer · ${p.val} validated`;
+  if (p.val < p.N) return `Every rule has an answer. ${p.N - p.val} left to validate`;
+  return 'All 99 rules validated';
+}
+function pulse() {
+  const inRound = S.session % ROUND, full = S.session > 0 && inRound === 0 && S.phase !== 'q';
+  $('cnt').firstChild.nodeValue = String(S.phase === 'intro' ? 0 : full ? ROUND : inRound + (S.phase === 'q' ? 1 : 0));
+  const filled = S.phase === 'intro' ? 0 : full ? ROUND : inRound;
+  [...$('pips').children].forEach((e, i) => e.classList.toggle('on', i < filled));
+  const me = S.uid && scores().find(x => x.uid === S.uid);
+  $('rnd').textContent = `Round ${Math.floor((S.session - (full ? 1 : 0)) / ROUND) + 1}${me ? ` · ${me.pts} points` : ''}`;
+  if (S.mode === 'loading') return;
+  const p = progress();
+  $('m-a').style.width = pc(p.ans / p.N) + '%'; $('m-v').style.width = pc(p.val / p.N) + '%';
+  $('meter').setAttribute('aria-label', `${p.ans} of ${p.N} rules answered, ${p.val} validated`);
+  $('pulse').textContent = progressLine(p);
+}
+
+/* ---------- sound and touch ---------- */
+let AC = null, muted = ls.get('tb-mute') === true;
+function sfx(name) {
+  if (muted) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    const t = AC.currentTime + 0.01;
+    const note = (f, at, len, vol) => { [[f, vol], [f * 2, vol * .22]].forEach(([fr, v]) => { const o = AC.createOscillator(), g = AC.createGain(); o.type = 'sine'; o.frequency.value = fr; g.gain.setValueAtTime(0.0001, t + at); g.gain.exponentialRampToValueAtTime(v, t + at + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + at + len); o.connect(g).connect(AC.destination); o.start(t + at); o.stop(t + at + len + 0.05); }); };
+    ({ tap: () => note(494, 0, .09, .05), skip: () => note(294, 0, .1, .035),
+      pick: () => { note(392, 0, .2, .07); note(587, .08, .3, .07); },
+      first: () => { note(392, 0, .2, .07); note(523, .08, .22, .07); note(784, .16, .4, .07); },
+      valid: () => { note(523, 0, .2, .07); note(659, .09, .2, .07); note(784, .18, .22, .07); note(1047, .27, .6, .08); },
+      round: () => { [262, 392, 523, 659].forEach((f, i) => note(f, i * .07, 1.4, .06)); note(1047, .42, 1.2, .05); } })[name]();
+  } catch (e) {}
+}
+function buzz(p) { try { if (!muted && navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
+function setSnd() { const b = $('snd'); b.setAttribute('aria-label', muted ? 'Sound is off' : 'Sound is on'); b.setAttribute('aria-pressed', muted ? 'false' : 'true'); }
+$('snd').onclick = () => { muted = !muted; ls.set('tb-mute', muted); setSnd(); sfx('tap'); };
+setSnd();
+function pop(text) { const e = h('div', { class: 'pop' }, text); $('hud').append(e); setTimeout(() => e.remove(), 1400); const c = $('cnt'); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
+function countUp(el, to) { const t0 = performance.now(), dur = 900; if (matchMedia('(prefers-reduced-motion: reduce)').matches) { el.firstChild.nodeValue = String(to); return; } (function f(now) { const k = Math.min(1, (now - t0) / dur); el.firstChild.nodeValue = String(Math.round(to * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(f); })(t0); }
+
+/* ---------- play views ---------- */
+const panel = $('panel');
+function show(...kids) { panel.replaceChildren(...kids.flat(3).filter(Boolean)); }
+function intro() {
+  S.phase = 'intro';
+  const done = Object.keys(S.mine).length, back = !!S.name && done > 0;
+  const inp = h('input', { class: 'field', id: 'player-name', type: 'text', maxlength: '24', placeholder: 'Your first name', autocomplete: 'given-name', 'aria-label': 'Your first name', value: S.name || '' });
+  const go = () => { const v = inp.value.trim().slice(0, 24); if (!v) { inp.focus(); return; } S.name = v; sfx('pick'); save(); next(); };
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+  show(h('div', { class: 'qcard' },
+    h('h1', { class: 'big' }, back ? `Welcome back, ${S.name}.` : 'Fit the bed to the sleeper.'),
+    h('p', { class: 'lead' }, back ? `${done} of ${RULES.length} answered. Pick up where the team needs you.` : 'You meet a sleeper. You say softer, firmer or the same. 20 questions a round.'),
+    h('div', { class: 'row' }, inp, h('button', { class: 'btn', type: 'button', onclick: go }, back ? 'Keep going' : 'Start'))));
+  pulse();
+}
+function valuePhrase(r) {
+  const v = r.current_value, u = r.unit, pct = x => Math.round(Math.abs(x) / r.step * 100);
+  if (u === 'score points') return `${fmt(v)} score points, about ${pct(v)}% of one feel step`;
+  if (u.startsWith('score points across')) return `${fmt(v)} score points from the narrowest to the widest sleeper, so about ${fmt(v / 2 / r.step)} feel steps from average to the far end`;
+  if (u.startsWith('score points per BMI')) return `${fmt(v)} per BMI point, so about ${pct(v * 10)}% of a feel step for this sleeper`;
+  if (u.startsWith('times')) return `${fmt(v)} times the load of back sleeping`;
+  if (u.startsWith('share of body weight')) return `${fmt(v * 100)} points of body weight${u.includes('base') ? ' (' + u.split('(')[1] : ''}`;
+  if (u.startsWith('penalty')) return `${fmt(v)} ${u}`;
+  if (u.startsWith('allowed alignment')) return `${fmt(v)} allowed error. Lower is stricter${u.includes('normally') ? '; normal is 0.30' : ''}`;
+  if (u.startsWith('meters')) return `${fmt(v * 1000)} mm across the full range`;
+  if (u.startsWith('share of the default')) return `${v > 0 ? '+' : ''}${fmt(v * 100)}% of the default weight`;
+  return `${fmt(v)} ${u}`;
+}
+const zoneWords = r => ({ 'All zones': 'whole side of the bed', 'Whole side': 'whole side of the bed', 'Whole bed': 'bed' }[r.zone] || r.zone.toLowerCase());
+const layerWords = r => r.layer === 'Support' ? 'the support underneath' : r.layer.startsWith('Comfort and s') ? 'comfort and support together' : 'the comfort layer on top';
+function elseLine(skip) {
+  const parts = { sleeps: 'sleeps on the back', frame: 'average frame', build: '5’8” and 158 lb', sore: 'no sore spots' };
+  return 'Everything else is average: ' + Object.keys(parts).filter(k => k !== skip).map(k => parts[k]).join(', ') + '.';
+}
+function next() {
+  const p = pick();
+  if (!p) return allDone();
+  S.phase = 'q'; S.cur = p; p.pend = null;
+  renderQ(); pulse(); window.scrollTo({ top: 0 });
+}
+function renderQ() {
+  const { r, tag, pend } = S.cur, built = r.status === 'Built', generic = GENERIC.has(r.answer);
+  const lock = S.phase === 'reveal', mineV = lock ? S.mine[r.rule_id] : null, picked = lock ? mineV.c : pend;
+  const opt = (c, title, sub, fn, on) => h('button', { class: 'opt', type: 'button', 'aria-pressed': on ? 'true' : 'false', disabled: lock, onclick: fn }, h('b', null, title), sub ? h('span', null, sub) : null);
+  const choose = c => () => { if (S.phase !== 'q') return; S.cur.pend = c; sfx('tap'); buzz(8); renderQ(); const f = panel.querySelector('.quad .opt, .sizes .opt'); if (f) f.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); };
+  const sizes = (list, cls) => h('div', { class: cls + ' sizes' }, list.map((z, i) => opt(i, z[0], z[1], () => answer(S.cur.pend, i), lock && mineV.s === i)));
+  let top, ask, sub = null, body, mid = null;
+  if (r.kind === 'feel' || r.kind === 'pull') {
+    const preset = r.p, sized = lock ? mineV.s != null : (pend && pend !== 'same' && pend !== 'no' && !r.fixed);
+    top = preset
+      ? [h('p', { class: 'kicker' }, `Meet ${r.who}`), h('h1', { class: 'big' }, preset[1]), h('p', { class: 'kicker' }, 'Otherwise average.')]
+      : [h('p', { class: 'kicker' }, `Meet ${r.who}`), h('h1', { class: 'big sm' }, r.question), h('p', { class: 'ansline' }, `${r.who}: `, h('b', null, `\u201C${r.answer}\u201D`))];
+    if (r.kind === 'feel') {
+      ask = `${r.who}\u2019s ${zoneWords(r)}, ${layerWords(r)}, should be`;
+      sub = `Compared with ${preset ? preset[2] : 'the same sleeper without that answer'}.`;
+      const d = c => r.fixed ? () => answer(c) : c === 'same' ? () => answer('same') : choose(c);
+      body = [h('div', { class: 'trio' }, opt('softer', 'Softer', '', d('softer'), picked === 'softer'), opt('same', 'The same', '', d('same'), picked === 'same'), opt('firmer', 'Firmer', '', d('firmer'), picked === 'firmer')),
+        sized ? [h('h2', { class: 'ask solo' }, `How much ${picked}?`), sizes(FEEL_SIZES, 'quad')] : null];
+    } else {
+      ask = `Should that steer ${r.who}\u2019s bed?`; sub = r.effect + '.';
+      body = [h('div', { class: 'duo' }, opt('yes', 'Yes', '', choose('yes'), picked === 'yes'), opt('no', 'No', '', () => answer('no'), picked === 'no')),
+        sized ? [h('h2', { class: 'ask solo' }, 'How hard?'), sizes(PULL_SIZES, 'trio')] : null];
+    }
+  } else {
+    top = [h('p', { class: 'kicker' }, generic ? r.chapter : r.question), h('h1', { class: 'big sm' }, generic ? r.question : `\u201C${r.answer}\u201D`),
+      h('p', { class: 'fact' }, `${r.zone} · ${r.layer}: ${r.effect}`), r.kind === 'tune' ? h('p', { class: 'kicker' }, valuePhrase(r)) : null];
+    if (r.kind === 'tune') {
+      const tol = r.unit.startsWith('allowed alignment');
+      ask = 'Is that the right size?';
+      body = h('div', { class: 'duo' }, opt('less', tol ? 'Stricter' : 'Turn it down', 'Toward ' + fmt(scaled(r, .5)), () => answer('less'), picked === 'less'), opt('more', tol ? 'Looser' : 'Turn it up', 'Toward ' + fmt(scaled(r, 1.5)), () => answer('more'), picked === 'more'));
+      mid = h('button', { class: 'link', type: 'button', 'aria-pressed': picked === 'right' ? 'true' : 'false', disabled: lock, onclick: () => answer('right') }, `It\u2019s right at ${fmt(r.current_value)}`);
+    } else {
+      ask = built ? 'Keep this rule?' : 'Add this rule?';
+      body = h('div', { class: 'duo' }, opt('keep', built ? 'Keep it' : 'Add it', '', () => answer('keep'), picked === 'keep'), opt('drop', built ? 'Drop it' : 'Leave it out', '', () => answer('drop'), picked === 'drop'));
+    }
+  }
+  show(h('span', { class: 'why-tag' }, tag), h('div', { class: 'qcard' }, top, h('h2', { class: 'ask' }, ask), sub ? h('p', { class: 'kicker' }, sub) : null), body,
+    h('div', { class: 'mid' }, mid, lock ? null : h('button', { class: 'link q', type: 'button', onclick: skip }, 'Not sure, skip')),
+    lock ? revealBox(r) : null);
+  if (lock) { const b = $('next-btn'); if (b) { b.focus({ preventScroll: true }); b.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } }
+}
+function revealBox(r) {
+  const mineV = S.mine[r.rule_id], others = stat(r, S.uid), all = stat(r);
+  const same = others.vs.filter(v => v.c === mineV.c).length;
+  const head = S.cur.justValid ? `Validated. You locked it in. +${S.cur.pts}` : !others.n ? 'First answer. +15' : same === others.n ? (others.n === 1 ? 'Your teammate said the same.' : `All ${others.n} teammates said the same.`) : same === 0 ? `You stand alone. None of ${others.n} agreed.` : `${same} of ${others.n} teammates said the same.`;
+  const hasDraft = r.kind === 'feel' && r.status === 'Built' && !r.fixed;
+  const now = all.keep != null ? `Team: ${breakdown(r, all)}` : `Team: ${teamText(r, all)}` + (hasDraft ? ` · draft: ${fmt(r.current_value)}` : '');
+  const status = all.conf === 'valid' ? 'Validated.' : all.conf === 'split' ? 'Team is split, so it stays open.' : `${3 - all.n} more to validate.`;
+  const note = h('input', { class: 'field', id: 'note-' + r.rule_id, type: 'text', maxlength: '200', placeholder: 'Your note for the team', 'aria-label': 'Note for the team', value: mineV.n || '', hidden: !mineV.n });
+  const add = h('button', { class: 'link q', type: 'button', hidden: !!mineV.n, onclick: () => { note.hidden = false; add.hidden = true; note.focus(); } }, 'Add a note (+2)');
+  const go = () => { const t = note.value.trim(); if (t !== (mineV.n || '')) { mineV.n = t; save(); } S.session % ROUND === 0 ? roundEnd() : next(); };
+  note.addEventListener('keydown', e => { if (e.key === 'Enter') { e.stopPropagation(); go(); } });
+  return h('div', { class: 'reveal', role: 'status' }, h('h3', null, head), h('p', null, h('b', null, now), h('br'), status), h('div', { class: 'row' }, note, h('button', { class: 'btn', type: 'button', id: 'next-btn', onclick: go }, 'Next')), add);
+}
+function answer(c, s) {
+  if (S.phase !== 'q') return;
+  const r = S.cur.r, rec = { c, t: Date.now() };
+  if (s != null) rec.s = s;
+  if (!cleanVote(r, rec)) return;
+  if (S.cur.again) S.revisited.add(r.rule_id);
+  const before = stat(r, S.uid);
+  S.mine[r.rule_id] = rec; S.session++; S.phase = 'reveal';
+  const after = stat(r), pts = before.n === 0 ? 15 : before.n < 3 ? 12 : 10;
+  S.cur.pts = pts; S.cur.justValid = after.conf === 'valid' && before.n < 3;
+  if (S.cur.justValid) { sfx('valid'); buzz([12, 50, 22]); } else if (before.n === 0) { sfx('first'); buzz(14); } else { sfx('pick'); buzz(12); }
+  pop('+' + pts);
+  save(); shuffle(); renderQ(); pulse();
+}
+function skip() { sfx('skip'); const id = S.cur.r.rule_id; S.skipped.add(id); if (S.cur.again) S.revisited.add(id); next(); }
+function myStats() {
+  let seen = 0, match = 0, soft = 0, firm = 0, same = 0;
+  for (const id in S.mine) { const r = BY_ID[id]; if (!r) continue; const m = cleanVote(r, S.mine[id]); if (!m) continue;
+    if (r.kind === 'feel') { m.c === 'softer' ? soft++ : m.c === 'firmer' ? firm++ : same++; }
+    const o = stat(r, S.uid); if (!o.n) continue; seen++; if (m.c === o.top) match++; }
+  const n = soft + firm + same;
+  const lean = n < 4 ? null : same / n > .45 ? ['Steady hand', 'You leave the bed alone more often than you change it.'] : soft > firm * 1.5 ? ['Soft touch', 'You reach for softer more often than firmer.'] : firm > soft * 1.5 ? ['Firm hand', 'You reach for firmer more often than softer.'] : ['Even hand', 'You go softer and firmer in about equal measure.'];
+  return { seen, match, lean };
+}
+function tiles(list) { return h('div', { class: 'tiles' }, list.map(([b, s]) => h('div', { class: 'tile' }, h('b', null, b), h('span', null, s)))); }
+function boardRows(limit) { return scores().slice(0, limit || 99).map(x => h('li', null, h('b', null, x.name + (x.uid === S.uid ? ' (you)' : '')), h('em', null, `${x.n} answers`), h('strong', null, x.pts))); }
+function roundEnd() {
+  S.phase = 'round';
+  const m = myStats(), left = RULES.filter(r => !S.mine[r.rule_id]).length, sc = scores(), rank = sc.findIndex(x => x.uid === S.uid), me = sc[rank] || { pts: 0 }, p = progress(), ahead = rank > 0 ? sc[rank - 1] : null;
+  const score = h('div', { class: 'scoreline' }, '0', h('small', null, 'points'));
+  const place = rank < 0 ? '' : sc.length === 1 ? 'You are the first on the board.' : rank === 0 ? `You lead the board of ${sc.length}.` : `You are #${rank + 1} of ${sc.length}. ${ahead.pts - me.pts + 1} points to pass ${ahead.name}.`;
+  show(
+    h('span', { class: 'why-tag' }, `Round ${S.session / ROUND} done`),
+    h('div', { class: 'qcard' }, score, h('h1', { class: 'h2' }, place), h('ol', { class: 'board' }, boardRows(5))),
+    h('p', { class: 'kicker' }, (m.lean ? `Your style: ${m.lean[0].toLowerCase()}. ` : '') + (m.seen ? `With the team ${pc(m.match / m.seen)}% of the time. ` : '') + (left ? `${left} to go.` : 'Only split ones left.')),
+    sendBox(),
+    h('div', { class: 'row' }, h('button', { class: 'btn', type: 'button', id: 'next-btn', onclick: () => { sfx('tap'); next(); } }, 'Keep going'), h('button', { class: 'btn ghost', type: 'button', onclick: () => go('results') }, 'See team results')));
+  countUp(score, me.pts); sfx('round'); buzz([20, 60, 20, 60, 40]);
+  for (let i = 0; i < 4; i++) setTimeout(shuffle, i * 180);
+  pulse(); window.scrollTo({ top: 0 });
+}
+function allDone() {
+  S.phase = 'done';
+  show(h('div', { class: 'qcard' }, h('h1', { class: 'big' }, 'All caught up.'), h('p', { class: 'lead' }, 'Come back after your teammates have played. Anything the team splits on returns to you.')), sendBox(), h('div', { class: 'row' }, h('button', { class: 'btn', type: 'button', onclick: () => go('results') }, 'See team results'), h('button', { class: 'btn ghost', type: 'button', onclick: () => { S.skipped.clear(); next(); } }, 'Check again')));
+  pulse();
+}
+document.addEventListener('keydown', e => {
+  if ($('v-play').hidden || e.target.matches('input')) return;
+  if (S.phase === 'q' && /^[1-4]$/.test(e.key)) { const g = panel.querySelector('.sizes') || panel.querySelector('.trio, .duo'); const b = g && g.querySelectorAll('.opt')[+e.key - 1]; if (b) { e.preventDefault(); b.click(); } }
+  else if (e.key === 'Enter' && (S.phase === 'reveal' || S.phase === 'round')) { const b = $('next-btn'); if (b && document.activeElement !== b) { e.preventDefault(); b.click(); } }
+});
+
+/* ---------- results ---------- */
+const FILTERS = { All: () => true, Built: r => r.status === 'Built', Proposed: r => r.status === 'Proposed', Validated: (r, s) => s.conf === 'valid', Split: (r, s) => s.conf === 'split', 'Needs answers': (r, s) => s.n < 3 };
+function results() {
+  const stats = RULES.map(r => [r, stat(r)]), p = progress(), sc = scores();
+  $('m2-a').style.width = pc(p.ans / p.N) + '%'; $('m2-v').style.width = pc(p.val / p.N) + '%';
+  $('meter2').setAttribute('aria-label', `${p.ans} of ${p.N} rules answered, ${p.val} validated`);
+  $('k-a').textContent = `Answered ${p.ans} of ${p.N}` + (p.ans < p.N ? `, ${p.N - p.ans} to go` : '');
+  $('k-v').textContent = `Validated ${p.val} of ${p.N}` + (p.val < p.N ? `, ${p.N - p.val} to go` : '');
+  $('sum').replaceChildren(...tiles([[String(sc.length), sc.length === 1 ? 'player' : 'players'], [String(p.total), 'answers'], [String(p.split), 'rules split'], [String(Math.max(0, p.N * 3 - stats.reduce((t, x) => t + Math.min(3, x[1].n), 0))), 'answers still needed, at least']]).children);
+  $('board').replaceChildren(...(sc.length ? boardRows() : [h('li', null, h('b', null, 'Nobody yet'), h('em', null, 'Play a round to get on the board'), h('strong', null, '0'))]));
+  $('chips').replaceChildren(...Object.keys(FILTERS).map(f => h('button', { type: 'button', 'aria-pressed': S.filter === f ? 'true' : 'false', onclick: () => { S.filter = f; results(); } }, f)));
+  const rows = stats.filter(([r, s]) => FILTERS[S.filter](r, s)).map(([r, s]) => {
+    const notes = s.vs.filter(v => v.n).map(v => `${v.name || 'Someone'}: ${v.n}`);
+    return h('div', { class: 'r' },
+      h('div', { class: 'id' }, r.rule_id, h('br'), r.status),
+      h('div', { class: 't' }, h('b', null, GENERIC.has(r.answer) ? r.question : `${r.question} ${r.answer}`), h('span', null, `${r.zone} · ${r.layer} · ${r.effect}`)),
+      h('div', { class: 'nums' }, h('div', null, h('em', null, 'Draft'), draftText(r)), h('div', { class: 'team' }, h('em', null, 'Team'), teamText(r, s)), h('div', null, h('em', null, 'Answers'), breakdown(r, s))),
+      h('div', null, h('span', { class: 'bar', role: 'img', 'aria-label': `Agreement ${pc(s.agree)}%` }, h('i', { style: `width:${pc(s.agree)}%` })), h('span', { class: 'pill ' + (s.conf === 'valid' ? 'strong' : s.conf) }, CONF[s.conf] + (s.n ? ` ${pc(s.agree)}%` : ''))),
+      notes.length ? h('div', { class: 'notes' }, notes.join('  ·  ')) : null);
+  });
+  $('list').replaceChildren(...(rows.length ? rows : [h('p', { class: 'empty' }, p.total ? 'No rules match this filter.' : 'No answers yet. Once the team starts playing, every rule shows its draft number, the team number and how much the team agrees.')]));
+  $('owner').hidden = !(S.isOwner && S.mode === 'team');
+}
+
+/* ---------- export ---------- */
+function exportRows() {
+  return RULES.map(r => {
+    const s = stat(r), row = COLS.map(c => r[c] == null ? '' : r[c]);
+    if (s.n) {
+      const flipped = r.kind === 'feel' && r.status === 'Built' && !r.fixed && s.team < 0;
+      row[10] = s.team == null ? '' : r.kind === 'tune' ? (s.net ? parseFloat(s.team.toFixed(4)) : '') : parseFloat(s.team.toFixed(r.status === 'Proposed' ? 1 : 3));
+      const notes = s.vs.filter(v => v.n).map(v => `${v.name || 'Someone'}: ${v.n}`).join(' | ');
+      const verdict = s.keep != null ? (s.keep ? 'Keep. ' : 'Drop. ') : r.kind === 'tune' && !s.net ? 'Keep current value. ' : flipped ? 'Team says the OPPOSITE direction (negative weight). ' : '';
+      row[11] = `${verdict}Team game: ${CONF[s.conf].toLowerCase()}, ${s.n} answers (${breakdown(r, s)}), agreement ${pc(s.agree)}%.${notes ? ' Notes: ' + notes : ''}`;
+    }
+    return row;
+  });
+}
+function voteRows() {
+  const head = ['rule_id', 'status', 'question_type', 'answers', 'breakdown', 'agreement_pct', 'state', 'draft_value', 'team_value', 'unit'];
+  const type = { feel: 'sleeper: softer, same or firmer', pull: 'sleeper: should it count', tune: 'turn down or up', agree: 'keep or drop' };
+  return [head, ...RULES.map(r => { const s = stat(r); return [r.rule_id, r.status, type[r.kind], s.n, breakdown(r, s), s.n ? pc(s.agree) : '', CONF[s.conf], r.current_value == null ? '' : r.current_value, s.team == null ? (s.keep == null ? '' : s.keep ? 'keep' : 'drop') : parseFloat(Number(s.team).toFixed(4)), r.status === 'Proposed' ? 'strength 0 to 3' : r.unit]; })];
+}
+const csvSafe = v => { let t = String(v); if (typeof v !== 'number' && /^[=+\-@\t\r]/.test(t)) t = "'" + t; return /[",\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+function loadXlsx() { return new Promise((ok, no) => { if (window.XLSX) return ok(); const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload = ok; s.onerror = no; document.head.append(s); }); }
+async function doExport(kind) {
+  const msg = $('x-msg'); msg.textContent = '';
+  const dl = CFG ? { save: async ({ filename, data }) => saveFile(filename, data) } : (window.claude && window.claude.use) ? await window.claude.use('downloads').catch(() => null) : null;
+  if (!dl) { msg.textContent = 'Downloads are not available in this view. Open the page in a browser on a computer.'; return; }
+  try {
+    const stamp = new Date().toISOString().slice(0, 10);
+    if (kind === 'csv') await dl.save({ filename: `sleep-fit-rule-table-team-${stamp}.csv`, data: '﻿' + [COLS, ...exportRows()].map(r => r.map(csvSafe).join(',')).join('\r\n') });
+    else {
+      await loadXlsx();
+      const wb = XLSX.utils.book_new(), safe = rows => rows.map(r => r.map(v => typeof v === 'string' && /^[=+\-@]/.test(v) ? "'" + v : v));
+      const ws = XLSX.utils.aoa_to_sheet(safe([COLS, ...exportRows()])); ws['!cols'] = [14, 10, 20, 34, 26, 16, 20, 30, 12, 24, 12, 60, 60, 20].map(w => ({ wch: w }));
+      XLSX.utils.book_append_sheet(wb, ws, 'Rules');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(safe(voteRows())), 'Game votes');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(safe([['player', 'points', 'answers'], ...scores().map(x => [x.name, x.pts, x.n])])), 'Leaderboard');
+      await dl.save({ filename: `sleep-fit-rule-table-team-${stamp}.xlsx`, data: XLSX.write(wb, { type: 'array', bookType: 'xlsx' }) });
+    }
+    msg.textContent = 'Saved.';
+  } catch (e) { msg.textContent = e && e.code === 'declined' ? '' : 'The file could not be saved here. Try again from a browser on a computer.'; }
+}
+$('x-xlsx').onclick = () => doExport('xlsx'); $('x-csv').onclick = () => doExport('csv');
+$('import').onclick = async () => {
+  const msg = $('import-msg'), raw = $('import-code').value.trim().replace(/^TB1:/, '').replace(/\s+/g, '');
+  try {
+    const x = JSON.parse(decodeURIComponent(escape(atob(raw))));
+    const name = String(x.name || 'Someone').slice(0, 24), a = {};
+    for (const id in (x.a || {})) { const r = BY_ID[id], v = r && cleanVote(r, x.a[id]); if (v) a[id] = { c: v.c, t: typeof v.t === 'number' ? v.t : Date.now(), ...(Number.isInteger(v.s) ? { s: v.s } : {}), ...(typeof v.n === 'string' && v.n ? { n: v.n.slice(0, 200) } : {}) }; }
+    if (!Object.keys(a).length) throw 0;
+    await S.db.doc('votes/imp-' + (name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'someone')).set({ name, a, u: Date.now() });
+    $('import-code').value = ''; msg.textContent = `Added ${Object.keys(a).length} answers from ${name}.`;
+  } catch (e) { msg.textContent = 'That code could not be read or saved. Ask for a fresh copy.'; }
+};
+const rs = on => { $('reset').hidden = on; $('reset2').hidden = !on; $('reset3').hidden = !on; };
+$('reset').onclick = () => rs(true); $('reset3').onclick = () => rs(false);
+$('reset2').onclick = async () => { rs(false); for (const id of Object.keys(S.team)) { try { await S.db.doc('votes/' + id).delete(); } catch (e) {} } S.mine = {}; S.team = {}; S.session = 0; S.skipped.clear(); S.revisited.clear(); results(); intro(); };
+
+/* ---------- routing ---------- */
+function go(v) { location.hash = v; }
+function route() {
+  const v = ['play', 'results', 'how'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'play';
+  ['play', 'results', 'how'].forEach(k => { $('v-' + k).hidden = k !== v; });
+  document.querySelectorAll('.nav button').forEach(b => b.setAttribute('aria-current', b.dataset.go === v ? 'true' : 'false'));
+  if (v === 'results') results();
+  window.scrollTo({ top: 0 });
+}
+document.querySelectorAll('.nav button').forEach(b => b.onclick = () => go(b.dataset.go));
+addEventListener('hashchange', route);
+window.__test = { S, stat, RULES, exportRows, scores, progress, live };
+intro(); route(); boot();
+
+</script>
+</body></html>
