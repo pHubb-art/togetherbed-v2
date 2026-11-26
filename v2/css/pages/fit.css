@@ -1,6 +1,6 @@
 /* Sleep Fit page
    Phones: the color art fills the whole screen behind the question.
-   Wide screens: the question sits on the left half, the art fills the right half edge to edge. */
+   Wide screens: the question sits on the left half, and the art runs the full width behind it. */
 
 /* ---------- The color art: full frame, never a small picture in the middle ---------- */
 .fit-art {
@@ -88,10 +88,17 @@
 
 /* ---------- Wide screens: a layout of its own, not a stretched phone ---------- */
 @media (min-width: 60rem) {
+  /* The bed lies on its side: shoulders, hips and legs run left to right across the whole screen,
+     sleeper one along the top, sleeper two along the bottom, overlapping through the middle. */
   .fit-art, .fit-page[data-fit-screen="result"] .fit-art, .fit-page[data-fit-screen="tune"] .fit-art {
-    position: fixed; inset: 0 0 0 50%; height: auto;
-    --pair-gap: 1.6vh; --shape-width: 66%; --bleed: -5%; padding-block: 1.6vh;
+    position: fixed; inset: 0; height: auto;
+    --pair-gap: 1.2vw; --shape-width: 64%; --bleed: -6%; padding: 0 1.2vw;
   }
+  .fit-art .zone-pairs { grid-template-rows: none; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .fit-art .zone-stack { left: 0; right: 0; width: auto; height: var(--shape-width); }
+  .fit-art .zone-stack:first-child { top: var(--bleed); bottom: auto; }
+  .fit-art .zone-stack:nth-child(2) { top: auto; bottom: var(--bleed); }
+  .fit-art .zone-pair.is-solo .zone-stack { top: 5%; bottom: 5%; height: auto; }
   .fit-page .site-header .wrap, .fit-shell { max-width: none; width: 50%; margin-inline: 0; padding-right: var(--gutter); }
   .fit-shell { padding-top: var(--space-6); }
   #fit-app { max-width: 36rem; }

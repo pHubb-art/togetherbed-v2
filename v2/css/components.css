@@ -276,23 +276,42 @@ button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, v
 .zone-stack:first-child { left: var(--bleed, -4%); }      /* a negative bleed runs the stack off the edge of the frame */
 .zone-stack:nth-child(2) { right: var(--bleed, -4%); }
 .zone-pair.is-solo .zone-stack { left: 6%; width: 88%; }
+/* One glass panel. The outer element places it, lifts it off the panel below with a soft
+   shadow and blends it like ink; the inner one is the glass: color that is fuller the
+   firmer the layer, light catching the top edge, and a slightly deeper lower edge.
+   No outline anywhere: the panel rolls off softly like a solid piece. */
 .zone-stack i {
-  --sq-r: 22%;
   position: absolute;
   inset: 0;
-  background: var(--c, #f4f1ef);
-  opacity: var(--o, 1);
   translate: var(--x, 0) var(--y, 0);
   rotate: var(--r, 0deg);
   mix-blend-mode: multiply;
-  transition: background-color 0.35s var(--ease), opacity 0.35s var(--ease);
+  filter: drop-shadow(0 10px 14px rgb(90 40 50 / 0.16));
+}
+.zone-stack b {
+  --sq-r: 22%;
+  position: absolute;
+  inset: 0;
+  opacity: var(--o, 1);
+  background:
+    linear-gradient(152deg, rgb(255 255 255 / 0.5) 0%, rgb(255 255 255 / 0.08) 26%, rgb(255 255 255 / 0) 52%, rgb(60 20 30 / 0.07) 100%),
+    var(--c, #f4f1ef);
+  box-shadow:
+    inset 10px 14px 26px rgb(255 255 255 / 0.5),
+    inset -10px -16px 30px rgb(60 20 30 / 0.1);
 }
 .zone-stack.is-empty { mix-blend-mode: normal; z-index: -1; }   /* a place held for a sleeper who has not answered yet */
-.zone-stack.is-empty i { opacity: 0.6; mix-blend-mode: normal; }
-.zone-stack i.is-new { animation: zone-slide 0.45s var(--ease) both; }
-.zone-stack:nth-child(2) i.is-new { --from: 28%; }
-@keyframes zone-slide { from { opacity: 0; transform: translateX(var(--from, -28%)) rotate(-4deg); } }
-@media (prefers-reduced-motion: reduce) { .zone-stack i { transition: none; animation: none !important; } }
+.zone-stack.is-empty i { opacity: 0.6; mix-blend-mode: normal; filter: none; }
+/* A new or changed panel flops down onto the pile, slightly crooked, like a photo dropped on a table */
+.zone-stack i.is-new { animation: panel-drop 0.55s var(--ease) both; }
+.zone-stack i.is-new:nth-child(2) { animation-delay: 0.08s; }
+.zone-pair:nth-child(2) i.is-new { animation-duration: 0.62s; }
+.zone-pair:nth-child(3) i.is-new { animation-duration: 0.7s; }
+@keyframes panel-drop {
+  from { opacity: 0; translate: calc(var(--x, 0%) * -2) calc(var(--y, 0%) - 9%); rotate: calc(var(--r, 0deg) * -4); scale: 1.06; }
+  60% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .zone-stack i { animation: none !important; } }
 
 /* The same pair, tiny, beside a zone's name */
 .pair-mark { position: relative; display: inline-block; width: 2.6rem; aspect-ratio: 1.6 / 1; isolation: isolate; flex: none; }

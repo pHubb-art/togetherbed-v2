@@ -35,11 +35,13 @@ test("each answer colors that sleeper's shape in every zone, and the color chang
   assert.deepEqual(pairs(), [0, 1, 2].map(() => ({ left: null, right: null })));
   flow = withAnswer(flow, "pose", "side");
   const afterPose = pairs();
+  assert.deepEqual(stacksSoFar(newFlow(), buildBed(newFlow(), beds)).map(zone => [zone.left.length, zone.right.length]), [[2, 2], [2, 2], [2, 2]]);
   afterPose.forEach(pair => { assert.match(pair.left, /^#[0-9A-F]{6}$/); assert.equal(pair.right, null); });
-  assert.deepEqual(stacksSoFar(flow, buildBed(flow, beds)).map(zone => [zone.left.length, zone.right.length]), [[1, 0], [1, 0], [1, 0]]);
   flow = withAnswer(flow, "build", "lighter");
-  stacksSoFar(flow, buildBed(flow, beds)).forEach(zone => { assert.equal(zone.left.length, 2); assert.equal(zone.left[0].color, MATERIALS.coil.color); });
-  pairs().forEach((pair, zone) => assert.notEqual(pair.left, afterPose[zone].left));
+  stacksSoFar(flow, buildBed(flow, beds)).forEach(zone => {
+    assert.equal(zone.left.length, 2); assert.equal(zone.left[0].color, MATERIALS.coil.color);
+    assert.deepEqual(zone.right.map(card => card.opacity), [FEELS.medium.opacity, FEELS.medium.opacity], "the sleeper who has not answered keeps the generic bed");
+  });
   flow = withAnswer({ ...flow, sleeper: 1 }, "pose", "back");
   pairs().forEach(pair => assert.match(pair.right, /^#[0-9A-F]{6}$/));
 

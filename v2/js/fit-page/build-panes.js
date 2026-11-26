@@ -59,14 +59,16 @@ export function pairsSoFar(flow, bed) {
 }
 
 /**
- * The same art as cards: one stack per sleeper per zone, one card per layer earned so far.
- * Each card is its material's color, fuller the firmer that layer is.
+ * The same art as glass panels: one stack per sleeper per zone, one panel per layer.
+ * Every sleeper starts on the same generic bed (medium everywhere), so the stacks begin
+ * alike. Answers then change how firm each layer is, zone by zone: firmer panels are
+ * fuller in color, so the hips usually deepen and the shoulders lighten.
  * @returns [{ left: [card], right: [card] }] head to foot, ready for zonePairsHtml
  */
 export function stacksSoFar(flow, bed) {
+  const generic = sideIndex => [{ material: "coil", feel: "medium" }, { material: COMFORT_MATERIAL[sideIndex], feel: "medium" }];
   const cardsFor = (sideIndex, zone) =>
-    panesForZone(bed.sides[sideIndex], sideIndex, zone)
-      .slice(0, panesEarned(flow, sideIndex))
+    (panesEarned(flow, sideIndex) ? panesForZone(bed.sides[sideIndex], sideIndex, zone) : generic(sideIndex))
       .map(pane => ({ color: MATERIALS[pane.material].color, opacity: FEELS[pane.feel]?.opacity ?? 0.7 }));
   return [0, 1, 2].map(zone => flow.solo ? { left: cardsFor(0, zone) } : { left: cardsFor(0, zone), right: cardsFor(1, zone) });
 }
