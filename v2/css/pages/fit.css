@@ -1,41 +1,73 @@
-/* Sleep Fit page */
-.fit-shell { max-width: 44rem; margin-inline: auto; padding-block: var(--space-5) var(--space-7, 4rem); }
-.fit-shell > * + * { margin-top: var(--space-5); }
-#fit-app > * + * { margin-top: var(--space-4); }
-#fit-app h1 { font-size: var(--step-3); font-weight: var(--weight-light); line-height: 1.1; outline: none; }
-#fit-app h2 { font-size: var(--step-1); }
+/* Sleep Fit page
+   Phones: the color art fills the whole screen behind the question.
+   Wide screens: the question sits on the left half, the art fills the right half edge to edge. */
 
-#fit-progress { width: 100%; height: 6px; appearance: none; border: 0; border-radius: 999px; overflow: hidden; background: var(--surface-sunk); }
-#fit-progress::-webkit-progress-bar { background: var(--surface-sunk); }
-#fit-progress::-webkit-progress-value { background: var(--accent); transition: width 0.3s var(--ease, ease); }
-#fit-progress::-moz-progress-bar { background: var(--accent); }
+/* ---------- The color art: full frame, never a small picture in the middle ---------- */
+.fit-art {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  --pair-gap: 1.2svh;
+  --shape-width: 70%;
+  --bleed: -8%;
+  padding-block: 1.2svh;
+}
+/* Result and fine-tune are long pages: the art fills the first screen, the detail follows on white */
+.fit-page[data-fit-screen="result"] .fit-art, .fit-page[data-fit-screen="tune"] .fit-art { position: absolute; height: 100svh; }
+.fit-page .site-header, .fit-shell { position: relative; z-index: 1; }
+
+.fit-shell { padding-block: var(--space-2) var(--space-8); }
+.fit-shell > * + * { margin-top: var(--space-5); }
+#fit-app > * + * { margin-top: var(--space-5); }
+#fit-app h1 { font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--step-3); line-height: 0.98; outline: none; }
+#fit-app h1.is-set-light { font-family: var(--font-sans); font-weight: var(--weight-light); }   /* key word heavy, the rest light */
+#fit-app h2 { font-size: var(--step-2); }
+#fit-app .lede { font-weight: var(--weight-regular); }
+
+#fit-progress { display: block; width: 100%; height: 3px; appearance: none; border: 0; background: rgb(35 31 32 / 0.12); }
+#fit-progress::-webkit-progress-bar { background: rgb(35 31 32 / 0.12); }
+#fit-progress::-webkit-progress-value { background: var(--text); transition: width 0.3s var(--ease); }
+#fit-progress::-moz-progress-bar { background: var(--text); }
 
 .fit-question { border: 0; padding: 0; margin: 0; min-width: 0; }
-.fit-question legend { padding: 0; margin-bottom: var(--space-4); }
-.fit-who::before { content: ""; display: inline-block; width: 0.7em; height: 0.7em; margin-right: 0.5em; border-radius: 50%; background: var(--sleeper-a); }
+.fit-question legend { padding: 0; margin-bottom: var(--space-5); }
+.fit-who { font-weight: var(--weight-bold); }
+.fit-who::before { content: ""; display: inline-block; width: 0.8em; height: 0.8em; margin-right: 0.5em; border-radius: 28%; background: var(--sleeper-a); }
 .fit-who[data-sleeper="1"]::before { background: var(--sleeper-b); }
+[data-screen="intro"] .choices { margin-top: var(--space-6); }
 
-.fit-paths .choice { min-height: 5.5rem; border: 0; font: inherit; color: inherit; }
-.fit-sides { display: grid; gap: var(--space-3); grid-template-columns: 1fr 1fr; }
-.fit-side { padding: var(--space-4); }
-.fit-side[data-sleeper="0"] { background: color-mix(in srgb, var(--sleeper-a) 16%, var(--surface)); }
-.fit-side[data-sleeper="1"] { background: color-mix(in srgb, var(--sleeper-b) 16%, var(--surface)); }
-.btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+/* Result: the headline owns the first screen, over the art */
+.fit-hero { min-height: calc(100svh - 11rem); display: grid; align-content: end; gap: var(--space-4); padding-bottom: var(--space-6); }
+.fit-hero h1 { font-size: var(--step-4) !important; }
+.fit-sides { display: grid; gap: var(--space-7); }
+.fit-side { gap: var(--space-5); }
+.zone-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-5); }
+.zone-why { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-4); align-items: start; }
+.zone-why h3 { font-size: var(--step-1); font-weight: var(--weight-bold); }
+.zone-why p { max-width: var(--text-max); }
+.zone-why .pair-mark { margin-top: 0.2em; width: 3.2rem; }
+.build-number { font-size: var(--step--1); font-variant-numeric: tabular-nums; }
 
-@media (max-width: 26rem) {
-  .bed-block { grid-template-columns: 1fr; gap: var(--space-1); padding: var(--space-2); }
-}
+/* Two ways to buy */
+.fit-choices { display: grid; gap: var(--space-7); }
+.fit-choice h2 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.fit-choice .btn { justify-self: start; }
+@media (max-width: 47.99rem) { .fit-choice .btn:not(.btn-quiet) { width: 100%; } }
 
-/* ---------- Engineer path: tuning screen ---------- */
-.tune-sides { display: grid; gap: var(--space-4); }
-.tune-side { padding: var(--space-4); display: grid; gap: var(--space-4); }
-.tune-side[data-sleeper="0"] { background: color-mix(in srgb, var(--sleeper-a) 10%, var(--surface)); }
-.tune-side[data-sleeper="1"] { background: color-mix(in srgb, var(--sleeper-b) 10%, var(--surface)); }
-.tune-side p { margin: 0; }
-.tune-status { display: grid; gap: var(--space-1); font-size: var(--step--1); }
-.tune-status strong { font-size: var(--step-0); }
+/* The real bed in 3D, opened on request */
+.real-bed { display: grid; gap: var(--space-2); justify-items: center; text-align: center; }
+.real-bed-view { width: 100%; }
+.real-bed-view canvas { display: block; width: 100%; aspect-ratio: 4 / 3; opacity: 0; transition: opacity 0.6s var(--ease, ease); }
+.real-bed-view.is-ready canvas { opacity: 1; }
+.real-bed p { margin: 0; font-size: var(--step--1); }
+
+
+/* ---------- Fine-tune screen ---------- */
+.tune-sides { display: grid; gap: var(--space-7); }
+.tune-side { gap: var(--space-5); }
+.tune-status { display: grid; gap: var(--space-1); }
 .tune-zone { display: grid; gap: var(--space-2); }
-.tune-zone h3 { font-size: var(--step-0); font-weight: var(--weight-bold); margin: 0; }
+.tune-zone h3 { font-size: var(--step-1); font-weight: var(--weight-bold); }
 .tune-foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 
 /* Three-way picker: one row, the chosen option filled in */
@@ -53,63 +85,18 @@
 .tune-body label { display: grid; gap: var(--space-1); font-size: var(--step--1); color: var(--text-muted); }
 .tune-body select, .tune-body input { font: inherit; font-size: 1rem; color: var(--text); min-height: 44px; width: 100%; padding-inline: var(--space-3); border: 0; border-radius: 12px; background: var(--surface-sunk); }
 
-@media (min-width: 48rem) {
-  .tune-sides[data-count="2"] { grid-template-columns: 1fr 1fr; }
-  .fit-shell:has([data-screen="tune"]) { max-width: 60rem; }
+
+/* ---------- Wide screens: a layout of its own, not a stretched phone ---------- */
+@media (min-width: 60rem) {
+  .fit-art, .fit-page[data-fit-screen="result"] .fit-art, .fit-page[data-fit-screen="tune"] .fit-art {
+    position: fixed; inset: 0 0 0 50%; height: auto;
+    --pair-gap: 1.6vh; --shape-width: 66%; --bleed: -5%; padding-block: 1.6vh;
+  }
+  .fit-page .site-header .wrap, .fit-shell { max-width: none; width: 50%; margin-inline: 0; padding-right: var(--gutter); }
+  .fit-shell { padding-top: var(--space-6); }
+  #fit-app { max-width: 36rem; }
+  #fit-app h1 { font-size: clamp(3.5rem, 5.4vw, 6rem); }
+  .fit-hero { min-height: calc(100vh - 12rem); }
+  .fit-hero h1 { font-size: clamp(4.5rem, 6.6vw, 7.5rem) !important; }
+  .choice strong { font-size: var(--step-1); }
 }
-
-/* ---------- Glass panes behind the questions ----------
-   White ground, so the pane colors read true. No outlines anywhere: the edge
-   comes from the soft thickness under each pane. */
-/* Answers are frosted glass so the panes show through behind them */
-.fit-page .choice, .fit-page .card {
-  background: rgb(255 255 255 / 0.62);
-  -webkit-backdrop-filter: blur(14px) saturate(1.3);
-  backdrop-filter: blur(14px) saturate(1.3);
-  box-shadow: inset 0 10px 14px -10px rgb(255 255 255 / 0.9), 0 10px 28px -14px rgb(74 36 24 / 0.28);
-}
-.fit-page .choice:has(input:checked) { background: rgb(255 255 255 / 0.9); box-shadow: inset 0 0 0 2px var(--text); }
-.fit-page .choice:has(input:focus-visible) { box-shadow: inset 0 0 0 3px var(--focus); }
-
-/* Result: the page takes on the build color */
-/* It waits until the panes have squared up, so the page stays white while the bed is being built */
-.fit-page[data-fit-screen="result"] { background: color-mix(in srgb, var(--build-color, #fff) 26%, #fff); transition: background-color 0.9s 1.1s var(--ease, ease); }
-.build-number { display: flex; align-items: center; gap: var(--space-2); font-size: var(--step--1); color: var(--text-muted); }
-
-/* The bed from above, in glass: it builds under the questions */
-.glass-bed { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-2) var(--space-3); max-width: 24rem; margin-inline: auto; }
-.glass-bed > .eyebrow { grid-column: 1 / -1; margin: 0; }
-.glass-bed-who { grid-column: 2; display: grid; grid-template-columns: 1fr 1fr; text-align: center; font-size: var(--step--1); color: var(--text-muted); }
-.glass-bed-who[data-count="1"] { grid-template-columns: 1fr; }
-.glass-bed-zones { display: grid; grid-template-rows: repeat(3, 1fr); align-items: center; font-size: var(--step--1); color: var(--text-muted); max-width: 5.5rem; }
-.glass-bed-art .bed-base { fill: #f6f1ee; }
-.glass-bed-art svg { display: block; }
-#fit-app > .glass-bed { margin-top: var(--space-6, 2.5rem); }
-
-/* Each zone explained */
-.fit-sides[data-count="1"] { grid-template-columns: 1fr; }
-.zone-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
-.zone-why { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-3); }
-.zone-why h3 { margin: 0; font-size: var(--step--1); font-weight: var(--weight-bold); letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); }
-.zone-why p { margin: 0; }
-.zone-chip { --sq-r: 9px; display: inline-block; width: 2rem; height: 2rem; flex: none; box-shadow: 0 6px 12px -8px rgb(74 36 24 / 0.5); }
-.build-number .zone-chip { width: 1.25rem; height: 1.25rem; --sq-r: 6px; }
-@media (max-width: 47.99rem) { .fit-sides { grid-template-columns: 1fr; } }
-
-@media (prefers-reduced-motion: reduce) {
-  .fit-page { transition: none; }
-}
-
-/* The real bed in 3D, opened on request */
-.real-bed { display: grid; gap: var(--space-2); justify-items: center; text-align: center; }
-.real-bed-view { width: 100%; }
-.real-bed-view canvas { display: block; width: 100%; aspect-ratio: 4 / 3; opacity: 0; transition: opacity 0.6s var(--ease, ease); }
-.real-bed-view.is-ready canvas { opacity: 1; }
-.real-bed p { margin: 0; font-size: var(--step--1); }
-
-/* Two ways to buy, side by side on wide screens */
-.fit-choices { display: grid; gap: var(--space-3); }
-.fit-choice h2 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin: 0; }
-.fit-choice p { margin: 0; }
-.fit-choice .btn { justify-self: start; }
-@media (min-width: 48rem) { .fit-choices { grid-template-columns: 1fr 1fr; } }

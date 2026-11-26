@@ -16,15 +16,18 @@ function pageLink(href) {
   return /fit/i.test(href || "") ? "fit/" : null;   // other pages do not exist yet, so their buttons are left out
 }
 
+/** A headline from the copy: words marked *like this* are set heavy, the rest light. */
+const headlineHtml = text => escapeHtml(text).replace(/\*(.+?)\*/g, "<strong>$1</strong>");
+
 function chapterHtml(chapter, index) {
   const heading = index === 0 ? "h1" : "h2";
   const link = chapter.cta && pageLink(chapter.cta.href);
-  const cta = link ? `\n          <a class="btn btn-accent sq" href="${link}">${escapeHtml(chapter.cta.label)}</a>` : "";
+  const cta = link ? `\n          <a class="btn sq" href="${link}">${escapeHtml(chapter.cta.label)}</a>` : "";
   return `
       <section class="chapter wrap" data-chapter="${escapeHtml(chapter.id)}">
-        <div class="chapter-card glass sq">
+        <div class="chapter-card">
           <p class="eyebrow">${escapeHtml(chapter.eyebrow)}</p>
-          <${heading}>${escapeHtml(chapter.headline)}</${heading}>
+          <${heading}>${headlineHtml(chapter.headline)}</${heading}>
           <p>${escapeHtml(chapter.body)}</p>${cta}
         </div>
       </section>`;
@@ -51,9 +54,8 @@ const html = `<!doctype html>
   <meta property="og:type" content="website">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="img/bed-poster.webp" fetchpriority="high">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/gabarito-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/albert-sans-latin.woff2" crossorigin>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
@@ -66,7 +68,7 @@ const html = `<!doctype html>
   ${siteHeaderHtml(copy.nav, "home", "./")}
   <main class="story" id="story">
     <div class="bed-stage" id="bed-stage" aria-hidden="true">
-      <div class="glass-stack story-glass" id="story-glass"></div>
+      <div class="story-pair" id="story-pair"><i class="sq"></i><i class="sq"></i></div>
       <img src="img/bed-poster.webp" width="1200" height="900" alt="" decoding="async" fetchpriority="high">
       <canvas id="bed-canvas"></canvas>
     </div>

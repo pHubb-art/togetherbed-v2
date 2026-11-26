@@ -12,9 +12,8 @@
   <meta property="og:type" content="website">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="img/bed-poster.webp" fetchpriority="high">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap">
+  <link rel="preload" as="font" type="font/woff2" href="fonts/gabarito-latin.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/albert-sans-latin.woff2" crossorigin>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
@@ -41,66 +40,66 @@
   </header>
   <main class="story" id="story">
     <div class="bed-stage" id="bed-stage" aria-hidden="true">
-      <div class="glass-stack story-glass" id="story-glass"></div>
+      <div class="story-pair" id="story-pair"><i class="sq"></i><i class="sq"></i></div>
       <img src="img/bed-poster.webp" width="1200" height="900" alt="" decoding="async" fetchpriority="high">
       <canvas id="bed-canvas"></canvas>
     </div>
     <div class="chapters">
       <section class="chapter wrap" data-chapter="meet">
-        <div class="chapter-card glass sq">
+        <div class="chapter-card">
           <p class="eyebrow">Meet Maya</p>
-          <h1>She has tried a lot of mattresses.</h1>
+          <h1>She has tried a <strong>lot</strong> of mattresses.</h1>
           <p>Showroom after showroom, Maya lies down, closes her eyes and tries to guess how she will feel in a year. Every bed feels fine for two minutes. None of them feel like hers.</p>
         </div>
       </section>
       <section class="chapter wrap" data-chapter="struggle">
-        <div class="chapter-card glass sq">
+        <div class="chapter-card">
           <p class="eyebrow">The shopping struggle</p>
-          <h2>Too soft here, too firm there.</h2>
+          <h2>Too <strong>soft</strong> here, too <strong>firm</strong> there.</h2>
           <p>Her shoulders want to sink in. Her hips want to stay level. Most beds ask her to pick one and live with the other.</p>
         </div>
       </section>
       <section class="chapter wrap" data-chapter="suit">
-        <div class="chapter-card glass sq">
+        <div class="chapter-card">
           <p class="eyebrow">A better idea</p>
-          <h2>The best suit isn&#39;t off the shelf.</h2>
+          <h2>The best suit isn&#39;t <strong>off the shelf.</strong></h2>
           <p>You would never buy a suit by size alone. It gets taken in at the shoulders and let out at the waist until it fits you. Your bed can work the same way.</p>
         </div>
       </section>
       <section class="chapter wrap" data-chapter="open">
-        <div class="chapter-card glass sq">
+        <div class="chapter-card">
           <p class="eyebrow">Meet TogetherBed</p>
-          <h2>A bed that opens up.</h2>
+          <h2>A bed that <strong>opens up.</strong></h2>
           <p>Unzip the top and look inside. TogetherBed is built from blocks that sit side by side, with nothing glued in place, so every part can be chosen for you.</p>
         </div>
       </section>
       <section class="chapter wrap" data-chapter="zones">
-        <div class="chapter-card glass sq">
+        <div class="chapter-card">
           <p class="eyebrow">Zones and layers</p>
-          <h2>Shoulders, hips and legs, each tuned.</h2>
+          <h2>Shoulders, hips and legs, <strong>each tuned.</strong></h2>
           <p>Each side has three zones. In every zone, a comfort block sits on a support block. Choose plush, medium or firm on top and the support you need underneath.</p>
         </div>
       </section>
       <section class="chapter wrap" data-chapter="partner">
-        <div class="chapter-card glass sq">
+        <div class="chapter-card">
           <p class="eyebrow">And then there&#39;s Sam</p>
-          <h2>Two people, one bed.</h2>
+          <h2><strong>Two</strong> people, <strong>one</strong> bed.</h2>
           <p>Maya sleeps on her side. Sam sleeps on his back. With TogetherBed, each side is built for the person sleeping on it, so neither of you has to meet in the middle.</p>
         </div>
       </section>
       <section class="chapter wrap" data-chapter="swap">
-        <div class="chapter-card glass sq">
+        <div class="chapter-card">
           <p class="eyebrow">Bodies change</p>
-          <h2>Swap a section, keep the bed.</h2>
+          <h2>Swap a section, <strong>keep the bed.</strong></h2>
           <p>If one zone stops feeling right, you change that block, not the whole mattress. Your bed can keep up with you over the years.</p>
         </div>
       </section>
       <section class="chapter wrap" data-chapter="start">
-        <div class="chapter-card glass sq">
+        <div class="chapter-card">
           <p class="eyebrow">Your turn</p>
-          <h2>Find your fit, together.</h2>
+          <h2>Find your fit, <strong>together.</strong></h2>
           <p>Sleep Fit asks a few simple questions about how you sleep, then suggests a build for each side. It takes a few minutes, and you can do it side by side.</p>
-          <a class="btn btn-accent sq" href="fit/">Start Sleep Fit</a>
+          <a class="btn sq" href="fit/">Start Sleep Fit</a>
         </div>
       </section>
     </div>

@@ -38,9 +38,8 @@
   min-height: 44px;              /* comfortable tap target */
   text-decoration: none;
   font-size: var(--step--1);
-  font-weight: var(--weight-bold);
 }
-.site-nav a[aria-current="page"] { box-shadow: inset 0 -2px 0 var(--accent); }
+.site-nav a[aria-current="page"] { font-weight: var(--weight-bold); box-shadow: inset 0 -2px 0 var(--text); }
 
 @media (min-width: 48rem) {
   .site-nav { flex: 0 1 auto; }
@@ -95,24 +94,34 @@
   text-transform: uppercase;
 }
 
-/* ---------- Choice tiles (Sleep Fit answers, shop options) ---------- */
-.choices { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); }
+/* ---------- Answer rows (Sleep Fit answers, shop options) ----------
+   Big plain rows, one under the other. The chosen row turns black: the interface stays
+   black and white, and the color answers back in the art behind it. */
+.choices { display: grid; gap: 2px; }
 .choice {
-  --sq-r: 20px;
+  --sq-r: 14px;
   position: relative;
   display: grid;
-  gap: var(--space-1);
-  padding: var(--space-4);
-  background: var(--surface);
-  box-shadow: inset 0 0 0 1px var(--line);
+  align-content: center;
+  gap: 2px;
+  min-height: 56px;
+  padding: var(--space-2) var(--space-4);
+  margin-inline: calc(var(--space-4) * -1);   /* the words line up with the page edge, the highlight reaches past them */
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
   cursor: pointer;
   text-align: left;
 }
 .choice input { position: absolute; opacity: 0; pointer-events: none; }
-.choice strong { font-size: var(--step-0); }
+.choice strong { font-size: var(--step-1); font-weight: var(--weight-regular); }
 .choice span { font-size: var(--step--1); color: var(--text-muted); }
-.choice:has(input:checked) { box-shadow: inset 0 0 0 2px var(--text); background: var(--surface-sunk); }
-.choice:has(input:focus-visible) { box-shadow: inset 0 0 0 3px var(--focus); }
+.choice span { color: inherit; opacity: 0.75; }
+.choice:hover { background: rgb(255 255 255 / 0.55); }
+.choice:has(input:checked) { background: var(--text); color: var(--bg); }
+.choice:has(input:checked) strong { font-weight: var(--weight-bold); }
+.choice:has(input:focus-visible), .choice:focus-visible { outline: none; box-shadow: inset 0 0 0 3px var(--focus); }
 
 /* ---------- Form fields ---------- */
 .field { display: grid; gap: var(--space-1); }
@@ -193,14 +202,13 @@ button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, v
 .shape-legend .shape { width: 16px; height: 16px; --side-color: var(--text-muted); }
 
 /* ---------- Cards ---------- */
+/* Almost nothing is a box. A "card" is a group set apart by space and one hairline. */
 .card {
-  --sq-r: 28px;
   display: grid;
   gap: var(--space-3);
   align-content: start;
-  padding: var(--space-5);
-  background: var(--surface);
-  box-shadow: inset 0 0 0 1px var(--line);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
 }
 
 .pill {
@@ -214,7 +222,7 @@ button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, v
   font-size: 0.75rem;
   font-weight: var(--weight-bold);
 }
-.pill-honey { background: var(--color-honey); color: var(--color-ink); }
+.pill-honey { background: var(--text); color: var(--bg); }
 
 /* ---------- Store handoff (shared by Sleep Fit and Store finder) ---------- */
 .handoff { display: grid; gap: var(--space-4); }
@@ -231,7 +239,7 @@ button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, v
   display: grid;
   gap: var(--space-2);
   padding: var(--space-4);
-  background: color-mix(in srgb, var(--color-honey) 35%, var(--surface));
+  background: var(--surface-sunk);
 }
 .call-ahead .phone { font-size: var(--step-1); font-weight: var(--weight-bold); user-select: all; }
 
@@ -251,26 +259,44 @@ button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, v
   max-width: calc(100% - 32px);
 }
 
-/* ---------- Glass cards: the background element (drawn by js/shared/glass-stack.js) ----------
-   Colored glass panes laid loosely on top of each other. Where they overlap the
-   colors deepen. No outlines: the edge comes from the soft thickness under each pane. */
-.glass-stack { pointer-events: none; }
-.glass-stack svg { width: 100%; height: 100%; overflow: visible; }
-.glass-stack .panes { isolation: isolate; }
-.glass-stack .pane {
+/* ---------- Zone stacks: the color art (markup from js/shared/zone-pairs.js) ----------
+   One row per zone: shoulders, hips, legs. Each sleeper has a stack of near-square
+   cards in every row, one card per layer of their bed, piled slightly off-centre.
+   Slivers of each layer show at the edges; the middle is that zone's color, and
+   where the two sleepers' stacks overlap the colors deepen again. */
+.zone-pairs { display: grid; grid-template-rows: repeat(3, minmax(0, 1fr)); gap: var(--pair-gap, 2%); width: 100%; height: 100%; pointer-events: none; }
+.zone-pair { position: relative; isolation: isolate; min-height: 0; }
+.zone-stack {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--shape-width, 58%);          /* two stacks wider than half the frame, so they overlap in the middle */
   mix-blend-mode: multiply;
-  transform: translate(var(--x), var(--y)) rotate(var(--turn));
-  transition: transform 0.9s cubic-bezier(0.3, 0.7, 0.2, 1);
 }
-.glass-stack .pane.is-new { animation: pane-drop 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
-@keyframes pane-drop {
-  from { opacity: 0; transform: translate(var(--x), calc(var(--y) - 46px)) rotate(calc(var(--turn) * 2.5)); }
+.zone-stack:first-child { left: var(--bleed, -4%); }      /* a negative bleed runs the stack off the edge of the frame */
+.zone-stack:nth-child(2) { right: var(--bleed, -4%); }
+.zone-pair.is-solo .zone-stack { left: 6%; width: 88%; }
+.zone-stack i {
+  --sq-r: 22%;
+  position: absolute;
+  inset: 0;
+  background: var(--c, #f4f1ef);
+  opacity: var(--o, 1);
+  translate: var(--x, 0) var(--y, 0);
+  rotate: var(--r, 0deg);
+  mix-blend-mode: multiply;
+  transition: background-color 0.35s var(--ease), opacity 0.35s var(--ease);
 }
-/* Finished: every pane slides to the middle and they read as one color */
-.glass-stack.is-blended .pane { transform: none; transition-duration: 1.2s; }
-.glass-stack .pane-mark { transition: opacity 0.6s; }
-.glass-stack.is-blended .pane-mark { opacity: 0; }
-@media (prefers-reduced-motion: reduce) {
-  .glass-stack .pane, .glass-stack .pane-mark { transition: none; }
-  .glass-stack .pane.is-new { animation: none; }
-}
+.zone-stack.is-empty { mix-blend-mode: normal; z-index: -1; }   /* a place held for a sleeper who has not answered yet */
+.zone-stack.is-empty i { opacity: 0.6; mix-blend-mode: normal; }
+.zone-stack i.is-new { animation: zone-slide 0.45s var(--ease) both; }
+.zone-stack:nth-child(2) i.is-new { --from: 28%; }
+@keyframes zone-slide { from { opacity: 0; transform: translateX(var(--from, -28%)) rotate(-4deg); } }
+@media (prefers-reduced-motion: reduce) { .zone-stack i { transition: none; animation: none !important; } }
+
+/* The same pair, tiny, beside a zone's name */
+.pair-mark { position: relative; display: inline-block; width: 2.6rem; aspect-ratio: 1.6 / 1; isolation: isolate; flex: none; }
+.pair-mark i { --sq-r: 24%; position: absolute; top: 0; height: 100%; aspect-ratio: 1; background: var(--c, #f1eeec); mix-blend-mode: multiply; }
+.pair-mark i:first-child { left: 0; }
+.pair-mark i:nth-child(2) { right: 0; }
+.pair-mark.is-solo i { left: 50%; translate: -50% 0; }

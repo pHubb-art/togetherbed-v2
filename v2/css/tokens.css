@@ -1,6 +1,8 @@
 /* =========================================================
    TogetherBed design tokens
    Palette: "Warm Layers" (locked by Patrick, 2026-11-25), black ink.
+   Direction (Patrick, 2026-11-26): the interface is black and white. Color lives
+   only in the overlap art, photos and the 3D materials, never in buttons or text.
    Every color on the site comes from this file. Swap here, nowhere else.
    ========================================================= */
 
@@ -16,33 +18,37 @@
 
   /* Roles (components use these, never the raw brand colors) */
   --bg: #fff;                     /* white ground, so the glass colors read true (Patrick, 2026-11-25) */
-  --surface: #fffcf9;
-  --surface-sunk: #f8ece3;
+  --surface: #fff;
+  --surface-sunk: #f4f1ef;         /* quiet grey for a hovered row or an empty shape */
   --text: var(--color-ink);
-  --text-muted: #6b5c57;
-  --line: #ecdcd2;
+  --text-muted: #5b5557;           /* use sparingly: body text is full ink */
+  --line: #e7e2df;                 /* hairline between groups */
   --sleeper-a: var(--color-apricot);
   --sleeper-b: var(--color-rose);
   --overlap: var(--color-mulberry);
-  --accent: var(--color-mulberry);
-  --on-accent: #fff7f1;
-  --focus: var(--color-mulberry);
+  --accent: var(--color-ink);      /* the one primary button is black */
+  --on-accent: #fff;
+  --focus: var(--color-ink);
   --layer-blend: multiply;        /* layers deepen where they overlap */
   --glass-tint: rgb(255 247 241 / 0.55);
   --glass-edge: rgb(255 255 255 / 0.7);
   --shadow: 0 1px 2px rgb(22 17 15 / 0.06), 0 12px 32px -12px rgb(22 17 15 / 0.18);
 
-  /* Type: Poppins light + bold mirrors the logo's light "together" / bold "bed" */
-  --font-sans: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Type (picked by Patrick, 2026-11-26): Gabarito for headlines and key words, Albert Sans for
+     everything else. Headlines are set like the logo: the key word heavy, the rest light. */
+  --font-display: "Gabarito", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Albert Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --weight-light: 300;
   --weight-regular: 400;
-  --weight-bold: 700;
-  --step--1: clamp(0.8rem, 0.78rem + 0.1vw, 0.86rem);
-  --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
-  --step-1: clamp(1.2rem, 1.12rem + 0.4vw, 1.45rem);
-  --step-2: clamp(1.5rem, 1.32rem + 0.9vw, 2.1rem);
-  --step-3: clamp(2rem, 1.6rem + 2vw, 3.3rem);
-  --step-4: clamp(2.6rem, 1.9rem + 3.6vw, 5rem);
+  --weight-bold: 650;
+  --weight-display: 800;
+  --step--1: 0.875rem;                                    /* small print: 14px */
+  --step-0: clamp(1.0625rem, 1.04rem + 0.1vw, 1.125rem);  /* body: 17 to 18px */
+  --step-1: clamp(1.25rem, 1.17rem + 0.4vw, 1.5rem);
+  --step-2: clamp(1.75rem, 1.5rem + 1.2vw, 2.5rem);
+  --step-3: clamp(2.75rem, 1.9rem + 4.2vw, 5.5rem);       /* headline: 44px on phones, up to 88px */
+  --step-4: clamp(3.25rem, 1.8rem + 7.2vw, 7.5rem);       /* the one biggest line: 52px up to 120px */
+  --gutter: 20px;
 
   /* Space and shape. Shapes are squircles: see .sq in base.css.
      Corners stay tight so a shape reads as close to a square, but not quite. */
@@ -58,10 +64,11 @@
   --radius-m: 14px;
   --radius-l: 22px;
   --page-max: 72rem;
-  --text-max: 34rem;
+  --text-max: 62ch;
 
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+@media (min-width: 48rem) { :root { --gutter: 48px; } }
 
 /* Dark theme: only when a page asks for it with data-theme="dark". The color glass is designed
    on white, so the site does not switch on its own until a dark version of the glass is designed. */

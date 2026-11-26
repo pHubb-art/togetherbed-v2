@@ -5,31 +5,31 @@
       {
         "id": "meet",
         "eyebrow": "Meet Maya",
-        "headline": "She has tried a lot of mattresses.",
+        "headline": "She has tried a *lot* of mattresses.",
         "body": "Showroom after showroom, Maya lies down, closes her eyes and tries to guess how she will feel in a year. Every bed feels fine for two minutes. None of them feel like hers."
       },
       {
         "id": "struggle",
         "eyebrow": "The shopping struggle",
-        "headline": "Too soft here, too firm there.",
+        "headline": "Too *soft* here, too *firm* there.",
         "body": "Her shoulders want to sink in. Her hips want to stay level. Most beds ask her to pick one and live with the other."
       },
       {
         "id": "suit",
         "eyebrow": "A better idea",
-        "headline": "The best suit isn't off the shelf.",
+        "headline": "The best suit isn't *off the shelf.*",
         "body": "You would never buy a suit by size alone. It gets taken in at the shoulders and let out at the waist until it fits you. Your bed can work the same way."
       },
       {
         "id": "open",
         "eyebrow": "Meet TogetherBed",
-        "headline": "A bed that opens up.",
+        "headline": "A bed that *opens up.*",
         "body": "Unzip the top and look inside. TogetherBed is built from blocks that sit side by side, with nothing glued in place, so every part can be chosen for you."
       },
       {
         "id": "zones",
         "eyebrow": "Zones and layers",
-        "headline": "Shoulders, hips and legs, each tuned.",
+        "headline": "Shoulders, hips and legs, *each tuned.*",
         "body": "Each side has three zones. In every zone, a comfort block sits on a support block. Choose plush, medium or firm on top and the support you need underneath.",
         "cta": {
           "label": "See how it's built",
@@ -39,13 +39,13 @@
       {
         "id": "partner",
         "eyebrow": "And then there's Sam",
-        "headline": "Two people, one bed.",
+        "headline": "*Two* people, *one* bed.",
         "body": "Maya sleeps on her side. Sam sleeps on his back. With TogetherBed, each side is built for the person sleeping on it, so neither of you has to meet in the middle."
       },
       {
         "id": "swap",
         "eyebrow": "Bodies change",
-        "headline": "Swap a section, keep the bed.",
+        "headline": "Swap a section, *keep the bed.*",
         "body": "If one zone stops feeling right, you change that block, not the whole mattress. Your bed can keep up with you over the years.",
         "cta": {
           "label": "How swapping works",
@@ -55,7 +55,7 @@
       {
         "id": "start",
         "eyebrow": "Your turn",
-        "headline": "Find your fit, together.",
+        "headline": "Find your fit, *together.*",
         "body": "Sleep Fit asks a few simple questions about how you sleep, then suggests a build for each side. It takes a few minutes, and you can do it side by side.",
         "cta": {
           "label": "Start Sleep Fit",
@@ -65,7 +65,7 @@
     ]
   },
   "fit": {
-    "headline": "Find the bed that fits you both.",
+    "headline": "Find the bed that fits you *both.*",
     "intro": "A few questions about how you sleep, and we will suggest a build for your side. Then hand the phone to your partner for theirs.",
     "paths": {
       "quick": {
@@ -111,12 +111,12 @@
       }
     },
     "passThePhone": {
-      "headline": "Now pass the phone.",
+      "headline": "Now *pass* the phone.",
       "body": "Your side is ready. Hand this over so your partner can answer for their side. Their answers stay theirs, and you will see both sides together at the end.",
       "cta": "My partner is ready"
     },
     "reveal": {
-      "headline": "Here's your bed, side by side.",
+      "headline": "Your bed, *side by side.*",
       "body": "One bed, two builds. Each side is shaped around the person sleeping on it, zone by zone, so you can see exactly where you match and where you differ."
     },
     "result": {
@@ -140,7 +140,7 @@
       "exact": "Your build is one of our ready-made beds, so you can order it online or see it in a store."
     },
     "tune": {
-      "headline": "Fine-tune each zone.",
+      "headline": "*Fine-tune* each zone.",
       "body": "We started you on the build we suggest. Change any block and watch how your alignment responds.",
       "comfort": "Comfort on top",
       "support": "Support underneath",
@@ -156,7 +156,7 @@
       "done": "See my bed"
     },
     "color": {
-      "label": "Your build color",
+      "label": "Build",
       "number": "No. {number}"
     },
     "explain": {
@@ -303,5 +303,6 @@
     "stores": "Stores",
     "shop": "Shop",
     "logoLabel": "together bed home"
-  }
+  },
+  "_headlines": "In a headline, put *asterisks* around the key word or words. They are set heavy, the rest light, like the logo."
 }

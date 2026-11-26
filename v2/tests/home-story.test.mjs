@@ -49,14 +49,12 @@ test("every page carries the shared header and marks its own link as current", a
   }
 });
 
-test("every story chapter has glass cards, growing to four and blending at the end", async () => {
-  const { panesForChapter } = await import("../js/home/story-glass.js");
-  let last = 0;
-  for (const chapter of copy.home.chapters) {
-    const { panes } = panesForChapter(chapter.id);
-    assert.ok(panes.length >= last && panes.length >= 1, chapter.id);
-    last = panes.length;
-  }
-  assert.equal(last, 4);
-  assert.equal(panesForChapter(copy.home.chapters.at(-1).id).blended, true);
+test("the two color shapes are apart at the start and together from the partner chapter on", async () => {
+  const { togetherAt } = await import("../js/home/chapter-layout.js");
+  const partner = CHAPTERS.findIndex(chapter => chapter.id === "partner");
+  assert.equal(togetherAt(0), 0);
+  assert.equal(togetherAt(partner - 1), 0);
+  assert.ok(togetherAt(partner - 0.5) > 0 && togetherAt(partner - 0.5) < 1);
+  assert.equal(togetherAt(partner), 1);
+  assert.equal(togetherAt(CHAPTERS.length - 1), 1);
 });

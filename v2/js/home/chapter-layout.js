@@ -63,3 +63,14 @@ export function poseAt(progress) {
   }
   return { offsets, yaw: mix(from.yaw, to.yaw, t), sideTint: mix(from.sideTint, to.sideTint, t) };
 }
+
+/**
+ * How far the two color shapes behind the bed have come together, 0 to 1.
+ * They stay apart while the story is about one person, slide together as the
+ * partner arrives, and rest overlapped from then on.
+ */
+const PARTNER_CHAPTER = CHAPTERS.findIndex(chapter => chapter.id === "partner");
+export function togetherAt(progress) {
+  const t = Math.max(0, Math.min(1, progress - (PARTNER_CHAPTER - 1)));
+  return smooth(t);
+}

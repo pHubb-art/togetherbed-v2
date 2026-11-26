@@ -9,7 +9,7 @@
  */
 import { COMFORT_LEVELS, SUPPORT_LEVELS } from "../fit/constants.js";
 import { typicalLevel } from "../fit/bed-lines.js";
-import { FEEL_BY_NAME, mixPanes, buildCode } from "../fit/build-color.js";
+import { FEEL_BY_NAME, FEELS, MATERIALS, mixPanes, buildCode } from "../fit/build-color.js";
 
 const COMFORT_MATERIAL = ["memory", "hybrid"];
 
@@ -35,7 +35,7 @@ export function buildColor(flow, bed) {
   return { hex: mixPanes(panes), number: sides.map(sideIndex => buildCode(panesForSide(bed.sides[sideIndex], sideIndex))).join(" / "), panes };
 }
 
-/* ---------- Zone by zone: the bed that builds under the questions ---------- */
+/* ---------- Zone by zone: the color art that builds under the questions ---------- */
 
 /** The two panes of one zone on one side: support underneath, comfort on top. */
 function panesForZone(side, sideIndex, zone) {
@@ -46,13 +46,29 @@ function panesForZone(side, sideIndex, zone) {
 }
 
 /**
- * The bed as it stands now: for each side, three zones, each with the panes earned so far.
- * @returns [ side: [ zone: [panes] ] ]  (one side when the sleeper is on their own)
+ * The color art as it stands now: one pair per zone, each shape colored by the
+ * answers given so far (null until that sleeper has answered anything).
+ * @returns [{ left, right }] head to foot; "right" is left out for a sleeper on their own
  */
-export function bedSoFar(flow, bed) {
-  const sides = flow.solo ? [0] : [0, 1];
-  return sides.map(sideIndex =>
-    [0, 1, 2].map(zone => panesForZone(bed.sides[sideIndex], sideIndex, zone).slice(0, panesEarned(flow, sideIndex))));
+export function pairsSoFar(flow, bed) {
+  const colorFor = (sideIndex, zone) => {
+    const earned = panesEarned(flow, sideIndex);
+    return earned ? mixPanes(panesForZone(bed.sides[sideIndex], sideIndex, zone).slice(0, earned)) : null;
+  };
+  return [0, 1, 2].map(zone => flow.solo ? { left: colorFor(0, zone) } : { left: colorFor(0, zone), right: colorFor(1, zone) });
+}
+
+/**
+ * The same art as cards: one stack per sleeper per zone, one card per layer earned so far.
+ * Each card is its material's color, fuller the firmer that layer is.
+ * @returns [{ left: [card], right: [card] }] head to foot, ready for zonePairsHtml
+ */
+export function stacksSoFar(flow, bed) {
+  const cardsFor = (sideIndex, zone) =>
+    panesForZone(bed.sides[sideIndex], sideIndex, zone)
+      .slice(0, panesEarned(flow, sideIndex))
+      .map(pane => ({ color: MATERIALS[pane.material].color, opacity: FEELS[pane.feel]?.opacity ?? 0.7 }));
+  return [0, 1, 2].map(zone => flow.solo ? { left: cardsFor(0, zone) } : { left: cardsFor(0, zone), right: cardsFor(1, zone) });
 }
 
 /** The color each finished zone blends into, shoulders to legs. */

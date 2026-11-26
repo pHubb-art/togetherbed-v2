@@ -2,6 +2,10 @@
    Base: reset, page layout, type, shared shapes (squircle, glass)
    ========================================================= */
 
+/* Fonts are hosted with the site (Latin only, two files, about 66 KB together) */
+@font-face { font-family: "Gabarito"; font-weight: 400 900; font-display: swap; src: url("../fonts/gabarito-latin.woff2") format("woff2"); }
+@font-face { font-family: "Albert Sans"; font-weight: 300 700; font-display: swap; src: url("../fonts/albert-sans-latin.woff2") format("woff2"); }
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
@@ -16,7 +20,7 @@ body {
   font-family: var(--font-sans);
   font-size: var(--step-0);
   font-weight: var(--weight-regular);
-  line-height: 1.6;
+  line-height: 1.5;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
@@ -38,23 +42,19 @@ a { color: inherit; text-underline-offset: 0.2em; }
 
 h1, h2, h3, h4 {
   margin: 0;
-  line-height: 1.1;
+  line-height: 1;
   text-wrap: balance;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.025em;
 }
 h1 { font-size: var(--step-4); font-weight: var(--weight-light); }
 h2 { font-size: var(--step-3); font-weight: var(--weight-light); }
 h3 { font-size: var(--step-1); font-weight: var(--weight-bold); }
-h1 strong, h2 strong { font-weight: var(--weight-bold); }
+/* The key word of a headline is heavy, like the "to" in the logo. In the copy it is marked *like this*. */
+h1 strong, h2 strong, .display { font-family: var(--font-display); font-weight: var(--weight-display); }
 p { margin: 0; text-wrap: pretty; }
 
-.eyebrow {
-  font-size: var(--step--1);
-  font-weight: var(--weight-bold);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
+/* A short label above a headline: plain sentence case, never tracked capitals */
+.eyebrow { font-size: var(--step-0); font-weight: var(--weight-bold); }
 .lede { font-size: var(--step-1); font-weight: var(--weight-light); max-width: var(--text-max); }
 .muted { color: var(--text-muted); }
 .num { font-variant-numeric: tabular-nums; }
@@ -64,11 +64,8 @@ p { margin: 0; text-wrap: pretty; }
   width: 100%;
   max-width: var(--page-max);
   margin-inline: auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-}
-@media (min-width: 48rem) {
-  .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); }
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
 }
 .section { padding-block: var(--space-8); }
 .stack { display: grid; gap: var(--space-4); align-content: start; }
@@ -90,41 +87,44 @@ p { margin: 0; text-wrap: pretty; }
 .sq-s { --sq-r: var(--radius-s); }
 .sq-l { --sq-r: var(--radius-l); }
 
-/* ---------- Glass: everyday frosted fallback of the liquid glass look ----------
-   The refracting WebGL version is reserved for signature moments (see docs). */
-.glass {
-  background: var(--glass-tint);
-  -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  backdrop-filter: blur(18px) saturate(1.4);
-  /* No outline stroke on glass. Depth comes from a soft curved inner highlight and a drop shadow. */
-  box-shadow: inset 0 10px 14px -10px var(--glass-edge), inset 0 -8px 12px -10px rgb(0 0 0 / 0.08), 0 8px 24px -12px rgb(0 0 0 / 0.18);
-}
-
-/* ---------- Buttons ---------- */
+/* ---------- Buttons ----------
+   One black primary button per screen, full width on phones.
+   Every other action is a plain text link (.btn-quiet). */
 .btn {
-  --sq-r: 12px;
+  --sq-r: 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: 48px;
-  padding: 0.7rem 1.4rem;
+  min-height: 56px;
+  padding: 0.7rem 1.75rem;
   border: 0;
-  background: var(--text);
-  color: var(--bg);
+  background: var(--accent);
+  color: var(--on-accent);
   font-weight: var(--weight-bold);
   font-size: var(--step-0);
   text-decoration: none;
   cursor: pointer;
-  transition: transform 0.2s var(--ease), background-color 0.2s;
+  transition: transform 0.2s var(--ease);
 }
-.btn:hover { transform: translateY(-1px); }
-.btn:active { transform: translateY(1px); }
-.btn-accent { background: var(--accent); color: var(--on-accent); }
-.btn-quiet { background: var(--surface-sunk); color: var(--text); }
-.btn-small { min-height: 40px; padding: 0.45rem 1rem; font-size: var(--step--1); }
-.btn[disabled] { opacity: 0.45; cursor: not-allowed; transform: none; }
-.btn-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.btn:active { transform: scale(0.98); }
+.btn-quiet {
+  min-height: 44px;
+  padding: 0 var(--space-2);
+  background: none;
+  color: var(--text);
+  font-weight: var(--weight-regular);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.btn-small { min-height: 44px; padding: 0.4rem 1.1rem; font-size: var(--step--1); }
+.btn[disabled] { opacity: 0.3; cursor: not-allowed; transform: none; }
+.btn-row { display: grid; gap: var(--space-2); justify-items: center; }
+.btn-row > .btn:not(.btn-quiet) { width: 100%; }
+@media (min-width: 48rem) {
+  .btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+  .btn-row > .btn:not(.btn-quiet) { width: auto; min-width: 16rem; }
+}
 
 /* Focus ring is drawn inside so the squircle mask never clips it */
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
