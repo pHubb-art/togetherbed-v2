@@ -54,7 +54,6 @@ const html = `<!doctype html>
   <meta property="og:type" content="website">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="img/bed-poster.webp" fetchpriority="high">
-  <link rel="preload" as="font" type="font/woff2" href="fonts/gabarito-latin.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="fonts/albert-sans-latin.woff2" crossorigin>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">

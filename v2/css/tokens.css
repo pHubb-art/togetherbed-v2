@@ -32,16 +32,25 @@
   --layer-blend: multiply;        /* layers deepen where they overlap */
   --glass-tint: rgb(255 247 241 / 0.55);
   --glass-edge: rgb(255 255 255 / 0.7);
+  /* Soft UI ("Foam", locked by Patrick 2026-11-28): every control is molded out of a linen ground.
+     Raised = sits proud of the surface, pressed = pushed into it. Never on white, glass or photos. */
+  --linen: #f3e8df;
+  --soft-hi: rgb(255 255 255 / 0.95);
+  --soft-lo: rgb(160 120 98 / 0.42);
+  --raised: -7px -7px 16px var(--soft-hi), 7px 7px 18px var(--soft-lo);
+  --raised-small: -3px -3px 8px var(--soft-hi), 3px 3px 9px var(--soft-lo);
+  --pressed: inset 5px 5px 11px var(--soft-lo), inset -5px -5px 11px var(--soft-hi);
   --shadow: 0 1px 2px rgb(22 17 15 / 0.06), 0 12px 32px -12px rgb(22 17 15 / 0.18);
 
-  /* Type (picked by Patrick, 2026-11-26): Gabarito for headlines and key words, Albert Sans for
-     everything else. Headlines are set like the logo: the key word heavy, the rest light. */
-  --font-display: "Gabarito", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Type: Albert Sans for everything while the headline font is parked (Patrick found Gabarito
+     too kid-like, 2026-11-26). To bring in a headline font later, change --font-display here, add
+     its @font-face in base.css and its preload link in tools/build-home.mjs. */
+  --font-display: var(--font-sans);
   --font-sans: "Albert Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --weight-light: 300;
   --weight-regular: 400;
   --weight-bold: 650;
-  --weight-display: 800;
+  --weight-display: 700;
   --step--1: 0.875rem;                                    /* small print: 14px */
   --step-0: clamp(1.0625rem, 1.04rem + 0.1vw, 1.125rem);  /* body: 17 to 18px */
   --step-1: clamp(1.25rem, 1.17rem + 0.4vw, 1.5rem);
@@ -85,6 +94,14 @@
   --layer-blend: screen;
   --glass-tint: rgb(28 23 22 / 0.5);
   --glass-edge: rgb(255 255 255 / 0.14);
+  /* Soft UI ("Foam", locked by Patrick 2026-11-28): every control is molded out of a linen ground.
+     Raised = sits proud of the surface, pressed = pushed into it. Never on white, glass or photos. */
+  --linen: #f3e8df;
+  --soft-hi: rgb(255 255 255 / 0.95);
+  --soft-lo: rgb(160 120 98 / 0.42);
+  --raised: -7px -7px 16px var(--soft-hi), 7px 7px 18px var(--soft-lo);
+  --raised-small: -3px -3px 8px var(--soft-hi), 3px 3px 9px var(--soft-lo);
+  --pressed: inset 5px 5px 11px var(--soft-lo), inset -5px -5px 11px var(--soft-hi);
   --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.6);
   color-scheme: dark;
 }

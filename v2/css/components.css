@@ -95,33 +95,51 @@
 }
 
 /* ---------- Answer rows (Sleep Fit answers, shop options) ----------
-   Big plain rows, one under the other. The chosen row turns black: the interface stays
-   black and white, and the color answers back in the art behind it. */
-.choices { display: grid; gap: 2px; }
+   Molded rows, one under the other. A row sits raised until it is chosen; the chosen row is
+   pressed in, and also gets a black check and a bold label so it never relies on shadow alone. */
+.choices { display: grid; gap: 14px; }
 .choice {
-  --sq-r: 14px;
   position: relative;
   display: grid;
-  align-content: center;
-  gap: 2px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--space-3);
+  row-gap: 2px;
   min-height: 56px;
-  padding: var(--space-2) var(--space-4);
-  margin-inline: calc(var(--space-4) * -1);   /* the words line up with the page edge, the highlight reaches past them */
+  padding: var(--space-3) var(--space-4);
   border: 0;
-  background: none;
+  border-radius: 16px;
+  corner-shape: squircle;
+  -webkit-mask-box-image: none;
+  background: var(--linen);
+  box-shadow: var(--raised);
   font: inherit;
   color: inherit;
   cursor: pointer;
   text-align: left;
+  transition: box-shadow 0.4s var(--ease);
 }
 .choice input { position: absolute; opacity: 0; pointer-events: none; }
-.choice strong { font-size: var(--step-1); font-weight: var(--weight-regular); }
-.choice span { font-size: var(--step--1); color: var(--text-muted); }
-.choice span { color: inherit; opacity: 0.75; }
-.choice:hover { background: rgb(255 255 255 / 0.55); }
-.choice:has(input:checked) { background: var(--text); color: var(--bg); }
-.choice:has(input:checked) strong { font-weight: var(--weight-bold); }
-.choice:has(input:focus-visible), .choice:focus-visible { outline: none; box-shadow: inset 0 0 0 3px var(--focus); }
+.choice strong { grid-column: 1; font-size: var(--step-0); font-weight: 500; }
+.choice span { grid-column: 1; font-size: var(--step--1); color: var(--text-muted); }
+.choice::after {                       /* the check box at the end of the row */
+  content: "";
+  grid-column: 2; grid-row: 1 / span 2;
+  width: 22px; height: 22px;
+  border-radius: 30%; corner-shape: squircle;
+  box-shadow: var(--pressed);
+}
+button.choice::after { display: none; }   /* a row that goes somewhere, not an answer */
+.choice:has(input:checked) { box-shadow: var(--pressed); }
+.choice:has(input:checked) strong { font-weight: 700; }
+.choice:has(input:checked)::after {
+  box-shadow: none;
+  background: var(--text) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'%3E%3Cpath d='M6 11.5l3.4 3.4L16.2 8' fill='none' stroke='%23fff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.choice:active { box-shadow: var(--pressed); }
+.choice:has(input:focus-visible), .choice:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+@media (prefers-contrast: more) { .choice, .seg-row, .field input, .field select, .field textarea, .tile { outline: 1px solid var(--text); } }
+@media (prefers-reduced-motion: reduce) { .choice { transition: none; } }
 
 /* ---------- Form fields ---------- */
 .field { display: grid; gap: var(--space-1); }
@@ -132,8 +150,11 @@
   min-height: 48px;
   padding: 0.6rem 0.9rem;
   border: 0;
-  background: var(--surface);
-  box-shadow: inset 0 0 0 1px var(--line);
+  border-radius: 14px;
+  corner-shape: squircle;
+  -webkit-mask-box-image: none;
+  background: var(--linen);
+  box-shadow: var(--pressed);          /* a field is a well pressed into the surface */
 }
 .field textarea { min-height: 7rem; resize: vertical; }
 .field-hint { font-size: var(--step--1); color: var(--text-muted); }
@@ -208,7 +229,18 @@ button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, v
   gap: var(--space-3);
   align-content: start;
   padding-top: var(--space-5);
-  border-top: 1px solid var(--line);
+  border-top: 1px solid rgb(35 31 32 / 0.14);
+}
+/* A tile is something you can pick up: a product, a store, a build. It is molded and raised. */
+.tile {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  padding: var(--space-4);
+  border-radius: 22px;
+  corner-shape: squircle;
+  background: var(--linen);
+  box-shadow: var(--raised);
 }
 
 .pill {
@@ -218,18 +250,22 @@ button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, v
   width: fit-content;
   padding: 0.15rem 0.65rem;
   border-radius: 999px;
-  background: var(--surface-sunk);
+  background: var(--linen);
+  box-shadow: var(--pressed);
   font-size: 0.75rem;
   font-weight: var(--weight-bold);
 }
-.pill-honey { background: var(--text); color: var(--bg); }
+.pill-honey { background: var(--text); color: var(--bg); box-shadow: none; }
 
 /* ---------- Store handoff (shared by Sleep Fit and Store finder) ---------- */
 .handoff { display: grid; gap: var(--space-4); }
 .handoff-preview {
   --sq-r: 20px;
   padding: var(--space-4);
-  background: var(--surface-sunk);
+  border-radius: 20px;
+  -webkit-mask-box-image: none;
+  background: var(--linen);
+  box-shadow: var(--pressed);
   font-size: var(--step--1);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -239,7 +275,10 @@ button.bed-block:hover { background: color-mix(in srgb, var(--side-color) 45%, v
   display: grid;
   gap: var(--space-2);
   padding: var(--space-4);
-  background: var(--surface-sunk);
+  border-radius: 20px;
+  -webkit-mask-box-image: none;
+  background: var(--linen);
+  box-shadow: var(--pressed);
 }
 .call-ahead .phone { font-size: var(--step-1); font-weight: var(--weight-bold); user-select: all; }
 

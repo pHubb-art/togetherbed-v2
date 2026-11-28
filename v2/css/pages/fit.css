@@ -1,31 +1,47 @@
 /* Sleep Fit page
-   Phones: the color art fills the whole screen behind the question.
-   Wide screens: the question sits on the left half, and the art runs the full width behind it. */
+   The glass art fills the top of the frame, edge to edge. The questions sit in a linen tray
+   that rises into the bottom of the frame: glass above for the bed building, soft molded
+   controls below. Phones: zones run head to foot. Wide screens: zones run left to right. */
 
-/* ---------- The color art: full frame, never a small picture in the middle ---------- */
+/* ---------- The color art ---------- */
 .fit-art {
   position: fixed;
-  inset: 0;
+  inset: 0 0 auto 0;
+  height: 44svh;
   z-index: 0;
-  --pair-gap: 1.2svh;
+  overflow: hidden;
+  background: var(--color-pillow);
+  --pair-gap: 0.8svh;
   --shape-width: 70%;
   --bleed: -8%;
-  padding-block: 1.2svh;
+  padding-block: 0.8svh;
 }
-/* Result and fine-tune are long pages: the art fills the first screen, the detail follows on white */
-.fit-page[data-fit-screen="result"] .fit-art, .fit-page[data-fit-screen="tune"] .fit-art { position: absolute; height: 100svh; }
-.fit-page .site-header, .fit-shell { position: relative; z-index: 1; }
+.fit-art .zone-stack b { --sq-r: 34px; }
+.fit-page { background: var(--linen); }
+.fit-page .site-header { position: absolute; inset: 0 0 auto; z-index: 2; }
 
-.fit-shell { padding-block: var(--space-2) var(--space-8); }
+/* ---------- The tray ---------- */
+.fit-shell {
+  position: relative;
+  z-index: 1;
+  max-width: none;
+  min-height: 62svh;
+  margin-top: 38svh;
+  padding-block: var(--space-5) var(--space-8);
+  border-radius: 32px 32px 0 0;
+  corner-shape: squircle;
+  background: var(--linen);
+  box-shadow: 0 -16px 30px -18px rgb(120 80 60 / 0.3);
+}
 .fit-shell > * + * { margin-top: var(--space-5); }
 #fit-app > * + * { margin-top: var(--space-5); }
-#fit-app h1 { font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--step-3); line-height: 0.98; outline: none; }
+#fit-app h1 { font-family: var(--font-display); font-weight: var(--weight-display); font-size: clamp(1.9rem, 1.5rem + 2vw, 2.75rem); line-height: 1.06; letter-spacing: -0.025em; outline: none; }
 #fit-app h1.is-set-light { font-family: var(--font-sans); font-weight: var(--weight-light); }   /* key word heavy, the rest light */
 #fit-app h2 { font-size: var(--step-2); }
 #fit-app .lede { font-weight: var(--weight-regular); }
 
-#fit-progress { display: block; width: 100%; height: 3px; appearance: none; border: 0; background: rgb(35 31 32 / 0.12); }
-#fit-progress::-webkit-progress-bar { background: rgb(35 31 32 / 0.12); }
+#fit-progress { display: block; width: 100%; height: 8px; appearance: none; border: 0; border-radius: 4px; overflow: hidden; background: var(--linen); box-shadow: inset 2px 2px 4px var(--soft-lo), inset -2px -2px 4px var(--soft-hi); }
+#fit-progress::-webkit-progress-bar { background: transparent; }
 #fit-progress::-webkit-progress-value { background: var(--text); transition: width 0.3s var(--ease); }
 #fit-progress::-moz-progress-bar { background: var(--text); }
 
@@ -37,8 +53,8 @@
 [data-screen="intro"] .choices { margin-top: var(--space-6); }
 
 /* Result: the headline owns the first screen, over the art */
-.fit-hero { min-height: calc(100svh - 11rem); display: grid; align-content: end; gap: var(--space-4); padding-bottom: var(--space-6); }
-.fit-hero h1 { font-size: var(--step-4) !important; }
+.fit-hero { display: grid; gap: var(--space-4); padding-bottom: var(--space-6); }
+.fit-hero h1 { font-size: var(--step-3) !important; line-height: 1; }
 .fit-sides { display: grid; gap: var(--space-7); }
 .fit-side { gap: var(--space-5); }
 .zone-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-5); }
@@ -73,37 +89,44 @@
 /* Three-way picker: one row, the chosen option filled in */
 .seg-group { border: 0; padding: 0; margin: 0; min-width: 0; }
 .seg-group legend { padding: 0; font-size: var(--step--1); color: var(--text-muted); margin-bottom: var(--space-1); }
-.seg-row { --sq-r: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; padding: 3px; background: var(--surface-sunk); }
+.seg-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 8px; border-radius: 20px; corner-shape: squircle; -webkit-mask-box-image: none; background: var(--linen); box-shadow: var(--raised); }
 .seg { position: relative; display: block; }
 .seg input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
-.seg span { display: grid; place-items: center; min-height: 44px; padding-inline: var(--space-1); border-radius: 9px; font-size: var(--step--1); font-weight: var(--weight-bold); text-align: center; }
-.seg input:checked + span { background: var(--text); color: var(--bg); }
-.seg input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 1px; }
+.seg span { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding-inline: var(--space-1); border-radius: 14px; corner-shape: squircle; font-size: var(--step--1); font-weight: 600; text-align: center; transition: box-shadow 0.4s var(--ease); }
+.seg input:checked + span { box-shadow: var(--pressed); font-weight: 800; }
+.seg input:checked + span::before { content: ""; width: 8px; height: 8px; border-radius: 3px; background: var(--text); flex: none; }
+.seg input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
 
 .tune-body summary { cursor: pointer; font-size: var(--step--1); font-weight: var(--weight-bold); min-height: 44px; display: flex; align-items: center; }
 .tune-body-fields { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-bottom: var(--space-2); }
 .tune-body label { display: grid; gap: var(--space-1); font-size: var(--step--1); color: var(--text-muted); }
-.tune-body select, .tune-body input { font: inherit; font-size: 1rem; color: var(--text); min-height: 44px; width: 100%; padding-inline: var(--space-3); border: 0; border-radius: 12px; background: var(--surface-sunk); }
+.tune-body select, .tune-body input { font: inherit; font-size: 1rem; color: var(--text); min-height: 44px; width: 100%; padding-inline: var(--space-3); border: 0; border-radius: 14px; background: var(--linen); box-shadow: var(--pressed); }
 
 
 /* ---------- Wide screens: a layout of its own, not a stretched phone ---------- */
 @media (min-width: 60rem) {
   /* The bed lies on its side: shoulders, hips and legs run left to right across the whole screen,
      sleeper one along the top, sleeper two along the bottom, overlapping through the middle. */
-  .fit-art, .fit-page[data-fit-screen="result"] .fit-art, .fit-page[data-fit-screen="tune"] .fit-art {
-    position: fixed; inset: 0; height: auto;
-    --pair-gap: 1.2vw; --shape-width: 64%; --bleed: -6%; padding: 0 1.2vw;
-  }
+  .fit-art { height: 54vh; --pair-gap: 1.2vw; --shape-width: 64%; --bleed: -10%; padding: 0 1.2vw; }
   .fit-art .zone-pairs { grid-template-rows: none; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .fit-art .zone-stack { left: 0; right: 0; width: auto; height: var(--shape-width); }
   .fit-art .zone-stack:first-child { top: var(--bleed); bottom: auto; }
   .fit-art .zone-stack:nth-child(2) { top: auto; bottom: var(--bleed); }
   .fit-art .zone-pair.is-solo .zone-stack { top: 5%; bottom: 5%; height: auto; }
-  .fit-page .site-header .wrap, .fit-shell { max-width: none; width: 50%; margin-inline: 0; padding-right: var(--gutter); }
-  .fit-shell { padding-top: var(--space-6); }
-  #fit-app { max-width: 36rem; }
-  #fit-app h1 { font-size: clamp(3.5rem, 5.4vw, 6rem); }
-  .fit-hero { min-height: calc(100vh - 12rem); }
-  .fit-hero h1 { font-size: clamp(4.5rem, 6.6vw, 7.5rem) !important; }
-  .choice strong { font-size: var(--step-1); }
+  .fit-art .zone-stack b { --sq-r: 56px; }
+
+  .fit-shell { margin-top: 46vh; min-height: 54vh; padding: var(--space-6) var(--gutter) var(--space-8); border-radius: 40px 40px 0 0; }
+  .fit-shell > * { max-width: 75rem; margin-inline: auto; }
+  /* In the tray the question sits on the left and its answers on the right */
+  [data-screen="pose"], [data-screen="build"], [data-screen="pain"], [data-screen="intro"], [data-screen="partner"] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--space-8); align-items: start; }
+  #fit-app[data-screen] > * { margin-top: 0; }
+  #fit-app > .fit-who, #fit-app > h1, #fit-app > .lede { grid-column: 1; }
+  #fit-app > .fit-who { margin-bottom: var(--space-3); }
+  #fit-app > .fit-question { display: contents; }
+  #fit-app > .fit-question legend { float: left; width: calc(50% - var(--space-8) / 2); margin: 0; }
+  #fit-app > .fit-question .choices, #fit-app > .choices { grid-column: 2; grid-row: 1 / span 4; }
+  #fit-app > .field-hint, #fit-app > .btn-row { grid-column: 2; margin-top: var(--space-4); }
+  #fit-app h1 { font-size: clamp(2.5rem, 3.4vw, 3.5rem); }
+  .fit-hero h1 { font-size: clamp(3.5rem, 5vw, 5rem) !important; }
+  [data-screen="result"], [data-screen="tune"] { max-width: 56rem; }
 }
